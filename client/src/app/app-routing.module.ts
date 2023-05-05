@@ -7,6 +7,12 @@ const routes: Routes = [
     pathMatch: 'full',
     loadChildren: () =>
       import('@client/home-page').then((m) => m.HomePageModule),
+  }, 
+  {
+    path: 'login',
+    pathMatch: 'full',
+    loadChildren: () =>
+      import('@client/login-page').then((m) => m.LoginPageModule),
   }
 ];
 
