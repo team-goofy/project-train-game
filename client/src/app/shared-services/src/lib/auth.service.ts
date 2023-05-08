@@ -1,5 +1,5 @@
 import { Injectable, inject } from "@angular/core";
-import { Auth, UserCredential, signInWithEmailAndPassword, signOut, user } from '@angular/fire/auth';
+import { Auth, authState, idToken, signInWithEmailAndPassword, signOut, user } from '@angular/fire/auth';
 import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
 
@@ -11,14 +11,19 @@ export class AuthService {
     private router: Router = inject(Router);
 
     user$ = user(this.auth);
+    idToken$ = idToken(this.auth);
     error$ = new BehaviorSubject<string | null>(null);
 
     login(email: string, password: string) {
       signInWithEmailAndPassword(this.auth, email, password)
-        .then((res: UserCredential) => {
-          res.user.getIdToken().then(token => {
-            localStorage.setItem('tokenId', token);
-            this.router.navigate(['/']);
+        .then(() => {
+          this.idToken$.subscribe(token => {
+            if (token) {
+              localStorage.setItem('tokenId', token);
+              this.router.navigate(['/']);
+            } else {
+              this.error$.next('Could not get token');
+            }
           });
         })
         .catch((err: Error) => {
