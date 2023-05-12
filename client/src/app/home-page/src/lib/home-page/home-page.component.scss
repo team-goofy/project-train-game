@@ -24,6 +24,10 @@
   text-align: center;
 }
 
+.card-icon-size{
+  transform: scale(2);
+}
+
 .home-cards-grid{
   z-index: 10;
   width: 100%;
@@ -52,6 +56,12 @@
   cursor:pointer;
 }
 
+.game-explanation-text{
+  margin-top: 10%;
+  margin-left: 10%;
+  margin-right:10%;
+}
+
 .game-explanation-icon{
   color: white;
   left: 50%;
@@ -74,8 +84,4 @@
   100% { transform: scale(3) translateY(-10px); }
 }
 
-.game-explanation-title{
-  margin-top: 5%;
-  color: black;
-}
 
