@@ -52,7 +52,7 @@ public class StationController {
 
         // GET THE NEAREST STATION BASED ON LOCATION
         @GetMapping("/nearest")
-        @ResponseBody  
+        @ResponseBody
         public Station getNearestStation(@RequestParam Number lat, @RequestParam Number lng) throws JsonProcessingException {
             ResponseEntity<String> response = restTemplate.exchange(
                     env.getProperty("ns.api.base.url") + "/stations/nearest?lat=" + lat + "&lng=" + lng,
