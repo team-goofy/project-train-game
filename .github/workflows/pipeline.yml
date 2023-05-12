@@ -2,8 +2,6 @@ name: train-game-pipeline
 
 on:
   push:
-    branches:
-      - main
     paths:
       - 'client/**'
       - 'server/**'
@@ -14,6 +12,7 @@ env:
 jobs:
   deploy-fe:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -28,6 +27,7 @@ jobs:
 
   deploy-be:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
