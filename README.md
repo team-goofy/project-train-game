@@ -1,4 +1,4 @@
-# project-train-game
+# Project Train Game (Actual name TBA)
 
 ## Sprint 1 | Week 2
 
