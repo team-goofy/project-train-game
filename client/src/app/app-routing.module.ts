@@ -7,6 +7,12 @@ const routes: Routes = [
     pathMatch: 'full',
     loadChildren: () =>
       import('@client/home-page').then((m) => m.HomePageModule),
+  },
+  {
+    path: 'background-image',
+    pathMatch: 'full',
+    loadChildren: () =>
+      import('@client/background-image').then((m) => m.BackgroundImageModule),
   }
 ];
 
