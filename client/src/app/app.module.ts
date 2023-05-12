@@ -9,11 +9,11 @@ import { provideAuth,getAuth } from '@angular/fire/auth';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
-    BrowserModule, 
-    AppRoutingModule, 
+    BrowserModule,
+    AppRoutingModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth())
   ],
