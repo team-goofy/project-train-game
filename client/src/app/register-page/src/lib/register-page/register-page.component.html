@@ -15,7 +15,7 @@
             <mat-label>E-mail</mat-label>
             <input matInput formControlName="email">
             <mat-icon matSuffix>clear</mat-icon>
-            <mat-error *ngIf="submitted && f['email'].errors.invalid">
+            <mat-error *ngIf="submitted && f['email'].errors">
               <span *ngIf="f['email'].errors['required']">Email is required</span>
               <span *ngIf="f['email'].errors['email']">Fill in a valid email</span>
             </mat-error>

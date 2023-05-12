@@ -36,6 +36,7 @@ export class RegisterPageComponent implements OnInit{
     this.submitted = true;
 
     if (this.form.invalid) {
+      this.submitted=false;
       return;
     }
   }
