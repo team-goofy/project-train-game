@@ -1,9 +1,8 @@
 .register-card {
   width: 38%;
   padding: 50px;
-  //margin-left: 30px;
-  //margin-right: 30px;
   position: absolute;
+  margin-left: 40px;
   top: 50%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
@@ -11,6 +10,14 @@
   mat-card-title {
     font-size: 40px;
     margin-bottom: 18px;
+  }
+
+  mat-card-content {
+    margin-bottom: 40px;
+  }
+
+  mat-card-header{
+    margin-top: 40px;
   }
 }
 
@@ -25,14 +32,15 @@ button {
   width: 100%;
 }
 
-@media (max-width: 750px) {
+@media (max-width: 600px) {
   .register-card{
-    width: 100%;
+    width:90%;
+    padding: 20px;
+    margin-left: 0;
     top: 50%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    //margin: 10px;
   }
 }
 

@@ -1,38 +1,43 @@
-<mat-card class="register-card">
-  <mat-card-header>
-    <!-- Login Register buttons-->
-    <mat-card-title-group>
-      <mat-card-title>Register</mat-card-title>
-    </mat-card-title-group>
-  </mat-card-header>
-  <mat-card-content>
-    <!--    Input fields-->
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <div class="form-fields" >
-        <mat-form-field appearance="outline">
-          <mat-label>E-mail</mat-label>
-          <input matInput formControlName="email">
-          <mat-icon matSuffix>clear</mat-icon>
-          <mat-error *ngIf="submitted && f['email'].errors">
-            <span *ngIf="f['email'].errors['required']">Email is required</span>
-            <span *ngIf="f['email'].errors['email']">Fill in a valid email</span>
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Password</mat-label>
-          <input type="password" matInput formControlName="password">
-          <mat-icon matSuffix>clear</mat-icon>
-          <mat-error *ngIf="submitted && f['password'].errors">
-            <span *ngIf="f['password'].errors['required']">Password is required</span>
-            <span *ngIf="f['password'].errors['minLength']">Password must be at least 6 characters long</span>
-            <span *ngIf="f['password'].errors['maxLength']">Password must not exceed 40 characters</span>
-          </mat-error>
-        </mat-form-field>
-      </div>
-      <button mat-raised-button color="primary" type="submit">
-        <mat-icon>person</mat-icon>
-        Register
-      </button>
-    </form>
-  </mat-card-content>
-</mat-card>
+<background-image></background-image>
+
+  <mat-card class="register-card">
+    <mat-card-header>
+      <!-- Login Register buttons-->
+      <mat-card-title-group>
+        <mat-card-title>Register</mat-card-title>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <!--    Input fields-->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-fields" >
+          <mat-form-field appearance="outline">
+            <mat-label>E-mail</mat-label>
+            <input matInput formControlName="email">
+            <mat-icon matSuffix>clear</mat-icon>
+            <mat-error *ngIf="submitted && f['email'].errors.invalid">
+              <span *ngIf="f['email'].errors['required']">Email is required</span>
+              <span *ngIf="f['email'].errors['email']">Fill in a valid email</span>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input type="password" matInput formControlName="password">
+            <mat-icon matSuffix>clear</mat-icon>
+            <mat-error *ngIf="submitted && f['password'].errors">
+              <span *ngIf="f['password'].errors['required']">Password is required</span>
+              <span *ngIf="f['password'].errors['minLength']">Password must be at least 6 characters long</span>
+              <span *ngIf="f['password'].errors['maxLength']">Password must not exceed 40 characters</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <button mat-raised-button color="primary" type="submit">
+          <mat-icon>person</mat-icon>
+          Register
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+
+

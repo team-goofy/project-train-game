@@ -9,6 +9,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
+import {BackgroundImageModule} from "@client/shared-components";
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import {ReactiveFormsModule} from "@angular/forms";
     MatIconModule,
     MatButtonModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BackgroundImageModule
   ],
     declarations: [
       RegisterPageComponent,
