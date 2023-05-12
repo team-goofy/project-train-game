@@ -4,24 +4,25 @@
 <button class="home-login-btn" mat-raised-button><mat-icon aria-hidden="false" aria-label="Login person" fontIcon="person"></mat-icon>login</button>
 
 <!--title-->
-<h1 class="game-title">title of the game</h1>
+<h1 class="game-title mdc-typography--headline1">title of the game</h1>
 
 <!--Explanation of the game-->
-<h3 class="game-explanation">Explanation of the game</h3>
-
-<div class="game-explanation-icon">
-  <mat-icon aria-hidden="false" aria-label="Login person" fontIcon="keyboard_arrow_down"></mat-icon>
+<div (click)="scrollTo(target)">
+  <h3 class="game-explanation mdc-typography--headline5">Explanation of the game</h3>
+  <div class="game-explanation-icon">
+    <mat-icon aria-hidden="false" aria-label="Login person" fontIcon="keyboard_arrow_down"></mat-icon>
+  </div>
 </div>
 
 <!--overlay color-->
-<div class="overlay-btn-bg">
+<div #target class="overlay-btn-bg">
 </div>
 
 <!-- overlay cards-->
 <div class="home-cards-grid">
   <mat-grid-list cols="3" rowHeight="100px">
     <mat-grid-tile>
-      <mat-card class="home-cards">
+      <mat-card class="home-cards mdc-typography--subtitle1">
         <mat-card-content><h2>Visit places you have never been to</h2></mat-card-content>
       </mat-card>
     </mat-grid-tile>
@@ -40,3 +41,34 @@
 
 
 <!--information-->
+<div class="game-explanation-title">
+  <mat-grid-list cols="3" rowHeight="100px">
+    <mat-grid-tile>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <h1>How do you play the train game?</h1>
+    </mat-grid-tile>
+    <mat-grid-tile>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <mat-grid-list cols="3" rowHeight="200px">
+    <mat-grid-tile>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <p>The project that we as team Goofy decided we wanted to do is called: “the train game”.
+        This is a game mostly known among students who have student OV (free traveling).
+        How to play the train game? First you go to a random station you decide on.
+        So let's say you start at Amsterdam Central station.
+        You throw a dice which lands on the number four.
+        You go to platform four and get on the next train that departs from there.
+        You throw the dice again and now it lands on number one.
+        This means you get off the train at the first stop.
+        You are now at Amsterdam Sloterdijk and start over by throwing the dice, go to that platform, etc.
+        In the end you end up somewhere random and can explore the city’s you stopped at.
+      </p>
+    </mat-grid-tile>
+    <mat-grid-tile>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+

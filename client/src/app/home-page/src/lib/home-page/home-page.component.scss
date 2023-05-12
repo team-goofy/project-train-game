@@ -1,3 +1,5 @@
+@use "@material/typography/mdc-typography";
+
 .overlay-btn-bg{
     background-color: #4F68CE;
     height: 15%;
@@ -47,6 +49,7 @@
   position: absolute;
   top:83%;
   color: white;
+  cursor:pointer;
 }
 
 .game-explanation-icon{
@@ -58,6 +61,7 @@
   top:90%;
   -webkit-animation: action 1s infinite  alternate;
   animation: action 1s infinite  alternate;
+  cursor:pointer;
 }
 
 @-webkit-keyframes action {
@@ -70,4 +74,8 @@
   100% { transform: scale(3) translateY(-10px); }
 }
 
+.game-explanation-title{
+  margin-top: 5%;
+  color: black;
+}
 
