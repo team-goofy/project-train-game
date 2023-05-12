@@ -1,0 +1,41 @@
+stages:
+  - deploy
+
+deploy_fe:
+  stage: deploy
+  image: node:latest
+  tags:
+    - hva
+  only:
+    refs:
+      - main
+    changes:
+      - "client/**/*"
+  script:
+    - set GIT_TRACE_PACKET=1
+    - set GIT_TRACE=1
+    - set GIT_CURL_VERBOSE=1
+    - git branch -D splitting-fe || true
+    - git remote rm heroku-fe-app || true
+    - git remote add heroku-fe-app https://heroku:$HEROKU_API_KEY@git.heroku.com/train-game-staging-fe.git || true
+    - git subtree split --prefix client -b splitting-fe
+    - git push --force heroku-fe-app splitting-fe:main
+    - git branch -D splitting-fe
+
+deploy_be:
+  stage: deploy
+  image: node:latest
+  tags:
+    - hva
+  only:
+    refs:
+      - main
+    changes:
+      - "server/**/*"
+  script:
+    - git branch -D splitting-be || true
+    - git remote rm heroku-be-app || true
+    - git remote add heroku-be-app https://heroku:$HEROKU_API_KEY@git.heroku.com/train-game-staging-be.git || true
+    - git subtree split --prefix server -b splitting-be
+    - git push --force heroku-be-app splitting-be:main
+    - git branch -D splitting-be
