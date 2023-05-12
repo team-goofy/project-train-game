@@ -3,6 +3,17 @@
     height: 15%;
 }
 
+.home-login-btn{
+  right: 0%;
+  margin-left: -50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  position: absolute;
+  top: 2%;
+  background-color: #333E9A !important;
+  color: white !important;
+}
+
 .home-cards{
   background-color: #F8A7C2;
   color: white;
@@ -28,13 +39,35 @@
   top: 30%;
 }
 
-.home-login-btn{
-  right: 0%;
-  margin-left: -50%;
+.game-explanation{
+  left: 50%;
+  margin-right: -50%;
   transform: translate(-50%, -50%);
   z-index: 10;
   position: absolute;
-  top: 2%;
-  background-color: #333E9A !important;
-  color: white !important;
+  top:83%;
+  color: white;
 }
+
+.game-explanation-icon{
+  color: white;
+  left: 50%;
+  margin-right: -50%;
+  z-index: 10;
+  position: absolute;
+  top:90%;
+  -webkit-animation: action 1s infinite  alternate;
+  animation: action 1s infinite  alternate;
+}
+
+@-webkit-keyframes action {
+  0% { transform: scale(3) translateY(0); }
+  100% { transform:  scale(3) translateY(-10px); }
+}
+
+@keyframes action {
+  0% { transform:  scale(3) translateY(0); }
+  100% { transform: scale(3) translateY(-10px); }
+}
+
+
