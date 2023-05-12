@@ -6,29 +6,36 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.cloud.StorageClient;
 import com.google.firebase.database.FirebaseDatabase;
-import org.springframework.beans.factory.annotation.Value;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.core.io.Resource;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 @Configuration
+@PropertySource("classpath:application.properties")
 public class FirebaseConfig {
+    private final Environment env;
 
-    @Value(value = "classpath:serviceAccount.json")
-    private Resource serviceAccountResource;
+    public FirebaseConfig(Environment env) {
+        this.env = env;
+    }
 
     @Bean
     public FirebaseApp createFireBaseApp() throws IOException {
-        InputStream serviceAccount = serviceAccountResource.getInputStream();
+        JsonObject jsonObject = JsonParser.parseString(env.getProperty("firebase.service.account")).getAsJsonObject();
+        InputStream is = new ByteArrayInputStream(jsonObject.toString().getBytes());
 
         FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setDatabaseUrl("https://train-game-6fc9f-default-rtdb.europe-west1.firebasedatabase.app/")
-                .setStorageBucket("train-game-6fc9f.appspot.com")
+                .setCredentials(GoogleCredentials.fromStream(is))
+                .setDatabaseUrl(env.getProperty("firebase.database.url"))
+                .setStorageBucket(env.getProperty("firebase.storage.url"))
                 .build();
 
         return FirebaseApp.initializeApp(options);
