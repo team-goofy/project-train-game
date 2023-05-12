@@ -1,7 +1,9 @@
 name: train-game-pipeline
 
 on:
+  workflow_dispatch:
   push:
+    branches: [ main ]
     paths:
       - 'client/**'
       - 'server/**'
@@ -12,10 +14,10 @@ env:
 jobs:
   deploy-fe:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
       - name: Deploy to Heroku FE
         run: |
           git branch -D splitting-fe || true
@@ -27,10 +29,10 @@ jobs:
 
   deploy-be:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
       - name: Deploy to Heroku BE
         run: |
           git branch -D splitting-be || true
