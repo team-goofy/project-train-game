@@ -1,5 +1,5 @@
 .register-card {
-  width: 38%;
+  width: 500px;
   padding: 50px;
   position: absolute;
   margin-left: 40px;
@@ -19,6 +19,7 @@
   mat-card-header{
     margin-top: 40px;
   }
+
 }
 
 .form-fields {
@@ -28,12 +29,12 @@
   margin-bottom: 40px;
 }
 
-button {
+#submit-button {
   width: 100%;
 }
 
-@media (max-width: 600px) {
-  .register-card{
+@media (max-width: 700px) {
+  .register-card {
     width:90%;
     padding: 20px;
     margin-left: 0;
@@ -41,6 +42,18 @@ button {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+  }
+}
+
+.button-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  button {
+    width: 100%;
   }
 }
 

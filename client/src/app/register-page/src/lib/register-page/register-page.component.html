@@ -1,8 +1,15 @@
 <background-image></background-image>
-
 <mat-card class="register-card">
+  <!-- Login Register buttons-->
+  <div class="button-row">
+    <button mat-stroked-button color="primary" routerLink="/login">
+      Login
+    </button>
+    <button mat-stroked-button color="primary" disabled routerLink="/register">
+      Register
+    </button>
+  </div>
   <mat-card-header>
-    <!-- Login Register buttons-->
     <mat-card-title-group>
       <mat-card-title>Register</mat-card-title>
     </mat-card-title-group>
@@ -35,7 +42,7 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <button mat-raised-button color="primary" type="submit">
+      <button id="submit-button" mat-raised-button color="primary" type="submit">
         <mat-icon>person</mat-icon>
         Register
       </button>
