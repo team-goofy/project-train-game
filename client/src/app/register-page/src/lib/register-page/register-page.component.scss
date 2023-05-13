@@ -11,15 +11,6 @@
     font-size: 40px;
     margin-bottom: 18px;
   }
-
-  mat-card-content {
-    margin-bottom: 40px;
-  }
-
-  mat-card-header{
-    margin-top: 40px;
-  }
-
 }
 
 .form-fields {
@@ -43,6 +34,10 @@
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
   }
+
+  .form-fields {
+    gap: 20px;
+  }
 }
 
 .button-row {
@@ -57,4 +52,7 @@
   }
 }
 
-
+.card-body {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
