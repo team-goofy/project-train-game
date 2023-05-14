@@ -1,5 +1,6 @@
 package com.goofy.configs;
 
+import com.goofy.exceptions.UsernameExistsException;
 import com.google.firebase.FirebaseException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +32,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorsResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UsernameExistsException.class)
+    public ResponseEntity<ErrorResponse> handleUsernameErrors(UsernameExistsException ex) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        ErrorResponse errorsResponse = ErrorResponse.builder()
+                .errors(errors)
+                .code(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .build();
+
+        return new ResponseEntity<>(errorsResponse, new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
     @ExceptionHandler(FirebaseException.class)
     public final ResponseEntity<ErrorResponse> handleFirebaseExceptions(FirebaseException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
@@ -41,6 +53,7 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorsResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ErrorResponse> handleGeneralExceptions(Exception ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
