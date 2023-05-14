@@ -39,7 +39,7 @@
             </button>
             <mat-error>
               <span *ngIf="f['email'].hasError('required')">Email is required</span>
-              <span *ngIf="f['email'].hasError('email')">Fill in a valid email</span>
+              <span *ngIf="f['email'].hasError('pattern')">Fill in a valid email</span>
             </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
