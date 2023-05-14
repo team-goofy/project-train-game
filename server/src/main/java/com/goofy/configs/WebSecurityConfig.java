@@ -8,18 +8,18 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.Arrays;
 import java.util.List;
 
-@Configuration
 @EnableWebSecurity
+@Configuration
 public class WebSecurityConfig {
-    private static final String[] AUTH_WHITELIST = { };
+    private static final String[] AUTH_WHITELIST = {"/user/register"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and()
+        http.csrf().disable()
+                .cors().and()
                 .authorizeHttpRequests()
                 .requestMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest()
