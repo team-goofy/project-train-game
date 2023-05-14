@@ -1,9 +1,10 @@
 package com.goofy.services;
 
 import com.goofy.dtos.UserDTO;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 
 public interface UserService {
-    UserRecord createUser(UserDTO user) throws FirebaseAuthException;
+    UserRecord saveUser(UserDTO user) throws Exception;
+
+    boolean usernameExists(String username) throws InterruptedException, ExecutionException;
 }

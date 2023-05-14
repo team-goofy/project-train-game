@@ -1,4 +1,4 @@
-package com.goofy.exception.handler;
+package com.goofy.configs;
 
 import com.google.firebase.FirebaseException;
 import lombok.AllArgsConstructor;
