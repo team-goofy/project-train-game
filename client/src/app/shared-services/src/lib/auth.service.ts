@@ -1,7 +1,9 @@
 import { Injectable, inject } from "@angular/core";
 import { Auth, authState, idToken, signInWithEmailAndPassword, signOut, user } from '@angular/fire/auth';
 import { Router } from "@angular/router";
-import { BehaviorSubject } from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { UserRequestModel } from "@client/shared-models";
 
 @Injectable({
     providedIn: 'root'
@@ -9,7 +11,7 @@ import { BehaviorSubject } from "rxjs";
 export class AuthService {
     private auth: Auth = inject(Auth);
     private router: Router = inject(Router);
-
+    private http: HttpClient = inject(HttpClient);
     user$ = user(this.auth);
     idToken$ = idToken(this.auth);
     error$ = new BehaviorSubject<string | null>(null);
@@ -35,5 +37,9 @@ export class AuthService {
         signOut(this.auth);
         localStorage.removeItem('tokenId');
         this.router.navigate(['/']);
+    }
+
+    register(userRequestModel: UserRequestModel): Observable<any> {
+      return this.http.post('http://localhost:8080/user/register', userRequestModel);
     }
 }
