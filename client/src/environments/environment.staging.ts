@@ -7,7 +7,7 @@ export const environment = {
     authDomain: 'train-game-6fc9f.firebaseapp.com',
     messagingSenderId: '1001538620902',
   },
-  apiUrl: 'https://train-game-staging-be.herokuapp.com/',
+  apiUrl: 'https://train-game-staging-be.herokuapp.com',
   environmentName: 'staging',
   production: false,
 };
