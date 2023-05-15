@@ -2,8 +2,8 @@ name: train-game-staging-pipeline
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main ]
+  pull_request:
+    types: [ closed ]
     paths:
       - 'client/**'
       - 'server/**'
@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: main
 
       - name: Deploy to Heroku FE
         run: |
@@ -32,6 +34,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: main
 
       - name: Deploy to Heroku BE
         run: |
