@@ -2,11 +2,11 @@ name: train-game-production-pipeline
 
 on:
   workflow_dispatch:
-    push:
-      branches: [ main ]
-      paths:
-        - 'client/**'
-        - 'server/**'
+  push:
+    branches: [ main ]
+    paths:
+      - 'client/**'
+      - 'server/**'
 
 env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
