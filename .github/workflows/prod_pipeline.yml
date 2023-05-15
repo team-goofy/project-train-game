@@ -1,4 +1,4 @@
-name: train-game-prod-pipeline
+name: train-game-production-pipeline
 
 on:
   workflow_dispatch:
