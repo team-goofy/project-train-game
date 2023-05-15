@@ -19,6 +19,9 @@ jobs:
 
       - name: Deploy to Heroku FE
         run: |
+          set GIT_TRACE_PACKET=1
+          set GIT_TRACE=1
+          set GIT_CURL_VERBOSE=1
           git branch -D splitting-fe || true
           git remote rm heroku-fe-app || true
           git remote add heroku-fe-app https://heroku:${{ env.HEROKU_API_KEY }}@git.heroku.com/train-game-production-fe.git || true
