@@ -1,0 +1,66 @@
+<background-image></background-image>
+<mat-card class="register-card">
+  <!-- Login Register buttons-->
+  <div class="button-row">
+    <button mat-stroked-button color="primary" routerLink="/login">
+      Login
+    </button>
+    <button mat-stroked-button color="primary" disabled routerLink="/register">
+      Register
+    </button>
+  </div>
+  <div class="card-body">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title>Register</mat-card-title>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <!--    Input fields-->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-fields" >
+          <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input type="text" matInput formControlName="username">
+            <button *ngIf="form.get('username')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('username')?.setValue('')">
+              <mat-icon>clear</mat-icon>
+            </button>
+            <mat-error>
+              <span *ngIf="f['username'].hasError('required')">Username is required</span>
+              <span *ngIf="f['username'].hasError('minlength')">Username must be at least 4 characters long</span>
+              <span *ngIf="f['username'].hasError('maxlength')">Username must not exceed 25 characters</span>
+              <span *ngIf="f['username'].hasError('usernameExists')">Username is not available</span>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>E-mail</mat-label>
+            <input type="email" matInput formControlName="email">
+            <button *ngIf="form.get('email')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('email')?.setValue('')">
+              <mat-icon>clear</mat-icon>
+            </button>
+            <mat-error>
+              <span *ngIf="f['email'].hasError('required')">Email is required</span>
+              <span *ngIf="f['email'].hasError('pattern')">Email is invalid</span>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input type="password" matInput formControlName="password">
+            <button *ngIf="form.get('password')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('password')?.setValue('')">
+              <mat-icon>clear</mat-icon>
+            </button>
+            <mat-error>
+              <span *ngIf="f['password'].hasError('required')">Password is required</span>
+              <span *ngIf="f['password'].hasError('minlength')">Password must be at least 6 characters long</span>
+              <span *ngIf="f['password'].hasError('maxlength')">Password must not exceed 40 characters</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <button id="submit-button" mat-raised-button color="primary" type="submit">
+          <mat-icon>person</mat-icon>
+          Register
+        </button>
+      </form>
+    </mat-card-content>
+  </div>
+</mat-card>

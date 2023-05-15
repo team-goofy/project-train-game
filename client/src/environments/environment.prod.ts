@@ -1,7 +1,7 @@
 export const environment = {
-  environmentName: 'development',
-  production: false,
-  apiUrl: 'http://localhost:8080',
+  environmentName: 'production',
+  production: true,
+  apiUrl: 'https://train-game-production-be.herokuapp.com',
   firebase: {
     projectId: 'train-game-6fc9f',
     appId: '1:1001538620902:web:d6be09b15d2d7953695a27',
