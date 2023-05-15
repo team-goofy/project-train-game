@@ -15,12 +15,9 @@ jobs:
   deploy-fe:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch complete commit history
-        run: git fetch --unshallow
-
       - name: Checkout
         uses: actions/checkout@v3
-        
+
       - name: Deploy to Heroku FE
         run: |
           set GIT_TRACE_PACKET=1
