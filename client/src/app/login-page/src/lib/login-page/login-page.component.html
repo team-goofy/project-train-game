@@ -1,1 +1,50 @@
-<p>login-page works!</p>
+<background-image></background-image>
+<mat-card class="login-card">
+  <!-- Login Register buttons-->
+  <div class="button-row">
+    <button mat-stroked-button color="primary" disabled routerLink="/login">
+      Login
+    </button>
+    <button mat-stroked-button color="primary" routerLink="/register">
+      Register
+    </button>
+  </div>
+  <div class="card-body">
+    <mat-card-header>
+      <mat-card-title-group>
+        <mat-card-title>Login</mat-card-title>
+      </mat-card-title-group>
+    </mat-card-header>
+    <mat-card-content>
+      <!--    Input fields-->
+      <form>
+        <div class="form-fields" >
+          <mat-form-field appearance="outline">
+            <mat-label>E-mail</mat-label>
+            <input type="email" matInput formControlName="email">
+            <button  matSuffix mat-icon-button aria-label="Clear">
+              <mat-icon>clear</mat-icon>
+            </button>
+            <mat-error>
+              <span >Email is invalid</span>
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input type="password" matInput formControlName="password">
+            <button matSuffix mat-icon-button aria-label="Clear">
+              <mat-icon>clear</mat-icon>
+            </button>
+            <mat-error>
+              <span >Password is required</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <button id="submit-button" mat-raised-button color="primary" type="submit">
+          <mat-icon>person</mat-icon>
+          Login
+        </button>
+      </form>
+    </mat-card-content>
+  </div>
+</mat-card>

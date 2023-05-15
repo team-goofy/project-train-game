@@ -1,0 +1,58 @@
+.login-card {
+  width: 500px;
+  padding: 50px;
+  position: absolute;
+  margin-left: 40px;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+
+  mat-card-title {
+    font-size: 40px;
+    margin-bottom: 18px;
+  }
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 40px;
+}
+
+#submit-button {
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .register-card {
+    width:90%;
+    padding: 20px;
+    margin-left: 0;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+  .form-fields {
+    gap: 20px;
+  }
+}
+
+.button-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  button {
+    width: 100%;
+  }
+}
+
+.card-body {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
