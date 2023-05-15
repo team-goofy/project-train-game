@@ -1,0 +1,134 @@
+@use "@material/typography/mdc-typography";
+
+.overlay-btn-bg{
+    background-color: #4F68CE;
+    height: 15%;
+}
+
+.home-login-btn{
+  margin-right: 2%;
+  z-index: 10;
+  position: absolute;
+  top: 2%;
+  right: 0;
+  background-color: #333E9A !important;
+  color: white !important;
+}
+
+.home-cards{
+  background-color: #F8A7C2;
+  color: white;
+  width: 70%;
+  height: 100%;
+  text-align: center;
+}
+
+.card-icon-size{
+  transform: scale(2);
+}
+
+.home-cards-grid{
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 110%;
+}
+
+.game-title{
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  position: absolute;
+  top: 30%;
+}
+
+.game-explanation{
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  position: absolute;
+  top:87%;
+  color: white;
+  cursor:pointer;
+}
+
+.game-explanation-icon{
+  color: white;
+  left: 50%;
+  margin-right: -50%;
+  z-index: 10;
+  position: absolute;
+  top:96%;
+  -webkit-animation: action 1s infinite  alternate;
+  animation: action 1s infinite  alternate;
+  cursor:pointer;
+}
+
+.game-explanation-text{
+  margin-top: 10%;
+  margin-left: 10%;
+  margin-right:10%;
+}
+
+@-webkit-keyframes action {
+  0% { transform: scale(3) translateY(0); }
+  100% { transform:  scale(3) translateY(-10px); }
+}
+
+@keyframes action {
+  0% { transform:  scale(3) translateY(0); }
+  100% { transform: scale(3) translateY(-10px); }
+}
+
+@media screen and (max-width: 1280px) {
+  .home-cards-grid {
+    display: none;
+  }
+
+  .overlay-btn-bg {
+    display: none;
+  }
+
+  .game-explanation{
+    display: none;
+  }
+
+  .game-explanation-icon{
+    margin-top: -105% !important;
+    color: #333E9A;
+  }
+
+  .home-login-btn {
+    margin-right: 2%;
+    margin-left: auto;
+  }
+
+  /* Responsive Adjustments */
+  @media screen and (max-width: 768px) {
+    .home-cards {
+      width: 90%;
+    }
+
+    .game-title {
+      font-size: 24px;
+    }
+
+    .game-explanation {
+      display: none;
+    }
+    .game-explanation-icon {
+      top: 100%;
+    }
+
+    .game-explanation-text {
+      margin: 5% 2%;
+    }
+  }
+
+
+}
+
+
