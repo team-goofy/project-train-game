@@ -1,9 +1,11 @@
 package com.goofy.configs;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.cloud.FirestoreClient;
 import com.google.firebase.cloud.StorageClient;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonObject;
@@ -55,7 +57,7 @@ public class FirebaseConfig {
 
     @Bean
     @DependsOn(value = "createFireBaseApp")
-    public FirebaseDatabase createFirebaseDatabase() {
-        return FirebaseDatabase.getInstance();
+    public Firestore createFirestore() {
+        return FirestoreClient.getFirestore();
     }
 }
