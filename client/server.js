@@ -1,13 +1,10 @@
 const express = require('express');
-const pjson = require('./package.json');
 const app = express();
 
-app.use(express.static(`./dist/${pjson.name}`));
+app.use(express.static(__dirname + '/dist/client'));
 
 app.get('/*', (req, res) =>
-  res.sendFile('index.html', {root: `dist/${pjson.name}`}),
+  res.sendFile(__dirname + '/dist/client/index.html')
 );
-
-console.log(`${pjson.name} running`)
 
 app.listen(process.env.PORT || 8080);
