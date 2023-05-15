@@ -2,7 +2,8 @@ name: train-game-staging-pipeline
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
+    types: [closed]
     branches: [ main ]
     paths:
       - 'client/**'
