@@ -29,6 +29,7 @@
               <span *ngIf="f['username'].hasError('required')">Username is required</span>
               <span *ngIf="f['username'].hasError('minlength')">Username must be at least 4 characters long</span>
               <span *ngIf="f['username'].hasError('maxlength')">Username must not exceed 25 characters</span>
+              <span *ngIf="f['username'].hasError('usernameExists')">Username is not available</span>
             </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
@@ -39,7 +40,7 @@
             </button>
             <mat-error>
               <span *ngIf="f['email'].hasError('required')">Email is required</span>
-              <span *ngIf="f['email'].hasError('pattern')">Fill in a valid email</span>
+              <span *ngIf="f['email'].hasError('pattern')">Email is invalid</span>
             </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">

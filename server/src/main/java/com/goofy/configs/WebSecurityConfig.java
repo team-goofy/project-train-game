@@ -14,7 +14,7 @@ import java.util.List;
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfig {
-    private static final String[] AUTH_WHITELIST = {"/user/register"};
+    private static final String[] AUTH_WHITELIST = {"/user/register", "/user/username"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

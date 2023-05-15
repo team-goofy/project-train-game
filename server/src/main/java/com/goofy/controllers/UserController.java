@@ -26,4 +26,9 @@ public class UserController {
 
         return ResponseEntity.created(location).body(savedUser);
     }
+
+    @GetMapping("/username")
+    public ResponseEntity<Boolean> checkUsername(@RequestParam String username) throws Exception {
+        return ResponseEntity.ok(userService.usernameExists(username));
+    }
 }

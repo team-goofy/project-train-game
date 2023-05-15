@@ -6,4 +6,8 @@ export const environment = {
     apiKey: 'AIzaSyBXe_0vP-zNBO3Q0tPGYoCnVUUF2IxdCnk',
     authDomain: 'train-game-6fc9f.firebaseapp.com',
     messagingSenderId: '1001538620902',
-  },};
+  },
+  production: true,
+  environmentName: 'production',
+  apiUrl: 'place prod url here'
+};

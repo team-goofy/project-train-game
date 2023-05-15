@@ -4,6 +4,7 @@ import { AuthService } from "@client/shared-services";
 import { UserRequestModel } from "@client/shared-models";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { debounceTime, distinctUntilChanged } from "rxjs";
 
 @Component({
   templateUrl: './register-page.component.html',
@@ -49,6 +50,21 @@ export class RegisterPageComponent implements OnInit{
         ],
       }
     );
+
+    this.form.controls['username'].valueChanges.pipe(
+      debounceTime(1000),
+      distinctUntilChanged()
+    ).subscribe({
+      next: (value: string) => {
+        this.authService.checkUsername(value).subscribe({
+          next: (exists: boolean) => {
+            if (exists) {
+              this.form.controls['username'].setErrors({ usernameExists: true });
+            }
+          }
+        });
+      }
+    });
   }
 
   onSubmit(): void {
