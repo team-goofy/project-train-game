@@ -1,8 +1,7 @@
-name: train-game-pipeline
+name: train-game-prod-pipeline
 
 on:
   workflow_dispatch:
-  push:
     branches: [ main ]
     paths:
       - 'client/**'
@@ -22,7 +21,7 @@ jobs:
         run: |
           git branch -D splitting-fe || true
           git remote rm heroku-fe-app || true
-          git remote add heroku-fe-app https://heroku:${{ env.HEROKU_API_KEY }}@git.heroku.com/train-game-staging-fe.git || true
+          git remote add heroku-fe-app https://heroku:${{ env.HEROKU_API_KEY }}@git.heroku.com/train-game-production-fe.git || true
           git subtree split --prefix client -b splitting-fe
           git push --force heroku-fe-app splitting-fe:main
           git branch -D splitting-fe
@@ -37,7 +36,7 @@ jobs:
         run: |
           git branch -D splitting-be || true
           git remote rm heroku-be-app || true
-          git remote add heroku-be-app https://heroku:${{ env.HEROKU_API_KEY }}@git.heroku.com/train-game-staging-be.git || true
+          git remote add heroku-be-app https://heroku:${{ env.HEROKU_API_KEY }}@git.heroku.com/train-game-production-be.git || true
           git subtree split --prefix server -b splitting-be
           git push --force heroku-be-app splitting-be:main
           git branch -D splitting-be

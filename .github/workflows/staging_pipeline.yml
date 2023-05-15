@@ -1,0 +1,43 @@
+name: train-game-staging-pipeline
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'client/**'
+      - 'server/**'
+
+env:
+  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+jobs:
+  deploy-fe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Deploy to Heroku FE
+        run: |
+          git branch -D splitting-fe || true
+          git remote rm heroku-fe-app || true
+          git remote add heroku-fe-app https://heroku:${{ env.HEROKU_API_KEY }}@git.heroku.com/train-game-staging-fe.git || true
+          git subtree split --prefix client -b splitting-fe
+          git push --force heroku-fe-app splitting-fe:main
+          git branch -D splitting-fe
+
+  deploy-be:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Deploy to Heroku BE
+        run: |
+          git branch -D splitting-be || true
+          git remote rm heroku-be-app || true
+          git remote add heroku-be-app https://heroku:${{ env.HEROKU_API_KEY }}@git.heroku.com/train-game-staging-be.git || true
+          git subtree split --prefix server -b splitting-be
+          git push --force heroku-be-app splitting-be:main
+          git branch -D splitting-be
