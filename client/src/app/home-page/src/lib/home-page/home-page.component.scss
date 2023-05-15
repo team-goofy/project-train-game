@@ -6,10 +6,11 @@
 }
 
 .home-login-btn{
-  margin-left: 90%;
+  margin-right: 2%;
   z-index: 10;
   position: absolute;
   top: 2%;
+  right: 0;
   background-color: #333E9A !important;
   color: white !important;
 }
@@ -92,14 +93,42 @@
   }
 
   .game-explanation{
-    margin-top: -90% !important;
-    color: #333E9A;
+    display: none;
   }
 
   .game-explanation-icon{
     margin-top: -105% !important;
     color: #333E9A;
   }
+
+  .home-login-btn {
+    margin-right: 2%;
+    margin-left: auto;
+  }
+
+  /* Responsive Adjustments */
+  @media screen and (max-width: 768px) {
+    .home-cards {
+      width: 90%;
+    }
+
+    .game-title {
+      font-size: 24px;
+    }
+
+    .game-explanation {
+      display: none;
+    }
+    .game-explanation-icon {
+      top: 100%;
+    }
+
+    .game-explanation-text {
+      margin: 5% 2%;
+    }
+  }
+
+
 }
 
 
