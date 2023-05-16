@@ -5,6 +5,8 @@ import { UserRequestModel } from "@client/shared-models";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { debounceTime, distinctUntilChanged } from "rxjs";
+import {UserLoginModel} from "../../../../shared-models/src/lib/user-login.model";
+import {signOut} from "@angular/fire/auth";
 
 @Component({
   templateUrl: './login-page.component.html',
@@ -12,9 +14,11 @@ import { debounceTime, distinctUntilChanged } from "rxjs";
 })
 export class LoginPageComponent implements OnInit{
   private formBuilder: FormBuilder = inject(FormBuilder);
+  private authService: AuthService = inject(AuthService);
+  private router: Router = inject(Router);
+    private snackbar: MatSnackBar = inject(MatSnackBar);
   form: FormGroup = new FormGroup({
     email: new FormControl(''),
-    username: new FormControl(''),
     password: new FormControl('')
   });
   submitted = false;
@@ -27,46 +31,34 @@ export class LoginPageComponent implements OnInit{
     this.form = new FormGroup(
       {
         email: new FormControl('', [Validators.required, Validators.email]),
-        password: new FormControl('', [Validators.required, Validators.minLength(6)])
+        password: new FormControl('', [Validators.required])
       }
     )
-
-
-    // this.form = this.formBuilder.group(
-    //   {
-    //     email: [
-    //       '',
-    //       [
-    //         Validators.required,
-    //         Validators.pattern(new RegExp("[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", "i"))
-    //       ]
-    //     ],
-    //     username: [
-    //       '',
-    //       [
-    //         Validators.required,
-    //         Validators.minLength(4),
-    //         Validators.maxLength(25),
-    //       ],
-    //     ],
-    //     password: [
-    //       '',
-    //       [
-    //         Validators.required,
-    //         Validators.minLength(6),
-    //         Validators.maxLength(40),
-    //       ],
-    //     ],
-    //   }
-    // );
   }
+
   onSubmit(): void {
     this.submitted = true;
-
     if (this.form.invalid) {
       return;
     }
 
-  }
+    const user = <UserLoginModel>{
+      email: this.form.value.email,
+      password: this.form.value.password
+    };
 
+    this.authService.login(user).subscribe({
+      next: (success) => {
+        let ref = this.snackbar.open(
+          "Logged in successfully",
+          "",
+          { horizontalPosition: 'end', duration: 3000 }
+        );
+        this.router.navigate(['/']);
+      },
+      error: (error) => {
+        this.snackbar.open("Something went wrong, please try again", "", { horizontalPosition: 'end', duration: 3000 });
+      }
+    });
+  }
 }

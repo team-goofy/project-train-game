@@ -25,8 +25,9 @@
             <button  matSuffix mat-icon-button aria-label="Clear">
               <mat-icon>clear</mat-icon>
             </button>
-            <mat-error *ngIf="form.get('email')?.errors?.['required']">
-              <span>Email is required</span>
+            <mat-error >
+              <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
+              <span *ngIf="form.get('email')?.errors?.['email']">Email is invalid</span>
             </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
@@ -39,12 +40,12 @@
               <span >Password is required</span>
             </mat-error>
           </mat-form-field>
-          <span class="forgot-password">Forgot Password?</span>
         </div>
         <button id="submit-button" mat-raised-button color="primary" type="submit">
           <mat-icon>person</mat-icon>
           Login
         </button>
+
       </form>
     </mat-card-content>
   </div>
