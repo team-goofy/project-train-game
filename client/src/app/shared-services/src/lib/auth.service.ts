@@ -1,7 +1,7 @@
 import { Injectable, inject } from "@angular/core";
 import { Auth, idToken, signInWithEmailAndPassword, signOut, user } from '@angular/fire/auth';
 import { Router } from "@angular/router";
-import {catchError, from, Observable, switchMap, tap, throwError} from "rxjs";
+import {BehaviorSubject, catchError, from, Observable, switchMap, tap, throwError} from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import {UserLoginModel, UserRequestModel} from "@client/shared-models";
 import { environment } from "../../../../environments/environment";
@@ -19,6 +19,7 @@ export class AuthService {
 
     user$ = user(this.auth);
     idToken$ = idToken(this.auth);
+    isLoggedIn = new BehaviorSubject(false);
 
 
     login(user: UserLoginModel): Observable<any> {
@@ -31,6 +32,7 @@ export class AuthService {
             } else {
               throw new Error('Could not get token');
             }
+            this.isLoggedIn.next(true);
           }),
           catchError((err: Error) => {
             return throwError(err);
@@ -41,7 +43,8 @@ export class AuthService {
     logout(): void {
         signOut(this.auth);
         localStorage.removeItem('tokenId');
-        // this.router.navigate(['/']);
+        this.isLoggedIn.next(false);
+        this.router.navigate(['/']);
     }
 
     register(userRequestModel: UserRequestModel): Observable<any> {

@@ -1,10 +1,14 @@
 <background-image></background-image>
 
 <!--login btn-->
-<button class="home-login-btn" mat-raised-button routerLink="/login">
+<button *ngIf="!loginStatus" class="home-login-btn" mat-raised-button routerLink="/login">
   <mat-icon aria-hidden="false" aria-label="Login person" fontIcon="person"></mat-icon>
-  login
+  Login
 </button>
+  <button *ngIf="loginStatus" class="home-login-btn" mat-raised-button routerLink="/login">
+    <mat-icon aria-hidden="false" aria-label="Login person" fontIcon="person"></mat-icon>
+    Logout
+  </button>
 
 <!--title-->
 <h1 class="game-title mdc-typography--headline1">WanderTrains </h1>
