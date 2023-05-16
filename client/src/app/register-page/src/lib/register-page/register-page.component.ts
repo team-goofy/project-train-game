@@ -29,7 +29,7 @@ export class RegisterPageComponent implements OnInit{
           '',
           [
             Validators.required,
-            Validators.pattern(new RegExp("[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", "i"))
+            Validators.pattern(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/i)
           ]
         ],
         username: [

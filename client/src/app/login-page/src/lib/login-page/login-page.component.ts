@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { AuthService } from "@client/shared-services";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -13,23 +13,32 @@ export class LoginPageComponent implements OnInit{
   private formBuilder: FormBuilder = inject(FormBuilder);
   private authService: AuthService = inject(AuthService);
   private router: Router = inject(Router);
-    private snackbar: MatSnackBar = inject(MatSnackBar);
+  private snackbar: MatSnackBar = inject(MatSnackBar);
   form: FormGroup = new FormGroup({
     email: new FormControl(''),
     password: new FormControl('')
   });
+
   submitted = false;
-  hide = true;
-  viewPass() {
-    this.hide = !this.hide;
-  }
+  showPassword = true;
 
   ngOnInit(): void {
-    this.form = new FormGroup(
-      {
-        email: new FormControl('', [Validators.required, Validators.email]),
-        password: new FormControl('', [Validators.required])
-      }
+    this.form = this.formBuilder.group(
+    {
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/i)
+        ]
+      ],
+      password: [
+      '',
+      [
+        Validators.required,
+      ],
+    ],
+    }
     )
   }
 
@@ -57,5 +66,9 @@ export class LoginPageComponent implements OnInit{
         this.snackbar.open("Something went wrong, please try again", "", { horizontalPosition: 'end', duration: 3000 });
       }
     });
+  }
+
+  get f(): { [key: string]: AbstractControl } {
+    return this.form.controls;
   }
 }

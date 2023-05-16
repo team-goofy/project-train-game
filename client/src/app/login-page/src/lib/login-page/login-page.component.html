@@ -12,7 +12,7 @@
   <div class="card-body">
     <mat-card-header>
       <mat-card-title-group>
-        <mat-card-title>Login</mat-card-title>
+        <mat-card-title class="mat-headline-3">Login</mat-card-title>
       </mat-card-title-group>
     </mat-card-header>
     <mat-card-content>
@@ -22,21 +22,21 @@
           <mat-form-field appearance="outline">
             <mat-label>E-mail</mat-label>
             <input type="email" matInput formControlName="email" required>
-            <button  matSuffix mat-icon-button aria-label="Clear">
+            <button *ngIf="form.get('email')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="form.get('email')?.setValue('')">
               <mat-icon>clear</mat-icon>
             </button>
             <mat-error >
-              <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
-              <span *ngIf="form.get('email')?.errors?.['email']">Email is invalid</span>
+              <span *ngIf="f['email'].hasError('required')">Email is required</span>
+              <span *ngIf="f['email'].hasError('pattern')">Email is invalid</span>
             </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
-            <input type="password" matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
-            <button matSuffix mat-icon-button aria-label="look" (click)="viewPass()">
-              <mat-icon>{{hide?'remove_red_eye':'visibility_off'}}</mat-icon>
+            <input type="password" matInput [type]="showPassword ? 'password' : 'text'" formControlName="password" required>
+            <button *ngIf="form.get('password')?.value" matSuffix mat-icon-button aria-label="look" (click)="showPassword = !showPassword" type="button">
+              <mat-icon>{{showPassword?'remove_red_eye':'visibility_off'}}</mat-icon>
             </button>
-            <mat-error *ngIf="form.get('password')?.errors?.['required']">
+            <mat-error *ngIf="f['password'].hasError('required')">
               <span >Password is required</span>
             </mat-error>
           </mat-form-field>
@@ -45,7 +45,6 @@
           <mat-icon>person</mat-icon>
           Login
         </button>
-
       </form>
     </mat-card-content>
   </div>
