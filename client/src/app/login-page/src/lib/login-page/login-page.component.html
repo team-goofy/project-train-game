@@ -21,21 +21,21 @@
         <div class="form-fields" >
           <mat-form-field appearance="outline">
             <mat-label>E-mail</mat-label>
-            <input type="email" matInput formControlName="email">
+            <input type="email" matInput formControlName="email" required>
             <button  matSuffix mat-icon-button aria-label="Clear">
               <mat-icon>clear</mat-icon>
             </button>
-            <mat-error>
-              <span >Email is invalid</span>
+            <mat-error *ngIf="form.get('email')?.errors?.['required']">
+              <span>Email is required</span>
             </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
-            <input type="password" matInput formControlName="password">
-            <button matSuffix mat-icon-button aria-label="Clear">
-              <mat-icon>clear</mat-icon>
+            <input type="password" matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+            <button matSuffix mat-icon-button aria-label="look" (click)="viewPass()">
+              <mat-icon>{{hide?'remove_red_eye':'visibility_off'}}</mat-icon>
             </button>
-            <mat-error>
+            <mat-error *ngIf="form.get('password')?.errors?.['required']">
               <span >Password is required</span>
             </mat-error>
           </mat-form-field>
