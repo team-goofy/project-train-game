@@ -1,17 +1,17 @@
 <background-image></background-image>
 
 <!--login btn-->
-<button class="home-login-btn" mat-raised-button routerLink="/login">
+<button class="home-login-btn" color="primary" mat-raised-button routerLink="/login">
   <mat-icon aria-hidden="false" aria-label="Login person" fontIcon="person"></mat-icon>
   login
 </button>
 
 <!--title-->
-<h1 class="game-title mdc-typography--headline1">WanderTrains </h1>
+<h1 class="game-title mat-headline-1">WanderTrains </h1>
 
 <!--Explanation of the game-->
-<div (click)="scrollTo(target)">
-  <h3 class="game-explanation mdc-typography--headline5">Explanation of the game</h3>
+<div class="explanation-btn" (click)="scrollTo(target)">
+  <h3 class="game-explanation mat-h1">Explanation of the game</h3>
   <div class="game-explanation-icon">
     <mat-icon aria-hidden="false" aria-label="Login person" fontIcon="keyboard_arrow_down"></mat-icon>
   </div>
@@ -22,7 +22,7 @@
 </div>
 
 <!-- overlay cards-->
-<div class="home-cards-grid mdc-typography--overline">
+<div class="home-cards-grid mat-headline-3">
   <mat-grid-list cols="3" rowHeight="120px">
     <mat-grid-tile>
       <mat-card class="home-cards">
@@ -53,31 +53,29 @@
 
 <!--information-->
 <div class="game-explanation-text">
-  <div class="mdc-typography--headline5">
-    <h1>How do you play the train game?</h1>
-  </div>
+    <h1 class="mat-headline-3"><b>How do you play the train game?</b></h1>
 
-  <div class="mdc-typography--body1 ">
+  <div class="mat-h3">
     <p>
       The train game is a simple and spontaneous game that involves exploring various cities by taking random trains.
       The objective of the game is to experience the thrill of unpredictability and discover new places along the way.
       Here's an explanation of how to play the train game:
       <br><br>
-      1. Start at a random train station: Begin the game by going to any train station.
+        <b>1.</b> Start at a random train station: Begin the game by going to any train station.
       The game will get your location and set that as your starting point.
       For example, let's say you start at Amsterdam Central station.
       <br>
-      2. Press the start button to start the game.
+        <b>2.</b> Press the start button to start the game.
       The game will then randomly select a platform number for you to go to.
       It will also show the departure time of the train, the end destination, and the station you need to get off at.
       For example, the app tells you to go to platform 4B for the train to Utrecht Central station, that departs over 10
       minutes.
       <br>
-      3.Get off at the indicated stop: in this case that will be Hilversum.
+        <b> 3.</b> Get off at the indicated stop: in this case that will be Hilversum.
       Once you arrive at the station, take the opportunity to explore the city or town.
       Don't forget to take a picture for the memories!
       <br>
-      4. Repeat the process until you are done for the day.
+          <b>4.</b> Repeat the process until you are done for the day.
       <br><br>
       By playing the train game, you can embark on spontaneous adventures, uncover hidden gems, and encounter unexpected
       surprises as you travel to various destinations.
