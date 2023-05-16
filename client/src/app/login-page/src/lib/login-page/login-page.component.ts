@@ -10,6 +10,51 @@ import { debounceTime, distinctUntilChanged } from "rxjs";
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit{
+  private formBuilder: FormBuilder = inject(FormBuilder);
+  form: FormGroup = new FormGroup({
+    email: new FormControl(''),
+    username: new FormControl(''),
+    password: new FormControl('')
+  });
+  submitted = false;
+
+  ngOnInit(): void {
+    this.form = this.formBuilder.group(
+      {
+        email: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern(new RegExp("[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", "i"))
+          ]
+        ],
+        username: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(4),
+            Validators.maxLength(25),
+          ],
+        ],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.maxLength(40),
+          ],
+        ],
+      }
+    );
+  }
+  onSubmit(): void {
+    this.submitted = true;
+
+    if (this.form.invalid) {
+      return;
+    }
+
+  }
 
 }
