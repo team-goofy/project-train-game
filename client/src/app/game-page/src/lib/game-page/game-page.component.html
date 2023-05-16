@@ -1,1 +1,33 @@
-<p>game-page works!</p>
+<background-image></background-image>
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-subtitle>
+      <button mat-button color="primary">
+        <mat-icon>arrow_back_ios</mat-icon>
+        Home
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="!loading" class="title-container">
+      <h2>You're starting in</h2>
+      <h1>{{ location }}</h1>
+    </div>
+    <div *ngIf="loading" class="loading">
+      <h3>Fetching location...</h3>
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+  </mat-card-content>
+  <div class="spacer"></div>
+  <mat-card-actions>
+    <button mat-raised-button color="primary">
+      <mat-icon>replay</mat-icon>
+      Refetch location
+    </button>
+
+    <button mat-raised-button color="accent">
+      <mat-icon>play_arrow</mat-icon>
+      Start
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -9,12 +9,10 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { InterceptorService } from '@client/shared-services';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { GamePageComponent } from './game-page/src/lib/game-page/game-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GamePageComponent,
   ],
   imports: [
     BrowserModule,
