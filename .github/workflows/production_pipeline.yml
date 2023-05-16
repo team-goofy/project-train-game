@@ -2,6 +2,7 @@ name: train-game-production-pipeline
 
 on:
   workflow_dispatch:
+  push:
     branches: [ main ]
     paths:
       - 'client/**'
