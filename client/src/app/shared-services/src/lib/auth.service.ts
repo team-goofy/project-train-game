@@ -3,10 +3,9 @@ import { Auth, idToken, signInWithEmailAndPassword, signOut, user } from '@angul
 import { Router } from "@angular/router";
 import {catchError, from, Observable, switchMap, tap, throwError} from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { UserRequestModel } from "@client/shared-models";
+import {UserLoginModel, UserRequestModel} from "@client/shared-models";
 import { environment } from "../../../../environments/environment";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
-import {UserLoginModel} from "../../../shared-models/src/lib/user-login.model";
 
 @Injectable({
     providedIn: 'root'

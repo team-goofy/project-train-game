@@ -1,12 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "@client/shared-services";
-import { UserRequestModel } from "@client/shared-models";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { debounceTime, distinctUntilChanged } from "rxjs";
-import {UserLoginModel} from "../../../../shared-models/src/lib/user-login.model";
-import {signOut} from "@angular/fire/auth";
+import {UserLoginModel} from "@client/shared-models";
 
 @Component({
   templateUrl: './login-page.component.html',
