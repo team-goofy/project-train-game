@@ -58,11 +58,18 @@ export class LoginPageComponent implements OnInit{
         let ref = this.snackbar.open(
           "Logged in successfully",
           "",
-          { horizontalPosition: 'end', duration: 3000 }
+          { horizontalPosition: 'end', duration: 2000 }
         );
-        this.router.navigate(['/']);
+
+        ref.afterDismissed().subscribe(() => {
+          this.router.navigate(['/'])
+            .then(() => {
+              window.location.reload();
+            });
+        });
       },
       error: (error) => {
+        console.log(error.message);
         this.snackbar.open("Something went wrong, please try again", "", { horizontalPosition: 'end', duration: 3000 });
       }
     });

@@ -23,7 +23,6 @@ export class AuthService {
       return !!localStorage.getItem('tokenId');
     }
 
-
     login(user: UserLoginModel): Observable<any> {
       return from(signInWithEmailAndPassword(this.auth, user.email, user.password))
         .pipe(
