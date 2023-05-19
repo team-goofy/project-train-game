@@ -29,7 +29,8 @@
       "@client/home-page": ["src/app/home-page/src/index.ts"],
       "@client/shared-components": ["src/app/shared-components/src/index.ts"],
       "@client/login-page": ["src/app/login-page/src/index.ts"],
-      "@client/register-page": ["src/app/register-page/src/index.ts"]
+      "@client/register-page": ["src/app/register-page/src/index.ts"],
+      "@client/verify-page": ["src/app/verification-page/src/index.ts"]
     }
   },
   "angularCompilerOptions": {

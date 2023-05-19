@@ -19,6 +19,13 @@
   width: 100%;
 }
 
+.spinnerWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 35px;
+}
+
 @media (max-width: 700px) {
   .register-card {
     width:90%;
