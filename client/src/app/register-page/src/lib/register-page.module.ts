@@ -11,6 +11,7 @@ import { MatInputModule } from "@angular/material/input";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BackgroundImageModule } from "@client/shared-components";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
     MatInputModule,
     ReactiveFormsModule,
     BackgroundImageModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
     declarations: [
       RegisterPageComponent,
