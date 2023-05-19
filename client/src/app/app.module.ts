@@ -9,6 +9,9 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { InterceptorService } from '@client/shared-services';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {AngularFireModule} from "@angular/fire/compat";
+import {AngularFireAuthModule} from "@angular/fire/compat/auth";
 
 @NgModule({
   declarations: [
@@ -19,8 +22,11 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    MatSnackBarModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth())
+    provideAuth(() => getAuth()),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule
   ],
   providers: [
     {
