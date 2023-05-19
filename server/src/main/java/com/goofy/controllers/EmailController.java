@@ -46,7 +46,7 @@ public class EmailController {
                 "Kind regards, \n" +
                 "WanderTrains";
 
-        emailService.sendEmail(email, subject, messageText);
+        emailService.sendEmail(env.getProperty("spring.mail.from"), email, subject, messageText);
         return new ResponseEntity<>("Verification mail send successfully", HttpStatus.OK);
     }
 }

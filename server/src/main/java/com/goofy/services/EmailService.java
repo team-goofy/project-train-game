@@ -13,11 +13,11 @@ public class EmailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendEmail(String to, String subject, String text) {
+    public void sendEmail(String from, String to, String subject, String text) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
 
-            message.setFrom("WanderTrains");
+            message.setFrom(from);
             message.setTo(to);
             message.setSubject(subject);
             message.setText(text);
