@@ -1,14 +1,12 @@
 import { Injectable, inject } from "@angular/core";
 import {
   Auth,
-  createUserWithEmailAndPassword,
-  idToken, sendEmailVerification,
+  idToken,
   signInWithEmailAndPassword,
-  signOut,
   user
 } from '@angular/fire/auth';
 import { Router } from "@angular/router";
-import {BehaviorSubject, catchError, from, Observable, switchMap, tap, throwError} from "rxjs";
+import {catchError, from, Observable, switchMap, tap, throwError} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {UserLoginModel, UserRequestModel} from "@client/shared-models";
 import { environment } from "../../../../environments/environment";
