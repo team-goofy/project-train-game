@@ -19,7 +19,9 @@ export class AuthService {
 
     user$ = user(this.auth);
     idToken$ = idToken(this.auth);
-    isLoggedIn = new BehaviorSubject(false);
+    isLoggedIn(): boolean {
+      return !!localStorage.getItem('tokenId');
+    }
 
 
     login(user: UserLoginModel): Observable<any> {
@@ -32,7 +34,6 @@ export class AuthService {
             } else {
               throw new Error('Could not get token');
             }
-            this.isLoggedIn.next(true);
           }),
           catchError((err: Error) => {
             return throwError(err);
@@ -43,7 +44,6 @@ export class AuthService {
     logout(): void {
         signOut(this.auth);
         localStorage.removeItem('tokenId');
-        this.isLoggedIn.next(false);
         this.router.navigate(['/']);
     }
 

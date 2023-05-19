@@ -1,11 +1,11 @@
 <background-image></background-image>
 
 <!--login btn-->
-<button *ngIf="!loginStatus" class="home-login-btn" color="primary" mat-raised-button routerLink="/login">
+<button *ngIf="!(authService.isLoggedIn())" class="home-login-btn" color="primary" mat-raised-button routerLink="/login">
   <mat-icon aria-hidden="false" aria-label="Login person" fontIcon="person"></mat-icon>
   Login
 </button>
-<button *ngIf="loginStatus" class="home-login-btn" color="primary" mat-raised-button (click)="logout()">
+<button *ngIf="(authService.isLoggedIn())" class="home-login-btn" color="primary" mat-raised-button (click)="authService.logout()">
   <mat-icon aria-hidden="false" aria-label="Login person" fontIcon="person"></mat-icon>
   Logout
 </button>
