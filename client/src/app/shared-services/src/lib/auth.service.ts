@@ -8,10 +8,11 @@ import {
   user
 } from '@angular/fire/auth';
 import { Router } from "@angular/router";
-import { BehaviorSubject, Observable } from "rxjs";
+import {BehaviorSubject, catchError, from, Observable, switchMap, tap, throwError} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import { UserRequestModel } from "@client/shared-models";
+import {UserLoginModel, UserRequestModel} from "@client/shared-models";
 import { environment } from "../../../../environments/environment";
+import {AngularFireAuth} from "@angular/fire/compat/auth";
 
 @Injectable({
     providedIn: 'root'
@@ -20,27 +21,27 @@ export class AuthService {
     private auth: Auth = inject(Auth);
     private router: Router = inject(Router);
     private http: HttpClient = inject(HttpClient);
+    private afs: AngularFireAuth = inject(AngularFireAuth);
     private baseUrl: String = environment.apiUrl;
 
     user$ = user(this.auth);
     idToken$ = idToken(this.auth);
-    error$ = new BehaviorSubject<string | null>(null);
-
-    login(email: string, password: string) {
-      signInWithEmailAndPassword(this.auth, email, password)
-        .then(() => {
-          this.idToken$.subscribe(token => {
+  
+    login(user: UserLoginModel): Observable<any> {
+      return from(signInWithEmailAndPassword(this.auth, user.email, user.password))
+        .pipe(
+          switchMap(() => this.idToken$),
+          tap(token => {
             if (token) {
               localStorage.setItem('tokenId', token);
-              this.router.navigate(['/']);
             } else {
-              this.error$.next('Could not get token');
+              throw new Error('Could not get token');
             }
-          });
-        })
-        .catch((err: Error) => {
-          this.error$.next(err.message);
-        });
+          }),
+          catchError((err: Error) => {
+            return throwError(err);
+          })
+        );
     }
 
     logout(): void {
@@ -56,8 +57,6 @@ export class AuthService {
 
     sendVerificationMail(emailParam: string | null) {
       const email = emailParam ? emailParam : this.auth.currentUser!.email;
-
-      console.log(email);
 
       const httpOptions: Object = {
         headers: new HttpHeaders().set('Content-Type', 'application/json'),

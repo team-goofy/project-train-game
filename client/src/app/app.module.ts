@@ -12,6 +12,9 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {AngularFireAuthGuardModule} from "@angular/fire/compat/auth-guard";
 import {FIREBASE_OPTIONS} from "@angular/fire/compat";
 import {AuthGuardModule} from "@angular/fire/auth-guard";
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {AngularFireModule} from "@angular/fire/compat";
+import {AngularFireAuthModule} from "@angular/fire/compat/auth";
 
 @NgModule({
   declarations: [
@@ -24,8 +27,11 @@ import {AuthGuardModule} from "@angular/fire/auth-guard";
     AuthGuardModule,
     AppRoutingModule,
     HttpClientModule,
+    MatSnackBarModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth())
+    provideAuth(() => getAuth()),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule
   ],
   providers: [
     {
