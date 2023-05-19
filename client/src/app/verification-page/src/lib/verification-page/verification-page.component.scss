@@ -1,0 +1,58 @@
+.verification-card {
+  position: absolute;
+  width: 60%;
+  padding: 30px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
+.title_center {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.text_center {
+  text-align: center;
+}
+
+.title_bold {
+  font-weight: bold;
+}
+
+.resend_btn {
+  font-size: 25px;
+  width: 300px;
+  height: 50px;
+  border-radius: 30px;
+}
+
+.spinnerWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 35px;
+}
+
+@media (max-width: 700px) {
+  .verification-card {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .text_small {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 450px) {
+  .title_small {
+    font-size: 40px;
+  }
+
+  .resend_btn {
+    width: 100%;
+  }
+}

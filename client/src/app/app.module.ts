@@ -9,6 +9,9 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { InterceptorService } from '@client/shared-services';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {AngularFireAuthGuardModule} from "@angular/fire/compat/auth-guard";
+import {FIREBASE_OPTIONS} from "@angular/fire/compat";
+import {AuthGuardModule} from "@angular/fire/auth-guard";
 
 @NgModule({
   declarations: [
@@ -17,6 +20,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    AngularFireAuthGuardModule,
+    AuthGuardModule,
     AppRoutingModule,
     HttpClientModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
@@ -27,7 +32,11 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,
       multi: true
-     }
+    },
+    {
+      provide: FIREBASE_OPTIONS,
+      useValue: environment.firebase
+    }
   ],
   bootstrap: [AppComponent]
 })
