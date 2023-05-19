@@ -12,7 +12,6 @@ import {BehaviorSubject, catchError, from, Observable, switchMap, tap, throwErro
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {UserLoginModel, UserRequestModel} from "@client/shared-models";
 import { environment } from "../../../../environments/environment";
-import {AngularFireAuth} from "@angular/fire/compat/auth";
 
 @Injectable({
     providedIn: 'root'
@@ -21,12 +20,11 @@ export class AuthService {
     private auth: Auth = inject(Auth);
     private router: Router = inject(Router);
     private http: HttpClient = inject(HttpClient);
-    private afs: AngularFireAuth = inject(AngularFireAuth);
     private baseUrl: String = environment.apiUrl;
 
     user$ = user(this.auth);
     idToken$ = idToken(this.auth);
-  
+
     login(user: UserLoginModel): Observable<any> {
       return from(signInWithEmailAndPassword(this.auth, user.email, user.password))
         .pipe(
