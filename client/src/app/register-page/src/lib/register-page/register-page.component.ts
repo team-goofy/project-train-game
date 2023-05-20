@@ -5,6 +5,7 @@ import { UserRequestModel } from "@client/shared-models";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { debounceTime, distinctUntilChanged } from "rxjs";
+import {sendEmailVerification} from "@angular/fire/auth";
 
 @Component({
   templateUrl: './register-page.component.html',
@@ -15,12 +16,14 @@ export class RegisterPageComponent implements OnInit{
   private authService: AuthService = inject(AuthService);
   private router: Router = inject(Router);
   private snackbar: MatSnackBar = inject(MatSnackBar);
+
   form: FormGroup = new FormGroup({
     email: new FormControl(''),
     username: new FormControl(''),
     password: new FormControl('')
   });
   submitted = false;
+  success = false;
 
   ngOnInit(): void {
     this.form = this.formBuilder.group(
@@ -29,7 +32,7 @@ export class RegisterPageComponent implements OnInit{
           '',
           [
             Validators.required,
-            Validators.pattern(new RegExp("[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", "i"))
+            Validators.pattern(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/i)
           ]
         ],
         username: [
@@ -71,6 +74,7 @@ export class RegisterPageComponent implements OnInit{
     this.submitted = true;
 
     if (this.form.invalid) {
+      this.submitted = false;
       return;
     }
 
@@ -82,10 +86,12 @@ export class RegisterPageComponent implements OnInit{
 
     this.authService.register(user).subscribe({
       next: () => {
+        this.success = true;
+
         let ref = this.snackbar.open(
-          "Account has been created successfully",
+          "Account has been created successfully! Check your mail to verify your account.",
           "",
-          { horizontalPosition: 'end', duration: 3000 }
+          { horizontalPosition: 'end', duration: 6000 }
         );
 
         ref.afterDismissed().subscribe(() => {
@@ -93,6 +99,7 @@ export class RegisterPageComponent implements OnInit{
         });
       },
       error: ({ error }) => {
+        this.submitted = false;
         this.snackbar.open(error.errors.join(), "Close");
       }
     });

@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { RegisterPageComponent } from "./register-page/register-page.component";
-import { RegisterPageRoutingModule } from "./register-page-routing.module";
+import { VerificationPageComponent } from "./verification-page/verification-page.component";
+import { VerificationPageRoutingModule } from "./verification-page-routing.module";
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
@@ -16,23 +16,20 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 @NgModule({
   imports: [
     CommonModule,
-    RegisterPageRoutingModule,
+    VerificationPageRoutingModule,
     MatGridListModule,
     MatCardModule,
-    MatFormFieldModule,
     MatIconModule,
     MatButtonModule,
-    MatInputModule,
-    ReactiveFormsModule,
     BackgroundImageModule,
     MatSnackBarModule,
     MatProgressSpinnerModule
   ],
     declarations: [
-      RegisterPageComponent,
+      VerificationPageComponent,
     ],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' }}
   ]
 })
-export class RegisterPageModule {}
+export class VerificationPageModule {}

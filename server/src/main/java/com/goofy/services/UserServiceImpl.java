@@ -1,5 +1,6 @@
 package com.goofy.services;
 
+import com.goofy.controllers.EmailController;
 import com.goofy.dtos.UserDTO;
 import com.goofy.exceptions.UsernameExistsException;
 import com.google.api.core.ApiFuture;
@@ -14,10 +15,13 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private EmailController emailController;
     private final FirebaseAuth firebaseAuth;
     private final Firestore firestore;
 
-    public UserServiceImpl(FirebaseAuth firebaseAuth, Firestore firestore) {
+    public UserServiceImpl(EmailController emailController, FirebaseAuth firebaseAuth, Firestore firestore) {
+        this.emailController = emailController;
         this.firebaseAuth = firebaseAuth;
         this.firestore = firestore;
     }
@@ -40,6 +44,7 @@ public class UserServiceImpl implements UserService {
             Map<String, String> data = Map.of("username", user.getUsername());
             this.firestore.collection("user").document(createdUser.getUid()).set(data);
 
+            emailController.sendEmailVerification(user.getEmail());
             return createdUser;
         } catch (InterruptedException | ExecutionException e) {
             throw new Exception("Something went wrong while creating the user");

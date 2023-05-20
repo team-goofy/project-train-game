@@ -9,6 +9,8 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { InterceptorService } from '@client/shared-services';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {AuthGuardModule} from "@angular/fire/auth-guard";
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -17,17 +19,19 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    AuthGuardModule,
     AppRoutingModule,
     HttpClientModule,
+    MatSnackBarModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth())
+    provideAuth(() => getAuth()),
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,
       multi: true
-     }
+    }
   ],
   bootstrap: [AppComponent]
 })

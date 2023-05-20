@@ -1,5 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import {AuthPipe} from "@angular/fire/auth-guard";
+import { map } from "rxjs";
+
+export const RedirectUnauthorizedOrUnverifiedUser: AuthPipe = map(user => {
+  if (user != null) {
+    if (user.emailVerified) {
+      return true;
+    } else {
+      return ['verify-email'];
+    }
+  } else {
+    return ['login'];
+  }
+});
 
 const routes: Routes = [
   {
@@ -12,13 +26,19 @@ const routes: Routes = [
     path: 'login',
     pathMatch: 'full',
     loadChildren: () =>
-      import('@client/login-page').then((m) => m.LoginPageModule),
+      import('@client/login-page').then((m) => m.LoginPageModule)
   },
   {
     path: 'game',
     pathMatch: 'full',
     loadChildren: () =>
       import('@client/game-page').then((m) => m.GamePageModule),
+  },
+  {
+    path: 'verify-email',
+    pathMatch: 'full',
+    loadChildren: () =>
+      import('@client/verify-page').then((m) => m.VerificationPageModule),
   }
 ];
 

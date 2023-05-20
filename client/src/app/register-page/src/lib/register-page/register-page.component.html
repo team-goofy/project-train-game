@@ -56,10 +56,16 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <button id="submit-button" mat-raised-button color="primary" type="submit">
+
+        <button id="submit-button" [disabled]="submitted" mat-raised-button color="primary" type="submit">
           <mat-icon>person</mat-icon>
           Register
         </button>
+
+        <div class="spinnerWrapper" *ngIf="submitted && !success">
+          <mat-spinner [diameter]="35"/>
+        </div>
+
       </form>
     </mat-card-content>
   </div>
