@@ -29,6 +29,12 @@ const routes: Routes = [
       import('@client/login-page').then((m) => m.LoginPageModule)
   },
   {
+    path: 'register',
+    pathMatch: 'full',
+    loadChildren: () =>
+      import('@client/register-page').then((m) => m.RegisterPageModule),
+  },
+  {
     path: 'game',
     pathMatch: 'full',
     loadChildren: () =>

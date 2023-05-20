@@ -9,6 +9,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { HttpClientModule } from "@angular/common/http";
+import { StationService } from "./services/station.service";
 
 @NgModule({
     imports: [
@@ -19,11 +21,15 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
         MatButtonModule,
         MatDividerModule,
         MatIconModule, 
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule, 
+        HttpClientModule
     ],
     declarations: [
       GamePageComponent,
       StartLocationComponent,
     ],
+    providers: [
+      StationService
+    ]
 })
 export class GamePageModule {}
