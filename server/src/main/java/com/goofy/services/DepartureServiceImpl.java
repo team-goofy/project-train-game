@@ -30,16 +30,17 @@ public class DepartureServiceImpl implements DepartureService {
     @Override
     public ExitStationTrain getRandomExitStationTrain(List<Departure> departures) {
         List<Departure> filteredDepartures = this.filterByFutureDepartures(departures);
-        int randomDepartureIndex = this.random.nextInt(filteredDepartures.size());
+        int randomDepartureIndex = (int)(Math.random() * filteredDepartures.size());
 
         Departure randomDeparture = filteredDepartures.get(randomDepartureIndex);
 
         List<RouteStation> stations = randomDeparture.getRouteStations();
-        int randomExitStationIndex = this.random.nextInt(stations.size());
+        int randomExitStationIndex = (int)(Math.random() * stations.size());
 
         RouteStation randomExitStation = stations.get(randomExitStationIndex);
 
         return new ExitStationTrain(randomDeparture, randomExitStation);
     }
+
 
 }
