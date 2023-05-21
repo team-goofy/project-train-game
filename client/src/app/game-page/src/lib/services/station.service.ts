@@ -7,7 +7,7 @@ import { environment } from "src/environments/environment";
 @Injectable()
 export class StationService {
     private _http: HttpClient = inject(HttpClient);
-    private _baseUrl: String = environment.apiUrl;
+    private _baseUrl: string = environment.apiUrl;
     private _nearestStation$ = new BehaviorSubject<Station | null>(null);
 
     init(lat: number, lng: number): void {

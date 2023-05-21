@@ -19,11 +19,11 @@
         <p class="mat-subtitle-1">Fetching location...</p>
         <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
       </div>
-      <div *ngIf="!state.loading && state.permission === 'denied'" class="center">
+      <div *ngIf="state.permission === 'denied'" class="center">
         <p class="mat-headline-5">No location? No game 😕</p>
         <p class="mat-subtitle-1">We need your location to start your adventure<br>Please enable location sharing in your browser settings</p>
       </div>
-      <div *ngIf="!state.loading && state.permission === 'prompt'" class="center">
+      <div *ngIf="state.permission === 'prompt'" class="center">
         <p class="mat-headline-5">Location = adventure 🌎</p>
         <p class="mat-subtitle-1">Please click "<b>Allow</b>" when prompted to enable your location sharing</p>
       </div>
