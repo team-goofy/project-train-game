@@ -3,6 +3,7 @@ import { RandomTrainService } from "../services/random-train.service";
 import { ExitStationTrain } from "@client/shared-models";
 import { ActivatedRoute } from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {from} from "rxjs";
 
 @Component({
   templateUrl: './random-train.component.html',
@@ -34,10 +35,6 @@ export class RandomTrainComponent implements OnInit{
 
       });
   }
-
-  // getTrains(): Promise<ExitStationTrain> {
-  //   return this.randomTrainService.getRandomTrain(this.uicCode).toPromise() as Promise<ExitStationTrain>;
-  // }
 
   get randomTrain(): ExitStationTrain {
     return this._randomTrain;
