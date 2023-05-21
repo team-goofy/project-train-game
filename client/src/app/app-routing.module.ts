@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {AuthPipe} from "@angular/fire/auth-guard";
+import { AuthPipe } from "@angular/fire/auth-guard";
 import { map } from "rxjs";
 
 export const RedirectUnauthorizedOrUnverifiedUser: AuthPipe = map(user => {
