@@ -3,6 +3,5 @@ import {RouteStation} from "./route-station.model";
 
 export interface ExitStationTrain  {
   departure: Departure;
-  routeStation: RouteStation;
-
+  exitStation: RouteStation;
 }
