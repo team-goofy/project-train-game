@@ -18,7 +18,7 @@ export class AuthService {
     private auth: Auth = inject(Auth);
     private router: Router = inject(Router);
     private http: HttpClient = inject(HttpClient);
-    private baseUrl: String = environment.apiUrl;
+    private baseUrl: string = environment.apiUrl;
 
     user$ = user(this.auth);
     idToken$ = idToken(this.auth);

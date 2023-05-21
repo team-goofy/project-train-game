@@ -35,6 +35,11 @@ const routes: Routes = [
       import('@client/register-page').then((m) => m.RegisterPageModule),
   },
   {
+    path: 'game',
+    loadChildren: () =>
+      import('@client/game-page').then((m) => m.GamePageModule),
+  },
+  {
     path: 'verify-email',
     pathMatch: 'full',
     loadChildren: () =>

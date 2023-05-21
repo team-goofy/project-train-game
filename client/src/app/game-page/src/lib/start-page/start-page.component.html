@@ -1,0 +1,50 @@
+<background-image></background-image>
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-subtitle>
+      <button routerLink="/" mat-button color="primary">
+        <mat-icon>arrow_back_ios</mat-icon>
+        Home
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-container *ngIf="!state.error; else errorMessage">
+      <div *ngIf="!state.loading && state.permission === 'granted' && (nearestStation$ | async) as station" class="title-container">
+        <p class="mat-headline-5">You're starting in</p>
+        <p class="mat-headline-3">{{ station.namen.lang }}</p>
+      </div>
+      <div *ngIf="state.loading && state.permission === 'granted'" class="center">
+        <p class="mat-headline-5">Welcome to the game!</p>
+        <p class="mat-subtitle-1">Fetching location...</p>
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      </div>
+      <div *ngIf="state.permission === 'denied'" class="center">
+        <p class="mat-headline-5">No location? No game 😕</p>
+        <p class="mat-subtitle-1">We need your location to start your adventure<br>Please enable location sharing in your browser settings</p>
+      </div>
+      <div *ngIf="state.permission === 'prompt'" class="center">
+        <p class="mat-headline-5">Location = adventure 🌎</p>
+        <p class="mat-subtitle-1">Please click "<b>Allow</b>" when prompted to enable your location sharing</p>
+      </div>
+    </ng-container>
+    <ng-template class="center" #errorMessage>
+      <p class="mat-headline-5">An error has occured</p>
+      <p class="mat-subtitle-1">{{ state.error }}</p>
+    </ng-template>
+  </mat-card-content>
+  <div class="spacer"></div>
+  <ng-container *ngIf="!state.loading && state.permission === 'granted' && !state.error && (nearestStation$ | async) as station">
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="fetchLocation()">
+        <mat-icon>location_on</mat-icon>
+        Refetch
+      </button>
+  
+      <button mat-raised-button color="accent">
+        <mat-icon>play_arrow</mat-icon>
+        Start
+      </button>
+    </mat-card-actions>
+  </ng-container>
+</mat-card>
