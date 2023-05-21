@@ -36,7 +36,6 @@ const routes: Routes = [
   },
   {
     path: 'game',
-    pathMatch: 'full',
     loadChildren: () =>
       import('@client/game-page').then((m) => m.GamePageModule),
   },

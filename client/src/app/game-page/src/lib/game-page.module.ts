@@ -1,9 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { GamePageRoutingModule } from "./game-page-routing.module";
-import { GamePageComponent } from "./game-page/game-page.component";
+import { StartPageComponent } from "./start-page/start-page.component";
 import { BackgroundImageModule } from "@client/shared-components";
-import { StartLocationComponent } from './components/start-location/start-location.component';
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDividerModule } from "@angular/material/divider";
@@ -25,8 +24,7 @@ import { StationService } from "./services/station.service";
         HttpClientModule
     ],
     declarations: [
-      GamePageComponent,
-      StartLocationComponent,
+      StartPageComponent
     ],
     providers: [
       StationService
