@@ -14,8 +14,8 @@ export class RandomTrainComponent {
   // private randomTrain: Observable<ExitStationTrain> = this.randomTrainService.getRandomTrain();
 
   //TODO: provide getRandomTrain with station to solve error
-  getTrains(): void {
-    this.randomTrainService.getRandomTrain()
-      .subscribe(trains => this.randomTrain = trains);
-  }
+  // getTrains(): void {
+  //   this.randomTrainService.getRandomTrain()
+  //     .subscribe(trains => this.randomTrain = trains);
+  // }
 }
