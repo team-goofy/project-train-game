@@ -1,23 +1,46 @@
 <background-image></background-image>
 
-<!--login btn-->
-<button *ngIf="!(authService.isLoggedIn())" class="home-login-btn" color="primary" mat-raised-button routerLink="/login">
-  <mat-icon aria-hidden="false" aria-label="Login person" fontIcon="person"></mat-icon>
-  Login
-</button>
-<button *ngIf="(authService.isLoggedIn())" class="home-login-btn" color="primary" mat-raised-button (click)="authService.logout()">
-  <mat-icon aria-hidden="false" aria-label="Login person" fontIcon="person"></mat-icon>
-  Logout
-</button>
+<!--btn group-->
+<div class="btn-group">
+  <ng-container *ngIf="!(authService.user$ | async); else loggedIn">
+    <button  color="primary" mat-raised-button routerLink="/login">
+      <mat-icon>person</mat-icon>
+      Login
+    </button>
+  </ng-container>
+  <ng-template class="center" #loggedIn>
+    <button color="primary" mat-raised-button disabled>
+      <mat-icon>group</mat-icon>
+      Social
+    </button>
+    <button color="primary" mat-raised-button disabled>
+      <mat-icon>person</mat-icon>
+      Profile
+    </button>
+    <button color="primary" mat-raised-button (click)="authService.logout()">
+      <mat-icon>person</mat-icon>
+      Logout
+    </button>
+  </ng-template>
+</div>
 
-<!--title-->
-<h1 class="game-title mat-headline-1">WanderTrains </h1>
+<!--title-container-->
+<div class="title-container">
+  <!--title-->
+  <h1 class="game-title mat-headline-1">WanderTrains</h1>
 
-<!--Explanation of the game-->
-<div class="explanation-btn" (click)="scrollTo(target)">
-  <h3 class="game-explanation mat-h1">Explanation of the game</h3>
-  <div class="game-explanation-icon">
-    <mat-icon aria-hidden="false" aria-label="Login person" fontIcon="keyboard_arrow_down"></mat-icon>
+  <!--btn start-->
+  <button *ngIf="(authService.user$ | async)" routerLink="/game" class="play-btn" color="accent" mat-raised-button>
+    <mat-icon>play_arrow</mat-icon>
+    Start
+  </button>
+
+  <!--Explanation of the game-->
+  <div class="explanation-btn" (click)="scrollTo(target)">
+    <h3 class="game-explanation mat-h1">Explanation of the game</h3>
+    <div class="game-explanation-icon">
+      <mat-icon>keyboard_arrow_down</mat-icon>
+    </div>
   </div>
 </div>
 

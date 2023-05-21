@@ -5,7 +5,6 @@ import { UserRequestModel } from "@client/shared-models";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { debounceTime, distinctUntilChanged } from "rxjs";
-import {sendEmailVerification} from "@angular/fire/auth";
 
 @Component({
   templateUrl: './register-page.component.html',
