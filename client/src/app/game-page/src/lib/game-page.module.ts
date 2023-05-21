@@ -12,6 +12,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { StationService } from "./services/station.service";
 import {RandomTrainComponent} from "./random-train/random-train.component";
 import {RandomTrainService} from "./services/random-train.service";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
     imports: [
@@ -23,7 +24,8 @@ import {RandomTrainService} from "./services/random-train.service";
         MatDividerModule,
         MatIconModule,
         MatProgressSpinnerModule,
-        HttpClientModule
+        HttpClientModule,
+        MatInputModule
     ],
     declarations: [
       StartPageComponent,
