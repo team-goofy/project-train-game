@@ -9,19 +9,14 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngIf="randomTrain; else error">
+    <ng-container *ngIf="randomTrain">
       <div class="title-container">
-        <p class="mat-headline-5">{{randomTrain.departure.direction}}</p>
-        <p class="mat-headline-3">{{randomTrain.departure.plannedDateTime}}</p>
+        <p class="mat-headline-5 departure-title">{{randomTrain.departure.direction}}</p>
+        <p class="mat-headline-2 time-title">{{randomTrain.departure.plannedDateTime}}</p>
         <p class="mat-headline-5">Platform: <b>{{randomTrain.departure.actualTrack}}</b></p>
-        <p class="mat-headline-5"><b>Exit station: {{randomTrain.exitStation.mediumName}}</b></p>
+        <p class="mat-headline-5">Exit station: <b>{{randomTrain.exitStation.mediumName}}</b></p>
       </div>
     </ng-container>
-    <ng-template #error>
-      <mat-error>
-        <p class="mat-headline-5">An error has occured</p>
-      </mat-error>
-    </ng-template>
   </mat-card-content>
   <div class="spacer"></div>
   <ng-container>

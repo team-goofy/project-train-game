@@ -33,6 +33,14 @@ mat-card {
   }
 }
 
+.departure-title {
+  color: gray;
+}
+
+.time-title {
+  margin-bottom: 15px;
+}
+
 .spacer {
   flex: 1 1 auto;
 }
@@ -40,6 +48,12 @@ mat-card {
 @media (max-width: $card-width) {
   mat-card {
     width: 90%;
+
+    mat-card-actions {
+      button {
+        font-size: 11px;
+      }
+    }
   }
 
   .icon {
