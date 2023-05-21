@@ -30,21 +30,12 @@ public class DepartureServiceImpl implements DepartureService {
     @Override
     public ExitStationTrain getRandomExitStationTrain(List<Departure> departures) {
         List<Departure> filteredDepartures = this.filterByFutureDepartures(departures);
-        if (filteredDepartures.isEmpty()) {
-            // handle the case where filteredDepartures is empty
-            System.out.println("test");
-            return null;
-        }
         int randomDepartureIndex = this.random.nextInt(filteredDepartures.size());
 
         Departure randomDeparture = filteredDepartures.get(randomDepartureIndex);
 
         List<RouteStation> stations = randomDeparture.getRouteStations();
-        if (stations.isEmpty()) {
-            // handle the case where stations is empty
-            System.out.println("test2");
-            return null;
-        }
+
         int randomExitStationIndex = this.random.nextInt(stations.size());
 
         RouteStation randomExitStation = stations.get(randomExitStationIndex);
