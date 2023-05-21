@@ -10,24 +10,28 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { HttpClientModule } from "@angular/common/http";
 import { StationService } from "./services/station.service";
+import {RandomTrainComponent} from "./random-train/random-train.component";
+import {RandomTrainService} from "./services/random-train.service";
 
 @NgModule({
     imports: [
         CommonModule,
         GamePageRoutingModule,
-        BackgroundImageModule, 
+        BackgroundImageModule,
         MatCardModule,
         MatButtonModule,
         MatDividerModule,
-        MatIconModule, 
-        MatProgressSpinnerModule, 
+        MatIconModule,
+        MatProgressSpinnerModule,
         HttpClientModule
     ],
     declarations: [
-      StartPageComponent
+      StartPageComponent,
+      RandomTrainComponent
     ],
     providers: [
-      StationService
+      StationService,
+      RandomTrainService
     ]
 })
 export class GamePageModule {}

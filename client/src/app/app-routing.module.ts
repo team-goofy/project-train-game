@@ -44,12 +44,6 @@ const routes: Routes = [
     pathMatch: 'full',
     loadChildren: () =>
       import('@client/verify-page').then((m) => m.VerificationPageModule),
-  },
-  {
-    path: 'test',
-    pathMatch: 'full',
-    loadChildren: () =>
-      import('@client/random-train').then((m) => m.RandomTrainModule),
   }
 ];
 

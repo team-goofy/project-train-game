@@ -69,7 +69,6 @@ export class LoginPageComponent implements OnInit{
         });
       },
       error: (error) => {
-        console.log(error.message);
         this.snackbar.open("Something went wrong, please try again", "", { horizontalPosition: 'end', duration: 3000 });
       }
     });
