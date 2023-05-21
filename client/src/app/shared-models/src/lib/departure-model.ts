@@ -1,7 +1,6 @@
-import {RouteStation} from "./route-station.model";
+import { RouteStation } from "./route-station.model";
 
 export interface Departure  {
-
   direction: string;
   name: string;
   plannedDateTime: string;
