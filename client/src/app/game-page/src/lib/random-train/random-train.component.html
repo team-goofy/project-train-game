@@ -1,0 +1,38 @@
+<background-image></background-image>
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-subtitle>
+      <button routerLink="/game" mat-button color="primary">
+        <mat-icon>arrow_back_ios</mat-icon>
+        Location
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-container *ngIf="randomTrain">
+      <div class="title-container">
+        <p class="mat-headline-5 departure-title">{{randomTrain.departure.direction}}</p>
+        <p class="mat-headline-2 time-title">{{randomTrain.departure.plannedDateTime}}</p>
+        <p class="mat-headline-5">Platform: <b>{{randomTrain.departure.actualTrack}}</b></p>
+        <p class="mat-headline-5">Exit station: <b>{{randomTrain.exitStation.mediumName}}</b></p>
+      </div>
+    </ng-container>
+  </mat-card-content>
+  <div class="spacer"></div>
+  <ng-container>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="getRandomTrain()">
+        <mat-icon class="icon">location_on</mat-icon>
+        Missed train
+      </button>
+      <button mat-raised-button color="accent" disabled>
+        <mat-icon class="icon">train</mat-icon>
+        Arrived
+      </button>
+      <button mat-raised-button color="primary" disabled>
+        <mat-icon class="icon">library_books</mat-icon>
+        Suggestions
+      </button>
+    </mat-card-actions>
+  </ng-container>
+</mat-card>

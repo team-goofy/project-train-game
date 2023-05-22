@@ -39,7 +39,6 @@ export class StartPageComponent implements OnInit {
 
     this._permissionService.state('geolocation').pipe(
       tap((state: PermissionState) => this.state.permission = state),
-      tap(() => console.log(this.state)),
       filter((state: PermissionState) => state === 'granted'),
       switchMap(() => this._geoLocationService.pipe(take(1))),
       catchError((error: GeolocationPositionError) => {
@@ -61,7 +60,6 @@ export class StartPageComponent implements OnInit {
         this.state.loading = false;
       }),
       catchError(() => {
-        console.log('error');
         this.state = this.initialState();
         this.state.error = 'Something went wrong. Please try again later.';
         return EMPTY;

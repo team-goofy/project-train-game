@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {AuthPipe} from "@angular/fire/auth-guard";
+import { AuthGuard, AuthPipe } from "@angular/fire/auth-guard";
+import { User } from 'firebase/auth';
 import { map } from "rxjs";
 
-export const RedirectUnauthorizedOrUnverifiedUser: AuthPipe = map(user => {
+export const redirectUnauthorizedOrUnverifiedUser: AuthPipe = map(user => {
   if (user != null) {
     if (user.emailVerified) {
       return true;
@@ -38,6 +39,8 @@ const routes: Routes = [
     path: 'game',
     loadChildren: () =>
       import('@client/game-page').then((m) => m.GamePageModule),
+    canActivate: [ AuthGuard ],
+    data: { authGuardPipe: () => redirectUnauthorizedOrUnverifiedUser }
   },
   {
     path: 'verify-email',
