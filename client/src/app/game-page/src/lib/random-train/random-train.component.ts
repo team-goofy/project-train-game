@@ -18,10 +18,10 @@ export class RandomTrainComponent implements OnInit {
       this.uicCode = params['uicCode'];
     });
 
-    this.getTrains();
+    this.getRandomTrain();
   }
 
-  getTrains(): void {
+  getRandomTrain(): void {
     this.randomTrainService.getRandomTrain(this.uicCode)
       .subscribe(train => {
         const date = new Date(train.departure.plannedDateTime);

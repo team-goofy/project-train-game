@@ -31,8 +31,7 @@
       "@client/login-page": ["src/app/login-page/src/index.ts"],
       "@client/register-page": ["src/app/register-page/src/index.ts"],
       "@client/game-page": ["src/app/game-page/src/index.ts"],
-      "@client/verify-page": ["src/app/verification-page/src/index.ts"],
-      "@client/random-train": ["src/app/random-train/src/index.ts"],
+      "@client/verify-page": ["src/app/verification-page/src/index.ts"]
     }
   },
   "angularCompilerOptions": {

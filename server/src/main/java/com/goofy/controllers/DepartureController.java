@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goofy.models.Departure;
 import com.goofy.models.ExitStationTrain;
 import com.goofy.services.DepartureService;
+import com.google.firebase.auth.UserRecord;
 import lombok.AllArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
@@ -32,11 +33,9 @@ public class DepartureController {
     private final ObjectMapper objectMapper;
     private final DepartureService departureService;
 
-    // GET HTTP-ROUTES \\
-    // GET DEPARTURES FROM A STATION
     @GetMapping
     @ResponseBody
-    public List<Departure> getDepartures(@RequestParam String station) throws JsonProcessingException {
+    public ResponseEntity<List<Departure>> getDepartures(@RequestParam String station) throws JsonProcessingException {
         ResponseEntity<String> response = restTemplate.exchange(
                 env.getProperty("ns.api.base.url") + "/departures?station=" + station,
                 HttpMethod.GET, httpEntity, String.class);
@@ -44,13 +43,15 @@ public class DepartureController {
         JsonNode jsonNode = objectMapper.readTree(response.getBody());
         JsonNode unsortedStations = jsonNode.get("payload").get("departures");
 
-        return objectMapper.readValue(unsortedStations.toString(),
+        List<Departure> departures = objectMapper.readValue(unsortedStations.toString(),
                 objectMapper.getTypeFactory().constructCollectionType(List.class, Departure.class));
+
+        return ResponseEntity.ok(departures);
     }
 
     @GetMapping("/random")
     @ResponseBody
-    public ExitStationTrain getRandomDeparture(@RequestParam String uicCode) throws JsonProcessingException {
+    public ResponseEntity<ExitStationTrain> getRandomDeparture(@RequestParam String uicCode) throws JsonProcessingException {
         ResponseEntity<String> response = restTemplate.exchange(
                 env.getProperty("ns.api.base.url") + "/departures?uicCode=" + uicCode,
                 HttpMethod.GET, httpEntity, String.class);
@@ -61,6 +62,8 @@ public class DepartureController {
         List<Departure> departures = objectMapper.readValue(unsortedStations.toString(),
                 objectMapper.getTypeFactory().constructCollectionType(List.class, Departure.class));
 
-        return this.departureService.getRandomExitStationTrain(departures);
+        ExitStationTrain exitStationTrain = this.departureService.getRandomExitStationTrain(departures);
+
+        return ResponseEntity.ok(exitStationTrain);
     }
 }

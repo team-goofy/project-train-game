@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { StartPageComponent } from "./start-page/start-page.component";
-import { AuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import {RandomTrainComponent} from "./random-train/random-train.component";
 
 const routes: Routes = [
@@ -9,14 +8,10 @@ const routes: Routes = [
     path: '',
     pathMatch: 'full',
     component: StartPageComponent,
-    canActivate: [AuthGuard],
-    data: { authGuardPipe: () => redirectUnauthorizedTo([''])}
   },
   {
     path: 'random-train',
-    component: RandomTrainComponent,
-    canActivate: [AuthGuard],
-    data: { authGuardPipe: () => redirectUnauthorizedTo([''])}
+    component: RandomTrainComponent
   },
 ];
 
