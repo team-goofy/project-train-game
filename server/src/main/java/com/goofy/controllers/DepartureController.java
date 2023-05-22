@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goofy.models.Departure;
 import com.goofy.models.ExitStationTrain;
 import com.goofy.services.DepartureService;
-import com.google.firebase.auth.UserRecord;
 import lombok.AllArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
