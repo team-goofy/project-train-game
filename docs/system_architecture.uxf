@@ -1,0 +1,74 @@
+<diagram program="umletino" version="15.1"><zoom_level>8</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLDeployment</id><coordinates><x>48</x><y>8</y><w>512</w><h>136</h></coordinates><panel_attributes>halign=center
+Presentation Layer
+bg=red
+transparency=0</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>232</x><y>48</y><w>152</w><h>80</h></coordinates><panel_attributes>valign=center
+halign=center
+Angular
+bg=orange
+transparency=0
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>656</x><y>8</y><w>248</w><h>328</h></coordinates><panel_attributes>Authentication Layer
+bg=#6A0DAD
+transparency=0
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>48</x><y>200</y><w>512</w><h>136</h></coordinates><panel_attributes>halign=center
+Application Layer
+bg=#3c7a00
+transparency=0
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>120</x><y>240</y><w>152</w><h>80</h></coordinates><panel_attributes>valign=center
+halign=center
+Spring Boot
+bg=orange
+transparency=0</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>48</x><y>392</y><w>512</w><h>304</h></coordinates><panel_attributes>halign=center
+Data Layer
+bg=blue
+transparency=0
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>696</x><y>104</y><w>152</w><h>80</h></coordinates><panel_attributes>valign=center
+halign=center
+layer=10
+Token Service API
+bg=yellow
+lt=.
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>696</x><y>208</y><w>152</w><h>80</h></coordinates><panel_attributes>valign=center
+halign=center
+layer=10
+Identity Toolkit API
+bg=yellow
+lt=.</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>672</x><y>56</y><w>208</w><h>256</h></coordinates><panel_attributes>halign=center
+Firebase
+bg=orange
+transparency=0</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>352</x><y>240</y><w>152</w><h>80</h></coordinates><panel_attributes>valign=center
+halign=center
+Email Server
+bg=orange
+transparency=0</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>264</x><y>280</y><w>104</w><h>24</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>110;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>296</x><y>136</y><w>24</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>552</x><y>72</y><w>120</w><h>24</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>130;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>552</x><y>264</y><w>120</w><h>24</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>130;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>296</x><y>328</y><w>24</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>Text</id><coordinates><x>560</x><y>272</y><w>96</w><h>24</h></coordinates><panel_attributes>halign=center
+Verify identity</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>560</x><y>248</y><w>96</w><h>24</h></coordinates><panel_attributes>halign=center
+OAuth 2.0
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>560</x><y>80</y><w>96</w><h>24</h></coordinates><panel_attributes>halign=center
+Manage token</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>560</x><y>56</y><w>96</w><h>24</h></coordinates><panel_attributes>halign=center
+HTTP/1.1
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>304</x><y>160</y><w>48</w><h>24</h></coordinates><panel_attributes>HTTP/1.1</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>272</x><y>264</y><w>80</w><h>24</h></coordinates><panel_attributes>halign=center
+SMTP</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>272</x><y>288</y><w>80</w><h>24</h></coordinates><panel_attributes>halign=center
+Send email</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>232</x><y>160</y><w>72</w><h>24</h></coordinates><panel_attributes>Send API calls</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>336</x><y>576</y><w>152</w><h>80</h></coordinates><panel_attributes>valign=center
+halign=center
+layer=10
+Cloud Storage for 
+Firebase API
+bg=yellow
+lt=.
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>312</x><y>432</y><w>208</w><h>248</h></coordinates><panel_attributes>halign=center
+2. Firebase
+bg=orange
+transparency=0
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>336</x><y>472</y><w>152</w><h>72</h></coordinates><panel_attributes>valign=center
+halign=center
+Cloud Firestore API
+bg=yellow
+lt=.
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>104</x><y>432</y><w>152</w><h>80</h></coordinates><panel_attributes>valign=center
+halign=center
+1. NS API
+bg=orange
+transparency=0</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>304</x><y>336</y><w>120</w><h>56</h></coordinates><panel_attributes>1. HTTP/1.1
+2. Firebase SDKs
+valign=center</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>200</x><y>336</y><w>104</w><h>56</h></coordinates><panel_attributes>1. Send API Calls
+2. Call Firebase SDKs
+valign=center</panel_attributes><additional_attributes></additional_attributes></element></diagram>
