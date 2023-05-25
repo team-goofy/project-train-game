@@ -51,16 +51,14 @@ export class AuthService {
       return this.http.post(`${this.baseUrl}/user/register`, userRequestModel);
     }
 
-    sendVerificationMail(emailParam: string | null) {
-      const email = emailParam ? emailParam : this.auth.currentUser!.email;
-
+    sendVerificationMail() {
       const httpOptions: Object = {
         headers: new HttpHeaders().set('Content-Type', 'application/json'),
         responseType: 'text'
       }
 
       return this.http
-        .post<any>(`${this.baseUrl}/mail/send-verification`, email, httpOptions)
+        .post<any>(`${this.baseUrl}/mail/send-verification`, this.auth.currentUser!.email, httpOptions)
     }
 
     checkUsername(username: string): Observable<any> {
