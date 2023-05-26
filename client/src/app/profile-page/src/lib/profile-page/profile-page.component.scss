@@ -1,0 +1,18 @@
+#backgroundImage {
+  height: 20%;
+  background-image: url("../../../../../../src/assets/profile_page_BG.svg");
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.container {
+  position: relative;
+}
+
+.nav-bar-styling {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
