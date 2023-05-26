@@ -2,7 +2,7 @@
 <mat-card class="example-card">
   <mat-card-header>
     <mat-card-subtitle>
-      <button routerLink="/" mat-button color="primary">
+      <button class="outline-go-back-btn" routerLink="/" mat-button color="primary">
         <mat-icon>arrow_back_ios</mat-icon>
         Home
       </button>
@@ -41,7 +41,7 @@
         Refetch
       </button>
 
-      <button mat-raised-button color="accent" routerLink="/game/random-train" [queryParams]="{uicCode: station?.UICCode}">
+      <button mat-raised-button color="accent" routerLink="/game/random-train" [queryParams]="{uicCode: station?.UICCode, location: station.namen.lang}">
         <mat-icon>play_arrow</mat-icon>
         Start
       </button>
