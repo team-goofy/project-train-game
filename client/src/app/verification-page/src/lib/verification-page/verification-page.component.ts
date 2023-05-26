@@ -15,7 +15,7 @@ export class VerificationPageComponent {
   resendMail(): void {
     this.isLoading = true;
 
-    this.authService.sendVerificationMail(null)
+    this.authService.sendVerificationMail()
       .subscribe({
       next: () => {
         this.snackbar.open(
@@ -26,7 +26,7 @@ export class VerificationPageComponent {
 
         this.isLoading = false;
       },
-      error: ({ error }) => {
+      error: () => {
         this.snackbar.open(
           "Something went wrong, please try again later",
           "", { horizontalPosition: 'end', duration: 3000 });
