@@ -11,10 +11,12 @@
   <mat-card-content>
     <ng-container *ngIf="randomTrain">
       <div class="title-container">
-        <p class="mat-headline-5 departure-title">{{randomTrain.departure.direction}}</p>
-        <p class="mat-headline-2 time-title">{{randomTrain.departure.plannedDateTime}}</p>
-        <p class="mat-headline-5">Platform: <b>{{randomTrain.departure.actualTrack}}</b></p>
-        <p class="mat-headline-5">Exit station: <b>{{randomTrain.exitStation.mediumName}}</b></p>
+        <p class="mat-headline-6 departure-title">Train towards: <b>{{randomTrain.departure.direction}}</b></p>
+        <p class="mat-h2 time-title">Departure time:</p>
+        <p class="mat-headline-2 time-title"><b>{{randomTrain.departure.plannedDateTime}}</b></p>
+        <p class="mat-headline-5">On platform: <b>{{randomTrain.departure.actualTrack}}</b></p>
+        <p class="mat-h2">Exit the train at station: </p>
+        <p class="mat-headline-5"><b>{{randomTrain.exitStation.mediumName}}</b></p>
       </div>
     </ng-container>
   </mat-card-content>
