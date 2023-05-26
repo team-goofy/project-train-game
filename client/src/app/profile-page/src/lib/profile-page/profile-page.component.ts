@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./profile-page.component.scss']
 })
 export class ProfilePageComponent {
-
+  scroll(el: HTMLElement) {
+    el.scrollIntoView();
+  }
 }

@@ -1,17 +1,19 @@
 <div id="backgroundImage" class="container">
-  <mat-tab-group fitInkBarToContent class="nav-bar-styling">
-    <mat-tab label="Account"></mat-tab>
-    <mat-tab label="Travel History"></mat-tab>
-    <mat-tab label="Achievements"></mat-tab>
-    <mat-tab label="Stats"></mat-tab>
-  </mat-tab-group>
+
 </div>
+<mat-tab-group fitInkBarToContent class="nav-bar-styling">
+  <mat-tab label="Account">
+    <app-account-page></app-account-page>
+  </mat-tab>
+  <mat-tab label="Travel History">
+    <app-travel-history-page></app-travel-history-page>
+  </mat-tab>
+  <mat-tab label="Achievements">
+    <app-achievements-page></app-achievements-page>
+  </mat-tab>
+  <mat-tab label="Stats">
+    <app-stats-page></app-stats-page>
+  </mat-tab>
+</mat-tab-group>
 
 
-<app-account-page></app-account-page>
-<hr>
-<app-travel-history-page></app-travel-history-page>
-<hr>
-<app-achievements-page></app-achievements-page>
-<hr>
-<app-stats-page></app-stats-page>
