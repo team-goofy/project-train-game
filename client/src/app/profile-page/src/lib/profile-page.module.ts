@@ -10,6 +10,7 @@ import { StatsPageComponent } from './stats-page/stats-page.component';
 import {MatTabsModule} from '@angular/material/tabs';
 
 
+
 @NgModule({
     imports: [
         CommonModule,
