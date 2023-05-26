@@ -12,10 +12,16 @@ export class RandomTrainComponent implements OnInit {
   private route: ActivatedRoute = inject(ActivatedRoute);
   private _randomTrain!: ExitStationTrain;
   private uicCode: string = "";
+  private departureLocation: string = "";
+
+  get departureLocationValue(): string {
+    return this.departureLocation;
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.uicCode = params['uicCode'];
+      this.departureLocation = params['location'];
     });
 
     this.getRandomTrain();
