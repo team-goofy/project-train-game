@@ -47,7 +47,15 @@ const routes: Routes = [
     pathMatch: 'full',
     loadChildren: () =>
       import('@client/verify-page').then((m) => m.VerificationPageModule),
-  }
+  },
+  {
+    path: 'profile-page',
+    pathMatch: 'full',
+    loadChildren: () =>
+      import('@client/profile-page').then((m) => m.ProfilePageModule),
+    canActivate: [ AuthGuard ],
+    data: { authGuardPipe: () => redirectUnauthorizedOrUnverifiedUser }
+  },
 ];
 
 @NgModule({
