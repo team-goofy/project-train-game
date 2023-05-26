@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .centered {
@@ -9,3 +10,15 @@
   margin-right: auto;
   margin-top: 5%;
 }
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 40px;
+}
+
+#submit-button {
+  width: 100%;
+}
+
