@@ -8,15 +8,23 @@ import { TravelHistoryPageComponent } from './travel-history-page/travel-history
 import { AchievementsPageComponent } from './achievements-page/achievements-page.component';
 import { StatsPageComponent } from './stats-page/stats-page.component';
 import {MatTabsModule} from '@angular/material/tabs';
-
-
+import {MatIconModule} from "@angular/material/icon";
+import {ReactiveFormsModule} from "@angular/forms";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
     imports: [
         CommonModule,
         ProfilePageRoutingModule,
         HttpClientModule,
-        MatTabsModule
+        MatTabsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatButtonModule
     ],
     declarations: [
       ProfilePageComponent,
