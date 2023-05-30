@@ -1,16 +1,22 @@
 package com.goofy.services;
 
+import com.goofy.dtos.TripDTO;
 import com.goofy.dtos.TripImageDTO;
 import com.goofy.exceptions.NoContentTypeException;
 import com.goofy.exceptions.TripImageAlreadyExistsException;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.firebase.cloud.StorageClient;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.stereotype.Service;
 
@@ -18,6 +24,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class TripServiceImpl implements TripService {
     private final StorageClient storage;
+    private final Firestore firestore;
 
     @Override
     public BlobId saveImageToStorage(TripImageDTO image, String uid) throws IOException {
@@ -43,6 +50,37 @@ public class TripServiceImpl implements TripService {
         }
 
         return storage.bucket().create(blobId, inputStream, contentType).getBlobId();
+    }
+
+    @Override
+    public String saveTripToDatabase(TripDTO trip, String uid) {
+        boolean hasTripId = trip.getTripId() != null;
+        String tripId = hasTripId ? trip.getTripId() : UUID.randomUUID().toString();
+
+        Map<String, Object> saveTrip = Map.of(
+                "tripId", tripId,
+                "uid", uid,
+                "isEnded", trip.getIsEnded(),
+                "routeStations", trip.getRouteStations()
+        );
+
+        DocumentReference tripRef = firestore.collection("trip").document(tripId);
+
+        ApiFuture<WriteResult> writeResult;
+        if (hasTripId) {
+            writeResult = tripRef.set(saveTrip, SetOptions.merge());
+        } else {
+            writeResult = tripRef.set(saveTrip);
+        }
+
+        // Block until the write operation is complete and the result is available.
+        try {
+            writeResult.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("Error writing trip to Firestore", e);
+        }
+
+        return tripRef.getId();
     }
 
     private static String getFileExtension(String contentType) {
