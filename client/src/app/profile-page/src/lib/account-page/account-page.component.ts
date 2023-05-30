@@ -2,7 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "@client/shared-services";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import { getAuth } from "firebase/auth";
+// import { getAuth } from "firebase/auth";
 
 interface State {
   loading: boolean;
@@ -19,8 +19,6 @@ interface State {
 })
 export class AccountPageComponent implements OnInit {
   private authService: AuthService = inject(AuthService);
-  private auth = getAuth();
-  private user = this.auth.currentUser;
   private snackbar: MatSnackBar = inject(MatSnackBar);
   private formBuilder: FormBuilder = inject(FormBuilder);
   form: FormGroup = new FormGroup({
@@ -30,15 +28,6 @@ export class AccountPageComponent implements OnInit {
 
   private username: string = "";
   private userEmail: string | null | undefined = "";
-
-
-  get userEmailValue(): string {
-    return <string>this.userEmail;
-  }
-
-  get usernameValue(): string {
-    return this.username;
-  }
 
   state: State;
 
@@ -51,6 +40,8 @@ export class AccountPageComponent implements OnInit {
   }
 
   fetchUserData(): void{
+    this.userEmail = this.authService.getUserData();
+
     this.authService.getUsername()
       .subscribe({
         next: (data:any) => {
@@ -58,7 +49,6 @@ export class AccountPageComponent implements OnInit {
           const parsedData = JSON.parse(this.username);
           this.username = parsedData.username;
 
-          this.userEmail = this.user?.email;
           return this.username;
         },
         error: () => {
@@ -78,7 +68,6 @@ export class AccountPageComponent implements OnInit {
   }
 
 
-
   private initialState(): State {
     return {
       loading: false,
@@ -92,6 +81,15 @@ export class AccountPageComponent implements OnInit {
   onSubmit(): void {
     this.state = this.initialState();
     console.log('submit form')
+  }
+
+
+  get userEmailValue(): string {
+    return <string>this.userEmail;
+  }
+
+  get usernameValue(): string {
+    return this.username;
   }
 
 }

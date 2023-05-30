@@ -3,7 +3,8 @@ import {
   Auth,
   idToken,
   signInWithEmailAndPassword,
-  user
+  user,
+  getAuth
 } from '@angular/fire/auth';
 import { Router } from "@angular/router";
 import {catchError, from, Observable, switchMap, tap, throwError} from "rxjs";
@@ -19,6 +20,7 @@ export class AuthService {
     private router: Router = inject(Router);
     private http: HttpClient = inject(HttpClient);
     private baseUrl: string = environment.apiUrl;
+
 
     user$ = user(this.auth);
     idToken$ = idToken(this.auth);
@@ -72,6 +74,15 @@ export class AuthService {
         responseType: 'text'
       }
       return this.http.post<any>(`${this.baseUrl}/user/profile`, this.auth.currentUser!.uid, httpOptions);
+    }
+
+    getUserData(): string {
+      const currUser = this.auth.currentUser?.email;
+      if(currUser){
+        return currUser;
+      }else{
+        throw new TypeError("There is no currentUser");
+      }
     }
 
     isLoggedIn(): boolean {
