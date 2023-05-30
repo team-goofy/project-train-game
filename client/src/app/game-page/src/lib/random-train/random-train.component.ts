@@ -13,6 +13,7 @@ export class RandomTrainComponent implements OnInit {
   private _randomTrain!: ExitStationTrain;
   private uicCode: string = "";
   private departureLocation: string = "";
+  //TODO: add a query-param for tripId maybe?
 
   get departureLocationValue(): string {
     return this.departureLocation;
@@ -37,6 +38,14 @@ export class RandomTrainComponent implements OnInit {
         this._randomTrain.departure.plannedDateTime = time;
 
       });
+  }
+
+  saveTrip(): void {
+    //TODO: navigate to konrad's page
+    this.randomTrainService.saveTrip({
+      routeStations: [this.randomTrain.exitStation.mediumName],
+      isEnded: false
+    }).subscribe();
   }
 
   get randomTrain(): ExitStationTrain {
