@@ -3,7 +3,10 @@ package com.goofy.services;
 import com.goofy.controllers.EmailController;
 import com.goofy.dtos.UserDTO;
 import com.goofy.exceptions.UsernameExistsException;
+import com.goofy.models.Profile;
 import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,9 +54,16 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    public Profile getProfile(String uid) throws InterruptedException, ExecutionException {
+        ApiFuture<DocumentSnapshot> apiFuture = this.firestore.collection("user").document(uid).get();
+
+        return apiFuture.get().toObject(Profile.class);
+    }
+
     public boolean usernameExists(String username) throws InterruptedException, ExecutionException {
         ApiFuture<QuerySnapshot> apiFuture = this.firestore.collection("user").whereEqualTo("username", username).get();
 
         return !apiFuture.get().isEmpty();
     }
+
 }

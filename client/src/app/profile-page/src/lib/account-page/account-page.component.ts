@@ -1,7 +1,8 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {catchError, delay, filter, switchMap, take, tap} from "rxjs/operators";
-import {EMPTY} from "rxjs";
+import {AuthService} from "@client/shared-services";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import { getAuth } from "firebase/auth";
 
 interface State {
   loading: boolean;
@@ -16,12 +17,28 @@ interface State {
   templateUrl: './account-page.component.html',
   styleUrls: ['./account-page.component.scss']
 })
-export class AccountPageComponent {
+export class AccountPageComponent implements OnInit {
+  private authService: AuthService = inject(AuthService);
+  private auth = getAuth();
+  private user = this.auth.currentUser;
+  private snackbar: MatSnackBar = inject(MatSnackBar);
   private formBuilder: FormBuilder = inject(FormBuilder);
   form: FormGroup = new FormGroup({
     email: new FormControl(''),
     password: new FormControl('')
   });
+
+  private username: string = "";
+  private userEmail: string | null | undefined = "";
+
+
+  get userEmailValue(): string {
+    return <string>this.userEmail;
+  }
+
+  get usernameValue(): string {
+    return this.username;
+  }
 
   state: State;
 
@@ -29,41 +46,35 @@ export class AccountPageComponent {
     this.state = this.initialState();
   }
 
+  ngOnInit(): void {
+    this.fetchUserData();
+  }
+
+  fetchUserData(): void{
+    this.authService.getUsername()
+      .subscribe({
+        next: (data:any) => {
+          this.username = data;
+          const parsedData = JSON.parse(this.username);
+          this.username = parsedData.username;
+
+          this.userEmail = this.user?.email;
+          return this.username;
+        },
+        error: () => {
+          this.snackbar.open(
+            "Something went wrong, please try again later",
+            "", { horizontalPosition: 'end', duration: 3000 });
+        }
+      });
+  }
+
+
   edittingState(): void {
     this.state = this.initialState();
     this.state.loading = true;
     this.state.editting = true;
     this.state.disabled = false;
-    console.log(this.state);
-
-    // this._permissionService.state('geolocation').pipe(
-    //   tap((state: PermissionState) => this.state.permission = state),
-    //   filter((state: PermissionState) => state === 'granted'),
-    //   switchMap(() => this._geoLocationService.pipe(take(1))),
-    //   catchError((error: GeolocationPositionError) => {
-    //     this.state = this.initialState();
-    //
-    //     if (error.code === error.PERMISSION_DENIED) {
-    //       this.state.permission = 'denied';
-    //     } else if (error.code === error.POSITION_UNAVAILABLE) {
-    //       this.state.error = 'Location information is unavailable.';
-    //     } else if (error.code === error.TIMEOUT) {
-    //       this.state.error = 'The request to get user location timed out.';
-    //     }
-    //
-    //     return EMPTY;
-    //   }),
-    //   delay(1000),
-    //   tap((position: GeolocationPosition) => {
-    //     this._stationService.init(position.coords.latitude, position.coords.longitude)
-    //     this.state.loading = false;
-    //   }),
-    //   catchError(() => {
-    //     this.state = this.initialState();
-    //     this.state.error = 'Something went wrong. Please try again later.';
-    //     return EMPTY;
-    //   })
-    // ).subscribe();
   }
 
 
@@ -75,27 +86,6 @@ export class AccountPageComponent {
       editting: false,
       disabled: true
     };
-  }
-
-
-  ngOnInit(): void {
-    this.form = this.formBuilder.group(
-      {
-        email: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/i)
-          ]
-        ],
-        password: [
-          '',
-          [
-            Validators.required,
-          ],
-        ],
-      }
-    )
   }
 
 

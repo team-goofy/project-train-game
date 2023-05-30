@@ -65,7 +65,17 @@ export class AuthService {
       return this.http.get(`${this.baseUrl}/user/username`, { params: { username } });
     }
 
+
+    getUsername(): Observable<any> {
+      const httpOptions: Object = {
+        headers: new HttpHeaders().set('Content-Type', 'application/json'),
+        responseType: 'text'
+      }
+      return this.http.post<any>(`${this.baseUrl}/user/profile`, this.auth.currentUser!.uid, httpOptions);
+    }
+
     isLoggedIn(): boolean {
       return !!localStorage.getItem('tokenId');
     }
+
 }
