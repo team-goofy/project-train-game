@@ -22,8 +22,8 @@ export class AccountPageComponent implements OnInit {
 
   accountEditForm = new FormGroup({
     userEmailForm: new FormControl(''),
-    userUsername: new FormControl('')
-
+    userUsername: new FormControl(''),
+    userPasswordForm: new FormControl('')
   });
 
   private username: string = "";
@@ -42,6 +42,7 @@ export class AccountPageComponent implements OnInit {
   fetchUserData(): void{
     this.accountEditForm.controls['userEmailForm'].disable();
     this.accountEditForm.controls['userUsername'].disable();
+    this.accountEditForm.controls['userPasswordForm'].disable();
 
     this.userEmail = this.authService.getUserData();
 
@@ -66,6 +67,7 @@ export class AccountPageComponent implements OnInit {
   editingState(): void {
     this.accountEditForm.controls['userEmailForm'].enable();
     this.accountEditForm.controls['userUsername'].enable();
+    this.accountEditForm.controls['userPasswordForm'].enable();
 
     this.state = this.initialState();
     this.state.loading = true;
