@@ -4,7 +4,8 @@ import {
   idToken,
   signInWithEmailAndPassword,
   user,
-  getAuth
+  getAuth,
+  updateEmail
 } from '@angular/fire/auth';
 import { Router } from "@angular/router";
 import {catchError, from, Observable, switchMap, tap, throwError} from "rxjs";
@@ -76,17 +77,34 @@ export class AuthService {
       return this.http.post<any>(`${this.baseUrl}/user/profile`, this.auth.currentUser!.uid, httpOptions);
     }
 
-    getUserData(): string {
-      const currUser = this.auth.currentUser?.email;
-      if(currUser){
-        return currUser;
-      }else{
-        throw new TypeError("There is no currentUser");
-      }
-    }
-
     isLoggedIn(): boolean {
       return !!localStorage.getItem('tokenId');
     }
+
+//    account-page
+  getUserData(): string {
+    const currUser = this.auth.currentUser?.email;
+    if(currUser){
+      return currUser;
+    }else{
+      throw new TypeError("There is no currentUser");
+    }
+  }
+
+  changeUserEmail(newUserEmail: string | null | undefined): void{
+    if (this.auth.currentUser) {
+      //check if userEmail is not null && check if the email is already in use!!
+      if (newUserEmail != null) {
+        updateEmail(this.auth.currentUser, newUserEmail).then(() => {
+          return;
+        }).catch((error) => {
+          // An error occurred
+          // ...
+          return;
+        });
+      }
+    }
+  }
+
 
 }

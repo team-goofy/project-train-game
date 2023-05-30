@@ -2,34 +2,29 @@
   <div class="centered">
     <h1 class="mat-headline-2">Account</h1>
 
-    <div class="form-fields">
-      <mat-form-field appearance="outline">
-        <mat-label>{{usernameValue}}</mat-label>
-        <input [disabled]="state.disabled" matInput>
-        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-      </mat-form-field>
+      <form [formGroup]="accountEditForm">
+        <div class="form-fields">
+        <mat-form-field appearance="outline">
+          <mat-label>User name</mat-label>
+          <input matInput formControlName="userUsername">
+          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{userEmailValue}}</mat-label>
-        <input [disabled]="state.disabled" matInput>
-        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input  matInput value="{{userEmailValue}}" formControlName="userEmailForm">
+          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        </mat-form-field>
 
-<!--      <mat-form-field appearance="outline">-->
-<!--        <mat-label>Password</mat-label>-->
-<!--        <input [disabled]="state.disabled" matInput placeholder="Placeholder">-->
-<!--        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
-<!--      </mat-form-field>-->
-<!--misschien nog een state waarin je substates kan doen voor als je je wachtwoord wilt wijzigen-->
-      <ng-container *ngIf="!state.editting">
-        <button mat-raised-button color="primary" (click)="edittingState()">Edit</button>
-      </ng-container>
+        <ng-container *ngIf="!state.editting">
+          <button mat-raised-button color="primary" (click)="editingState()">Edit</button>
+        </ng-container>
 
-      <ng-container *ngIf="state.editting">
-        <button id="submit-button" mat-raised-button color="primary" (click)="onSubmit()">Save changes</button>
-      </ng-container>
-
-    </div>
+        <ng-container *ngIf="state.editting">
+          <button id="submit-button" mat-raised-button color="primary" (click)="onSubmit()">Save changes</button>
+        </ng-container>
+        </div>
+      </form>
   </div>
 </div>
 
