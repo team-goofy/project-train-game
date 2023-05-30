@@ -63,7 +63,6 @@ export class AccountPageComponent implements OnInit {
       });
   }
 
-
   editingState(): void {
     this.accountEditForm.controls['userEmailForm'].enable();
     this.accountEditForm.controls['userUsername'].enable();
@@ -88,20 +87,27 @@ export class AccountPageComponent implements OnInit {
       let usernameValue = this.accountEditForm?.get('userUsername')?.value;
       let userEmailValue = this.accountEditForm?.get('userEmailForm')?.value;
 
+    // if (typeof usernameValue === "string") {
+    //   this.authService.changeUserName(usernameValue);
+    // }
+
+
+    if (typeof userEmailValue === "string") {
       this.authService.changeUserEmail(userEmailValue).subscribe({
         next: (success) => {
           let ref = this.snackbar.open(
-            "Account changed succesfully",
+            "Account changed successfully",
             "",
-            { horizontalPosition: 'end', duration: 2000 }
+            {horizontalPosition: 'end', duration: 2000}
           );
           this.fetchUserData();
           this.state = this.initialState();
         },
         error: (error) => {
-          this.snackbar.open("Something went wrong, please try again", "", { horizontalPosition: 'end', duration: 3000 });
+          this.snackbar.open("The email/username already exists", "", {horizontalPosition: 'end', duration: 3000});
         }
       })
+    }
 
   }
 

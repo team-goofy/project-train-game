@@ -92,8 +92,12 @@ export class AuthService {
     }
   }
 
+  // changeUserName(username: string): Observable<any>{
+  //     console.log(username);
+  //     return this.http.get(`${this.baseUrl}/user/username`, { params: { username } });
+  // }
 
-  changeUserEmail(newUserEmail: string | null | undefined): Observable<any> {
+  changeUserEmail(newUserEmail: string): Observable<any> {
     if (this.auth.currentUser) {
       if (newUserEmail != null && newUserEmail !== this.auth.currentUser.email) {
         return new Observable((observer) => {
