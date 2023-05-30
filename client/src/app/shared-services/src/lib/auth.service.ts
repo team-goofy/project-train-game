@@ -55,6 +55,7 @@ export class AuthService {
     }
 
     sendVerificationMail() {
+      console.log(this.auth.currentUser!.email)
       const httpOptions: Object = {
         headers: new HttpHeaders().set('Content-Type', 'application/json'),
         responseType: 'text'
@@ -91,20 +92,34 @@ export class AuthService {
     }
   }
 
-  changeUserEmail(newUserEmail: string | null | undefined): void{
+
+  changeUserEmail(newUserEmail: string | null | undefined): Observable<any> {
     if (this.auth.currentUser) {
-      //check if userEmail is not null && check if the email is already in use!!
-      if (newUserEmail != null) {
-        updateEmail(this.auth.currentUser, newUserEmail).then(() => {
-          return;
-        }).catch((error) => {
-          // An error occurred
-          // ...
-          return;
+      if (newUserEmail != null && newUserEmail !== this.auth.currentUser.email) {
+        return new Observable((observer) => {
+          if (this.auth.currentUser) {
+            updateEmail(this.auth.currentUser, newUserEmail)
+              .then(() => {
+                observer.next(); // Emit a value to complete the Observable
+                observer.complete(); // Complete the Observable
+              })
+              .catch((error) => {
+                observer.error(error); // Emit an error to the Observable
+              });
+          }
+        });
+      } else {
+        return new Observable((observer) => {
+          observer.next(); // Emit a value to complete the Observable
+          observer.complete(); // Complete the Observable
         });
       }
+    } else {
+      return new Observable((observer) => {
+        observer.next(); // Emit a value to complete the Observable
+        observer.complete(); // Complete the Observable
+      });
     }
   }
-
 
 }

@@ -72,6 +72,8 @@ export class AccountPageComponent implements OnInit {
     this.state.loading = true;
     this.state.editting = true;
 
+    //check if user made any changes and then enable the submit btn
+
   }
 
   private initialState(): State {
@@ -83,20 +85,24 @@ export class AccountPageComponent implements OnInit {
   }
 
   onSubmit(): void {
-    //check if the username and email are empty
-    // if not check if the username or email is already used
-    // if not change data
-
       let usernameValue = this.accountEditForm?.get('userUsername')?.value;
       let userEmailValue = this.accountEditForm?.get('userEmailForm')?.value;
-      console.log(usernameValue, userEmailValue);
 
-      this.authService.changeUserEmail(userEmailValue);
+      this.authService.changeUserEmail(userEmailValue).subscribe({
+        next: (success) => {
+          let ref = this.snackbar.open(
+            "Account changed succesfully",
+            "",
+            { horizontalPosition: 'end', duration: 2000 }
+          );
+          this.fetchUserData();
+          this.state = this.initialState();
+        },
+        error: (error) => {
+          this.snackbar.open("Something went wrong, please try again", "", { horizontalPosition: 'end', duration: 3000 });
+        }
+      })
 
-      this.state = this.initialState();
-
-      // call to fetch an display the new user data
-      this.fetchUserData();
   }
 
   get userEmailValue(): string {

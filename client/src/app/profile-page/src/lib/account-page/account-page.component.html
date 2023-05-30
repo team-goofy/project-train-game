@@ -12,7 +12,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
-          <input  matInput value="{{userEmailValue}}" formControlName="userEmailForm">
+          <input  matInput formControlName="userEmailForm">
           <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
         </mat-form-field>
 
@@ -22,6 +22,7 @@
 
         <ng-container *ngIf="state.editting">
           <button id="submit-button" mat-raised-button color="primary" (click)="onSubmit()">Save changes</button>
+          <button mat-raised-button color="accent">Cancel</button>
         </ng-container>
         </div>
       </form>
