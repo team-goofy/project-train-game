@@ -13,6 +13,8 @@ import { StationService } from "./services/station.service";
 import {RandomTrainComponent} from "./random-train/random-train.component";
 import {RandomTrainService} from "./services/random-train.service";
 import {MatInputModule} from "@angular/material/input";
+import { PictureUploadPageComponent } from "./picture-upload-page/picture-upload-page.component";
+import { PictureUploadService } from "./services/picture-upload.service";
 
 @NgModule({
     imports: [
@@ -29,11 +31,13 @@ import {MatInputModule} from "@angular/material/input";
     ],
     declarations: [
       StartPageComponent,
-      RandomTrainComponent
+      RandomTrainComponent,
+      PictureUploadPageComponent
     ],
     providers: [
       StationService,
-      RandomTrainService
+      RandomTrainService,
+      PictureUploadService
     ]
 })
 export class GamePageModule {}
