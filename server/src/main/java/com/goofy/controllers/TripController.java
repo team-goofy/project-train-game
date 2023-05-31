@@ -11,10 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.goofy.dtos.TripImageDTO;
 import com.goofy.services.TripService;
@@ -31,6 +28,12 @@ public class TripController {
         public ResponseEntity<Object> saveTrip(@RequestBody() @Valid TripDTO trip, Principal principal) {
                 String tripId = this.tripService.saveTripToDatabase(trip, principal.getName());
                 return ResponseEntity.ok(tripId);
+        }
+
+        //TODO: getTrip
+        @GetMapping
+        public ResponseEntity<Object> getTripById(@RequestParam() String tripId) {
+                return ResponseEntity.ok().build();
         }
 
         @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
