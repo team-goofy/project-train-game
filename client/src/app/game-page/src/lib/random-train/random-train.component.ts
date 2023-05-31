@@ -13,7 +13,7 @@ export class RandomTrainComponent implements OnInit {
   private _randomTrain!: ExitStationTrain;
   private uicCode: string = "";
   private departureLocation: string = "";
-  //TODO: add a query-param for tripId maybe?
+  //TODO: add a query-param for tripId maybe? or store in local session storage?
 
   get departureLocationValue(): string {
     return this.departureLocation;
