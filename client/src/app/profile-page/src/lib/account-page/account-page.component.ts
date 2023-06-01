@@ -9,6 +9,7 @@ interface State {
   loading: boolean;
   error: string | null;
   editting: boolean;
+  valueHasNotBeenChanged: boolean;
 }
 
 
@@ -24,7 +25,10 @@ export class AccountPageComponent implements OnInit {
   accountEditForm = new FormGroup({
     userEmailForm: new FormControl(''),
     userUsername: new FormControl(''),
-    userPasswordForm: new FormControl('')
+    userPasswordForm: new FormControl('*******'),
+    userOldPasswordForm: new FormControl(''),
+    userNewPasswordForm: new FormControl(''),
+    userNewRepeatPasswordForm: new FormControl('')
   });
 
   private username: string = "";
@@ -66,6 +70,18 @@ export class AccountPageComponent implements OnInit {
   }
 
   editingState(): void {
+    this.accountEditForm.valueChanges.subscribe((formValue) => {
+      if(this.accountEditForm.value.userUsername === this.usernameValue && this.accountEditForm.value.userEmailForm === this.userEmailValue){
+        this.state.valueHasNotBeenChanged = true;
+      }else{
+        this.state.valueHasNotBeenChanged = false;
+      }
+
+      if(this.accountEditForm.value.userOldPasswordForm != '' &&  this.accountEditForm.value.userNewPasswordForm != '' &&  this.accountEditForm.value.userNewRepeatPasswordForm != ''){
+        this.state.valueHasNotBeenChanged = false;
+      }
+    });
+
     this.accountEditForm.controls['userEmailForm'].enable();
     this.accountEditForm.controls['userUsername'].enable();
     this.accountEditForm.controls['userPasswordForm'].enable();
@@ -74,7 +90,6 @@ export class AccountPageComponent implements OnInit {
     this.state.loading = true;
     this.state.editting = true;
 
-    //check if user made any changes and then enable the submit btn
 
   }
 
@@ -82,7 +97,8 @@ export class AccountPageComponent implements OnInit {
     return {
       loading: false,
       error: null,
-      editting: false
+      editting: false,
+      valueHasNotBeenChanged: true
     };
   }
 
@@ -130,6 +146,11 @@ export class AccountPageComponent implements OnInit {
     this.fetchUserData();
     this.state = this.initialState();
 
+  }
+
+  cancel(): void{
+    this.fetchUserData();
+    this.state = this.initialState();
   }
 
   get userEmailValue(): string {
