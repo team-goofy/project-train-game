@@ -1,6 +1,62 @@
 <div class="parent">
   <div class="centered">
-    <h1 class="mat-headline-2">Stats</h1>
+    <h1 class="mat-headline-2 text__centered">Stats</h1>
 
+    <div class="cardWrapper" fxLayoutAlign="space-between center">
+        <mat-card class="statsCard statsCard__width">
+          <mat-card-header class="icon__center">
+            <mat-icon class="icon__circle mat-icon">train</mat-icon>
+          </mat-card-header>
+
+          <mat-card-content class="">
+            <mat-card-title class="text__centered">{{totalKM}} KM</mat-card-title>
+            <mat-card-subtitle class="text__centered mat-subtitle-1">Total travel distance</mat-card-subtitle>
+          </mat-card-content>
+        </mat-card>
+
+      <mat-card class="statsCard statsCard__width">
+        <mat-card-header class="icon__center">
+          <mat-icon class="icon__circle mat-icon">transfer_within_a_station</mat-icon>
+        </mat-card-header>
+
+        <mat-card-content>
+          <mat-card-title class="text__centered">{{totalStations}} Stations</mat-card-title>
+          <mat-card-subtitle class="text__centered mat-subtitle-1">Total stations visited</mat-card-subtitle>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="statsCard statsCard__width">
+        <mat-card-header class="icon__center">
+          <mat-icon class="icon__circle mat-icon">timer</mat-icon>
+        </mat-card-header>
+
+        <mat-card-content>
+          <mat-card-title class="text__centered">{{totalHours}} Hours</mat-card-title>
+          <mat-card-subtitle class="text__centered mat-subtitle-1">Total travel time</mat-card-subtitle>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="statsCard" fxFlex="47">
+        <mat-card-header class="icon__center">
+          <mat-icon class="icon__circle mat-icon">location_on</mat-icon>
+        </mat-card-header>
+
+        <mat-card-content>
+          <mat-card-title class="text__centered">{{mostVisitedStation}}</mat-card-title>
+          <mat-card-subtitle class="text__centered mat-subtitle-1">Most visited station</mat-card-subtitle>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="statsCard" fxFlex="45">
+        <mat-card-header class="icon__center">
+          <mat-icon class="icon__circle mat-icon">home</mat-icon>
+        </mat-card-header>
+
+        <mat-card-content>
+          <mat-card-title class="text__centered">{{mostUsedStartStation}}</mat-card-title>
+          <mat-card-subtitle class="text__centered mat-subtitle-1">Most used start station</mat-card-subtitle>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
 </div>

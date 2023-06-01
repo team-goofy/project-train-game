@@ -5,7 +5,55 @@
 }
 
 .centered {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 5%;
+  margin: 5% auto 0;
+}
+
+.icon__center {
+  font-size: 40px;
+  margin: 0 auto;
+}
+
+.cardWrapper {
+  margin: 0 auto;
+  width: 70%;
+  flex-flow: row wrap;
+}
+
+.statsCard {
+  padding: 15px;
+  margin-bottom: 30px;
+}
+
+.text__centered {
+  text-align: center;
+}
+
+.icon__circle {
+  font-size: 50px;
+  color: white;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  background-color: pink;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .cardWrapper {
+    width: 90%;
+  }
+}
+
+@media (max-width: 700px) {
+  .statsCard {
+    max-width: 300px!important;
+    width: 300px;
+  }
+
+  .cardWrapper {
+    width: 100%;
+    flex-direction: column!important;
+  }
 }
