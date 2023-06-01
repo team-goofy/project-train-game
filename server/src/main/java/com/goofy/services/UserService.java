@@ -4,6 +4,8 @@ import com.goofy.dtos.UserDTO;
 import com.goofy.models.Profile;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.firebase.auth.UserRecord;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 
 import java.util.concurrent.ExecutionException;
 
@@ -14,4 +16,7 @@ public interface UserService {
 
 
     Profile getProfile(String uid) throws InterruptedException, ExecutionException;
+
+    ResponseEntity<String> changeUsername(@Valid String username, String uid) throws InterruptedException, ExecutionException;
+
 }

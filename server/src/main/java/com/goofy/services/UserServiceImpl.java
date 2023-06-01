@@ -5,12 +5,12 @@ import com.goofy.dtos.UserDTO;
 import com.goofy.exceptions.UsernameExistsException;
 import com.goofy.models.Profile;
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.AsyncPageImpl;
+import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -66,4 +66,34 @@ public class UserServiceImpl implements UserService {
         return !apiFuture.get().isEmpty();
     }
 
+    public ResponseEntity<String> changeUsername(String newUsername, String uid) throws InterruptedException, ExecutionException {
+
+        if (usernameExists(newUsername)) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            DocumentReference usernameReference = this.firestore.collection("user").document(uid);
+            try {
+                DocumentSnapshot docuSnap = usernameReference.get().get();
+                Profile profile = docuSnap.toObject(Profile.class);
+
+                if (profile != null) {
+                    String currUsername = profile.getUsername();
+
+                    if (!currUsername.equals(newUsername)) {
+                        profile.setUsername(newUsername);
+                        usernameReference.set(profile);
+
+                        return ResponseEntity.ok(newUsername);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                    }
+                } else {
+                    return ResponseEntity.notFound().build();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+    }
 }

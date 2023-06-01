@@ -2,6 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "@client/shared-services";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {UserRequestModel} from "@client/shared-models";
 // import { getAuth } from "firebase/auth";
 
 interface State {
@@ -86,30 +87,42 @@ export class AccountPageComponent implements OnInit {
   }
 
   onSubmit(): void {
-      let usernameValue = this.accountEditForm?.get('userUsername')?.value;
-      let userEmailValue = this.accountEditForm?.get('userEmailForm')?.value;
+    const user = <UserRequestModel>{
+      username: this.accountEditForm.value.userUsername,
+      email: this.accountEditForm.value.userEmailForm,
+      password: this.accountEditForm.value.userPasswordForm
+    };
 
-    // if (typeof usernameValue === "string") {
-    //   this.authService.changeUserName(usernameValue);
-    // }
+    this.authService.changeUserName(user).subscribe({
+      next: (success) => {
+        console.log()
+        let ref = this.snackbar.open(
+          "Username changed successfully",
+          "",
+          {horizontalPosition: 'end', duration: 2000}
+        );
+        this.fetchUserData();
+        this.state = this.initialState();
+      },
+      error: (error) => {
+        this.snackbar.open("The username already exists", "", {horizontalPosition: 'end', duration: 3000});
+      }
+    })
 
-
-    if (typeof userEmailValue === "string") {
-      this.authService.changeUserEmail(userEmailValue).subscribe({
-        next: (success) => {
-          let ref = this.snackbar.open(
-            "Account changed successfully",
-            "",
-            {horizontalPosition: 'end', duration: 2000}
-          );
-          this.fetchUserData();
-          this.state = this.initialState();
-        },
-        error: (error) => {
-          this.snackbar.open("The email/username already exists", "", {horizontalPosition: 'end', duration: 3000});
-        }
-      })
-    }
+    this.authService.changeUserEmail(user.email).subscribe({
+      next: (success) => {
+        let ref = this.snackbar.open(
+          "Email changed successfully",
+          "",
+          {horizontalPosition: 'end', duration: 2000}
+        );
+        this.fetchUserData();
+        this.state = this.initialState();
+      },
+      error: (error) => {
+        this.snackbar.open("The email already exists", "", {horizontalPosition: 'end', duration: 3000});
+      }
+    })
 
   }
 

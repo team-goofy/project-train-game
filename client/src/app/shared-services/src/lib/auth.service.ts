@@ -92,10 +92,14 @@ export class AuthService {
     }
   }
 
-  // changeUserName(username: string): Observable<any>{
-  //     console.log(username);
-  //     return this.http.get(`${this.baseUrl}/user/username`, { params: { username } });
-  // }
+  changeUserName(userRequestModel: UserRequestModel): Observable<any>{
+    const httpOptions: Object = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      responseType: 'text'
+    }
+    let username = userRequestModel.username;
+    return this.http.put<any>(`${this.baseUrl}/user/profileUsername`, username, httpOptions);
+  }
 
   changeUserEmail(newUserEmail: string): Observable<any> {
     if (this.auth.currentUser) {

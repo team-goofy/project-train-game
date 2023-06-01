@@ -4,7 +4,6 @@ import com.goofy.dtos.UserDTO;
 import com.goofy.models.Profile;
 import com.goofy.services.UserService;
 import com.goofy.services.UserServiceImpl;
-import com.google.cloud.firestore.DocumentReference;
 import com.google.firebase.auth.UserRecord;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -12,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
+import java.security.Principal;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -40,5 +40,10 @@ public class UserController {
     @PostMapping("/profile")
     public Profile getProfile(@RequestBody() @Valid String uid) throws InterruptedException, ExecutionException {
         return userService.getProfile(uid);
+    }
+
+    @PutMapping("/profileUsername")
+    public ResponseEntity<String> updateUserName(@RequestBody() @Valid String username, Principal principal) throws Exception {
+        return userService.changeUsername(username, principal.getName());
     }
 }
