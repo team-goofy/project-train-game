@@ -6,8 +6,6 @@ import java.util.concurrent.ExecutionException;
 
 import com.goofy.dtos.TripDTO;
 import com.goofy.dtos.TripImageDTO;
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.storage.BlobId;
 
 public interface TripService {

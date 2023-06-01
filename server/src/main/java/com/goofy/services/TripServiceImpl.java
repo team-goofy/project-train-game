@@ -4,16 +4,12 @@ import com.goofy.dtos.TripDTO;
 import com.goofy.dtos.TripImageDTO;
 import com.goofy.exceptions.NoContentTypeException;
 import com.goofy.exceptions.TripImageAlreadyExistsException;
-import com.google.api.core.ApiFunction;
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
-import com.google.common.util.concurrent.MoreExecutors;
 import com.google.firebase.cloud.StorageClient;
 
-import java.util.List;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;

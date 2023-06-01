@@ -1,8 +1,6 @@
 package com.goofy.controllers;
 
 import com.goofy.dtos.TripDTO;
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.QuerySnapshot;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
