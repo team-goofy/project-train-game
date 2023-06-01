@@ -93,36 +93,42 @@ export class AccountPageComponent implements OnInit {
       password: this.accountEditForm.value.userPasswordForm
     };
 
-    this.authService.changeUserName(user).subscribe({
-      next: (success) => {
-        console.log()
-        let ref = this.snackbar.open(
-          "Username changed successfully",
-          "",
-          {horizontalPosition: 'end', duration: 2000}
-        );
-        this.fetchUserData();
-        this.state = this.initialState();
-      },
-      error: (error) => {
-        this.snackbar.open("The username already exists", "", {horizontalPosition: 'end', duration: 3000});
-      }
-    })
+    if(user.username !== this.usernameValue){
+      this.authService.changeUserName(user).subscribe({
+        next: (success) => {
+          console.log()
+          let ref = this.snackbar.open(
+            "Username changed successfully",
+            "",
+            {horizontalPosition: 'end', duration: 2000}
+          );
+          this.fetchUserData();
+          this.state = this.initialState();
+        },
+        error: (error) => {
+          this.snackbar.open("The username already exists", "", {horizontalPosition: 'end', duration: 3000});
+        }
+      })
+    }
 
-    this.authService.changeUserEmail(user.email).subscribe({
-      next: (success) => {
-        let ref = this.snackbar.open(
-          "Email changed successfully",
-          "",
-          {horizontalPosition: 'end', duration: 2000}
-        );
-        this.fetchUserData();
-        this.state = this.initialState();
-      },
-      error: (error) => {
-        this.snackbar.open("The email already exists", "", {horizontalPosition: 'end', duration: 3000});
-      }
-    })
+    if(user.email !== this.userEmailValue){
+      this.authService.changeUserEmail(user.email).subscribe({
+        next: (success) => {
+          let ref = this.snackbar.open(
+            "Email changed successfully",
+            "",
+            {horizontalPosition: 'end', duration: 2000}
+          );
+          this.fetchUserData();
+          this.state = this.initialState();
+        },
+        error: (error) => {
+          this.snackbar.open("The email already exists", "", {horizontalPosition: 'end', duration: 3000});
+        }
+      })
+    }
+    this.fetchUserData();
+    this.state = this.initialState();
 
   }
 
