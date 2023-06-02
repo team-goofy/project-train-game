@@ -103,7 +103,8 @@ export class AccountPageComponent implements OnInit {
     this.accountEditForm.controls['userUsername'].disable();
     this.accountEditForm.controls['userPasswordForm'].disable();
 
-    this.userEmail = this.authService.getUserData();
+    this.userEmail = this.authService.getUserData().email;
+
 
     this.authService.getUsername()
       .subscribe({
@@ -163,6 +164,8 @@ export class AccountPageComponent implements OnInit {
     };
 
     if(this.accountEditForm.value.userOldPasswordForm != '' &&  this.accountEditForm.value.userNewPasswordForm != '' &&  this.accountEditForm.value.userNewRepeatPasswordForm != ''){
+      let user = this.authService.getUserData();
+      console.log(user);
       // userOldPasswordForm === userOldPass
       // if(){
       //   // check of de nieuwe 2 passwords met elkaar overeenkomen, zo niet error

@@ -12,6 +12,7 @@ import {catchError, from, Observable, switchMap, tap, throwError} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {UserLoginModel, UserRequestModel} from "@client/shared-models";
 import { environment } from "../../../../environments/environment";
+import {User} from "firebase/auth";
 
 @Injectable({
     providedIn: 'root'
@@ -83,8 +84,8 @@ export class AuthService {
     }
 
 //    account-page
-  getUserData(): string {
-    const currUser = this.auth.currentUser?.email;
+  getUserData(): User {
+    const currUser = this.auth.currentUser;
     if(currUser){
       return currUser;
     }else{
