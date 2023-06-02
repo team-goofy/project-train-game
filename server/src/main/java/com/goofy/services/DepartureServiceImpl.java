@@ -42,7 +42,7 @@ public class DepartureServiceImpl implements DepartureService {
         Departure randomDeparture = filteredDepartures.get(randomDepartureIndex);
         List<RouteStation> stations = randomDeparture.getRouteStations();
 
-        if(stations.isEmpty()){
+        if(stations.isEmpty()) {
             throw new NoStationFoundException("This station has no route stations.");
         }
 

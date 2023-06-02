@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private EmailController emailController;
+    private final EmailController emailController;
     private final FirebaseAuth firebaseAuth;
     private final Firestore firestore;
 
