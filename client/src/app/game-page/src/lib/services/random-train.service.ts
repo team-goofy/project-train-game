@@ -1,8 +1,8 @@
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../../../environments/environment";
-import {inject, Injectable} from "@angular/core";
-import {Observable} from "rxjs";
-import {ExitStationTrain, Trip} from "@client/shared-models";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../../../environments/environment";
+import { inject, Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { ExitStationTrain } from "@client/shared-models";
 
 @Injectable()
 export class RandomTrainService {
@@ -13,10 +13,4 @@ export class RandomTrainService {
     return this.http.get<ExitStationTrain>(`${this.baseUrl}/departures/random`,
       {params: {uicCode: stationUicCode}});
   }
-
-  saveTrip(trip: Trip): Observable<string> {
-    return this.http.post<string>(`${this.baseUrl}/trip`, trip);
-  }
-
 }
-

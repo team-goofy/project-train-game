@@ -1,26 +1,27 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {RandomTrainService} from "../services/random-train.service";
-import {ExitStationTrain} from "@client/shared-models";
-import {ActivatedRoute} from "@angular/router";
+import { Component, inject, OnInit } from '@angular/core';
+import { RandomTrainService } from "../services/random-train.service";
+import { ExitStationTrain } from "@client/shared-models";
+import { ActivatedRoute } from "@angular/router";
+import { TripService } from "../services/trip.service";
 
 @Component({
   templateUrl: './random-train.component.html',
   styleUrls: ['./random-train.component.scss']
 })
 export class RandomTrainComponent implements OnInit {
-  private randomTrainService: RandomTrainService = inject(RandomTrainService);
-  private route: ActivatedRoute = inject(ActivatedRoute);
+  private _randomTrainService: RandomTrainService = inject(RandomTrainService);
+  private _route: ActivatedRoute = inject(ActivatedRoute);
+  private _tripService: TripService = inject(TripService);
   private _randomTrain!: ExitStationTrain;
   private uicCode: string = "";
   private departureLocation: string = "";
-  //TODO: add a query-param for tripId maybe? or store in local session storage?
 
   get departureLocationValue(): string {
     return this.departureLocation;
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
+    this._route.queryParams.subscribe((params) => {
       this.uicCode = params['uicCode'];
       this.departureLocation = params['location'];
     });
@@ -29,7 +30,7 @@ export class RandomTrainComponent implements OnInit {
   }
 
   getRandomTrain(): void {
-    this.randomTrainService.getRandomTrain(this.uicCode)
+    this._randomTrainService.getRandomTrain(this.uicCode)
       .subscribe(train => {
         const date = new Date(train.departure.plannedDateTime);
         const time = date.toLocaleTimeString([], {timeStyle: 'short'});
@@ -41,8 +42,8 @@ export class RandomTrainComponent implements OnInit {
   }
 
   saveTrip(): void {
-    //TODO: navigate to konrad's page
-    this.randomTrainService.saveTrip({
+    //TODO; first get trip by id, add the new station to the array before saving
+    this._tripService.saveTrip({
       routeStations: [this.randomTrain.exitStation.mediumName],
       isEnded: false
     }).subscribe();

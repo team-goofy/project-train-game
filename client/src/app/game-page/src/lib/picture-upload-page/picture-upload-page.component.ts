@@ -1,6 +1,6 @@
-import {Component, ElementRef, inject, ViewChild} from '@angular/core';
-import {PictureUploadService} from "../services/picture-upload.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { TripService } from "../services/trip.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   templateUrl: './picture-upload-page.component.html',
@@ -9,8 +9,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class PictureUploadPageComponent {
   @ViewChild('previewImg') private _previewImg?: ElementRef;
   private _imageUrl!: string ;
-  private pictureUploadService: PictureUploadService = inject(PictureUploadService);
-  private snackbar: MatSnackBar = inject(MatSnackBar);
+  private _pictureUploadService: TripService = inject(TripService);
+  private _snackbar: MatSnackBar = inject(MatSnackBar);
 
   onFileSelected(event: Event) {
     const inputElement = event.target as HTMLInputElement;
@@ -28,7 +28,7 @@ export class PictureUploadPageComponent {
 
   uploadImage() {
     if (!this._imageUrl) {
-      this.snackbar.open("Please select a picture first!", "Close");
+      this._snackbar.open("Please select a picture first!", "Close");
       return;
     }
 
@@ -41,16 +41,16 @@ export class PictureUploadPageComponent {
         formData.append('tripId', "238888993");
         formData.append('uicCode', "222gjgh2");
 
-        this.pictureUploadService.saveImage(formData).subscribe({
+        this._pictureUploadService.saveImage(formData).subscribe({
           next: () => {
-            this.snackbar.open(
+            this._snackbar.open(
               "Image has been uploaded successfully!",
               "",
               { horizontalPosition: 'end', duration: 6000 }
             );
           },
           error: ({ error }) => {
-            this.snackbar.open(error.errors.join(), "Close");
+            this._snackbar.open(error.errors.join(), "Close");
           }
         })
       }

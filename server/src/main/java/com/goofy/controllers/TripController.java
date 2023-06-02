@@ -1,6 +1,7 @@
 package com.goofy.controllers;
 
 import com.goofy.dtos.TripDTO;
+import com.goofy.models.TripResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -27,9 +28,10 @@ public class TripController {
         private final TripService tripService;
 
         @PostMapping
-        public ResponseEntity<Object> saveTrip(@RequestBody() @Valid TripDTO trip, Principal principal) {
+        public ResponseEntity<TripResponse> saveTrip(@RequestBody() @Valid TripDTO trip, Principal principal) {
                 String tripId = this.tripService.saveTripToDatabase(trip, principal.getName());
-                return ResponseEntity.ok(tripId);
+                TripResponse response = new TripResponse(tripId);
+                return ResponseEntity.ok(response);
         }
 
         @GetMapping(value = "/id")
