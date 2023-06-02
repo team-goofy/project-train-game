@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class PictureUploadPageComponent implements OnInit {
   @ViewChild('previewImg') private _previewImg?: ElementRef;
-  private _pictureUploadService: TripService = inject(TripService);
+  private _tripService: TripService = inject(TripService);
   private _snackbar: MatSnackBar = inject(MatSnackBar);
   private _route: ActivatedRoute = inject(ActivatedRoute);
   private _router: Router = inject(Router);
@@ -74,7 +74,7 @@ export class PictureUploadPageComponent implements OnInit {
         formData.append('tripId', this._tripId);
         formData.append('uicCode', this._uicCode);
 
-        this._pictureUploadService.saveImage(formData).subscribe({
+        this._tripService.saveImage(formData).subscribe({
           next: () => {
             this._loading = false;
             let ref = this._snackbar.open(
