@@ -41,8 +41,18 @@ public class UserServiceImpl implements UserService {
             }
 
             UserRecord createdUser = this.firebaseAuth.createUser(request);
-            Map<String, String> data = Map.of("username", user.getUsername());
-            this.firestore.collection("user").document(createdUser.getUid()).set(data);
+
+            // Create User-Document where username will be stored
+            Map<String, String> userData = Map.of("username", user.getUsername());
+            this.firestore.collection("user").document(createdUser.getUid()).set(userData);
+
+            // Create Stats-Document where the user's stats will be stored
+            Map<String, String> statsData = Map.of(
+                    "totalStations", String.valueOf(0),
+                    "totalMinutes", String.valueOf(0),
+                    "mostVisitedStation", "",
+                    "mostUsedStartLocation", "");
+            this.firestore.collection("stats").document(createdUser.getUid()).set(statsData);
 
             emailController.sendEmailVerification(user.getEmail());
             return createdUser;
