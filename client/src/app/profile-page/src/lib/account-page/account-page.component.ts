@@ -194,7 +194,7 @@ export class AccountPageComponent implements OnInit {
     this.authService.sendPassResetmail().subscribe({
       next: () => {
         this.snackbar.open(
-          "A rest email has been sent to your email address.",
+          "A reset email has been sent to your email address.",
           "",
           { horizontalPosition: 'end', duration: 6000 }
         );

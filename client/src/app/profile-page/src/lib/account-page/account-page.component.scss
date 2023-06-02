@@ -2,13 +2,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  width: 100%;
+  padding: 0 20px; /* Add some padding to the parent container */
+  box-sizing: border-box; /* Include padding in the width calculation */
 }
 
 .centered {
+  width: 100%;
+  max-width: 500px; /* Adjust the max-width value as needed */
+  margin-top: 5%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 5%;
 }
 
 .form-fields {
@@ -16,12 +20,8 @@
   flex-direction: column;
   gap: 8px;
   margin-bottom: 40px;
+  width: 100%; /* Add this line to make the form fields expand to the full width */
 }
-
-#submit-button {
-  width: 100%;
-}
-
 .text-centered {
   text-align: center;
 }
