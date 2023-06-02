@@ -177,7 +177,6 @@ export class AccountPageComponent implements OnInit {
         this.fetchUserData();
         this.state = this.initialState();
       }else{
-        console.log('matched niet')
         //error gooien
       }
     }
