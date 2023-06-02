@@ -56,7 +56,6 @@ export class AuthService {
     }
 
     sendVerificationMail() {
-      console.log(this.auth.currentUser!.email)
       const httpOptions: Object = {
         headers: new HttpHeaders().set('Content-Type', 'application/json'),
         responseType: 'text'
@@ -131,4 +130,13 @@ export class AuthService {
     }
   }
 
+  sendPassResetmail() {
+    const httpOptions: Object = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      responseType: 'text'
+    }
+
+    return this.http
+      .post<any>(`${this.baseUrl}/mail/sendPassReset`, this.auth.currentUser!.email, httpOptions)
+  }
 }

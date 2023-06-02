@@ -31,10 +31,6 @@ export class AccountPageComponent implements OnInit {
   accountEditForm: FormGroup = new FormGroup({
     userEmailForm: new FormControl(''),
     userUsername: new FormControl(''),
-    userPasswordForm: new FormControl(''),
-    userOldPasswordForm: new FormControl(''),
-    userNewPasswordForm: new FormControl(''),
-    userNewRepeatPasswordForm: new FormControl('')
   });
 
   private username: string = "";
@@ -64,18 +60,6 @@ export class AccountPageComponent implements OnInit {
             Validators.minLength(4),
             Validators.maxLength(25),
           ],
-        ],
-        userPasswordForm: [
-          { value: '******', disabled: this.state.valueHasNotBeenChanged },
-        ],
-        userOldPasswordForm: [
-          '',
-        ],
-        userNewPasswordForm: [
-          '',
-        ],
-        userNewRepeatPasswordForm: [
-          '',
         ]
       }
     );
@@ -101,7 +85,6 @@ export class AccountPageComponent implements OnInit {
   fetchUserData(): void{
     this.accountEditForm.controls['userEmailForm'].disable();
     this.accountEditForm.controls['userUsername'].disable();
-    this.accountEditForm.controls['userPasswordForm'].disable();
 
     this.userEmail = this.authService.getUserData().email;
 
@@ -140,15 +123,10 @@ export class AccountPageComponent implements OnInit {
       }else{
         this.state.valueHasNotBeenChanged = false;
       }
-
-      if(this.accountEditForm.value.userOldPasswordForm != '' &&  this.accountEditForm.value.userNewPasswordForm != '' &&  this.accountEditForm.value.userNewRepeatPasswordForm != ''){
-        this.state.valueHasNotBeenChanged = false;
-      }
     });
 
     this.accountEditForm.controls['userEmailForm'].enable();
     this.accountEditForm.controls['userUsername'].enable();
-    this.accountEditForm.controls['userPasswordForm'].enable();
 
     this.state = this.initialState();
     this.state.loading = true;
@@ -159,26 +137,9 @@ export class AccountPageComponent implements OnInit {
   onSubmit(): void {
     const user = <UserRequestModel>{
       username: this.accountEditForm.value.userUsername,
-      email: this.accountEditForm.value.userEmailForm,
-      password: this.accountEditForm.value.userPasswordForm
+      email: this.accountEditForm.value.userEmailForm
     };
 
-    if(this.accountEditForm.value.userOldPasswordForm != '' &&  this.accountEditForm.value.userNewPasswordForm != '' &&  this.accountEditForm.value.userNewRepeatPasswordForm != ''){
-      let user = this.authService.getUserData();
-      console.log(user);
-      // userOldPasswordForm === userOldPass
-      // if(){
-      //   // check of de nieuwe 2 passwords met elkaar overeenkomen, zo niet error
-      //   if(this.accountEditForm.value.userNewPasswordForm === this.accountEditForm.value.userNewRepeatPasswordForm){
-      //     console.log("wow de wachtwooroden matchen")
-      //     this.submitUserPassword()
-      //   }else{
-      //     //throw error
-      //   }
-      // }else{
-      //   // throw error
-      // }
-    }
 
     if(user.username !== this.usernameValue){
       this.submitUserUsername(user)
@@ -228,6 +189,26 @@ export class AccountPageComponent implements OnInit {
       }
     })
   }
+
+  changePassword(){
+    this.authService.sendPassResetmail().subscribe({
+      next: () => {
+        this.snackbar.open(
+          "A rest email has been sent to your email address.",
+          "",
+          { horizontalPosition: 'end', duration: 6000 }
+        );
+
+      },
+      error: () => {
+        this.snackbar.open(
+          "Something went wrong, please try again later",
+          "", { horizontalPosition: 'end', duration: 3000 });
+      }
+    });
+
+  }
+
 
   cancel(): void{
     this.fetchUserData();

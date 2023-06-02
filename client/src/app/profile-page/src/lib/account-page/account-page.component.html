@@ -25,34 +25,11 @@
 
 
         <ng-container *ngIf="!state.editting">
-          <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput formControlName="userPasswordForm" placeholder="">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-          </mat-form-field>
-
           <button mat-raised-button color="primary" (click)="editingState()">Edit</button>
+          <button mat-raised-button color="accent" (click)="changePassword()">Change password</button>
         </ng-container>
 
         <ng-container *ngIf="state.editting">
-          <mat-form-field appearance="outline">
-            <mat-label>Current password</mat-label>
-            <input matInput type="password" formControlName="userOldPasswordForm" placeholder="">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>New Password</mat-label>
-            <input matInput type="password" formControlName="userNewPasswordForm" placeholder="">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Repeat new password</mat-label>
-            <input matInput type="password" formControlName="userNewRepeatPasswordForm" placeholder="">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-          </mat-form-field>
-
           <button id="submit-button" [disabled]="state.valueHasNotBeenChanged" mat-raised-button color="primary" (click)="onSubmit()">Save changes</button>
           <button mat-raised-button color="accent" (click)="cancel()">Cancel</button>
         </ng-container>
