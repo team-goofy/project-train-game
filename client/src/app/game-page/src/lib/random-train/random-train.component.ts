@@ -13,6 +13,8 @@ export class RandomTrainComponent implements OnInit {
   private _route: ActivatedRoute = inject(ActivatedRoute);
   private _tripService: TripService = inject(TripService);
   private _randomTrain!: ExitStationTrain;
+
+  private tripId: string = "";
   private uicCode: string = "";
   private departureLocation: string = "";
 
@@ -24,6 +26,7 @@ export class RandomTrainComponent implements OnInit {
     this._route.queryParams.subscribe((params) => {
       this.uicCode = params['uicCode'];
       this.departureLocation = params['location'];
+      this.tripId = params['tripId'];
     });
 
     this.getRandomTrain();
