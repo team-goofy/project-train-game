@@ -170,7 +170,7 @@ export class AccountPageComponent implements OnInit {
         this.state = this.initialState();
       },
       error: (error) => {
-        this.snackbar.open("The username already exists", "", {horizontalPosition: 'end', duration: 3000});
+        this.snackbar.open("An error occurred, please log in again", "", {horizontalPosition: 'end', duration: 3000});
       }
     })
   }
@@ -178,7 +178,7 @@ export class AccountPageComponent implements OnInit {
   submitUserEmail(userEmail: string){
     this.authService.changeUserEmail(userEmail).subscribe({
       next: (success) => {
-        let ref = this.snackbar.open(
+        this.snackbar.open(
           "Email changed successfully",
           "",
           {horizontalPosition: 'end', duration: 2000}
@@ -187,7 +187,7 @@ export class AccountPageComponent implements OnInit {
         this.authService.sendVerificationMail()
           .subscribe({
             next: () => {
-              this.snackbar.open(
+              let ref = this.snackbar.open(
                 "A verification email has been sent to your email address.",
                 "",
                 { horizontalPosition: 'end', duration: 6000 }
@@ -197,14 +197,17 @@ export class AccountPageComponent implements OnInit {
               });
             },
             error: () => {
-              this.snackbar.open(
-                "Something went wrong, please try again later",
+              let ref = this.snackbar.open(
+                "Something went wrong sending email, please try again later",
                 "", { horizontalPosition: 'end', duration: 3000 });
+              ref.afterDismissed().subscribe(() => {
+                this.router.navigate(['/'])
+              });
             }
           });
       },
       error: (error) => {
-        this.snackbar.open("The email already exists", "", {horizontalPosition: 'end', duration: 3000});
+        this.snackbar.open("An error occurred, please log in again", "", {horizontalPosition: 'end', duration: 3000});
       }
     })
   }
