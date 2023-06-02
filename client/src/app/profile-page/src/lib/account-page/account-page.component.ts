@@ -120,12 +120,13 @@ export class AccountPageComponent implements OnInit {
   }
 
   editingState(): void {
+
     this.accountEditForm.valueChanges.subscribe((formValue) => {
-      if(this.accountEditForm.value.userUsername === this.usernameValue && this.accountEditForm.value.userEmailForm === this.userEmailValue
-      || this.accountEditForm.value.userUsername.isEmpty() || this.accountEditForm.value.userEmailForm.isEmpty()
-      ){
+      if (this.accountEditForm.value.userUsername === this.usernameValue && this.accountEditForm.value.userEmailForm === this.userEmailValue) {
         this.state.valueHasNotBeenChanged = true;
-      }else{
+      } else if (this.accountEditForm.value.userUsername === '' || this.accountEditForm.value.userEmailForm === '') {
+        this.state.valueHasNotBeenChanged = true;
+      } else {
         this.state.valueHasNotBeenChanged = false;
       }
     });
@@ -199,7 +200,7 @@ export class AccountPageComponent implements OnInit {
                 "Something went wrong sending email, please try again later",
                 "", { horizontalPosition: 'end', duration: 3000 });
               ref.afterDismissed().subscribe(() => {
-                this.router.navigate(['/'])
+                this.router.navigate(['/verify-email'])
               });
             }
           });
