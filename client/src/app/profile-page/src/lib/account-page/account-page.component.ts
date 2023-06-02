@@ -52,6 +52,7 @@ export class AccountPageComponent implements OnInit {
         userEmailForm: [
           { value: '', disabled: this.state.valueHasNotBeenChanged },
           [
+            Validators.required,
             Validators.pattern(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/i)
           ]
         ],
@@ -120,7 +121,9 @@ export class AccountPageComponent implements OnInit {
 
   editingState(): void {
     this.accountEditForm.valueChanges.subscribe((formValue) => {
-      if(this.accountEditForm.value.userUsername === this.usernameValue && this.accountEditForm.value.userEmailForm === this.userEmailValue){
+      if(this.accountEditForm.value.userUsername === this.usernameValue && this.accountEditForm.value.userEmailForm === this.userEmailValue
+      || this.accountEditForm.value.userUsername.isEmpty() || this.accountEditForm.value.userEmailForm.isEmpty()
+      ){
         this.state.valueHasNotBeenChanged = true;
       }else{
         this.state.valueHasNotBeenChanged = false;
@@ -151,11 +154,6 @@ export class AccountPageComponent implements OnInit {
       this.submitUserEmail(user.email)
     }
 
-  }
-
-  submitUserPassword(){
-    this.fetchUserData();
-    this.state = this.initialState();
   }
 
   submitUserUsername(user: UserRequestModel){
@@ -231,12 +229,10 @@ export class AccountPageComponent implements OnInit {
 
   }
 
-
   cancel(): void{
     this.fetchUserData();
     this.state = this.initialState();
   }
-
 
   get f(): { [key: string]: AbstractControl } {
     return this.accountEditForm.controls;
