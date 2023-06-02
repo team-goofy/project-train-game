@@ -15,7 +15,7 @@
         </div>
         <img class="img-preview" *ngIf="imageUrl" [src]="imageUrl" alt="image here">
       </div>
-      <mat-progress-spinner *ngIf="loading"></mat-progress-spinner>
+      <mat-progress-spinner *ngIf="loading" mode="indeterminate"></mat-progress-spinner>
     </ng-container>
   </mat-card-content>
   <div class="spacer"></div>
