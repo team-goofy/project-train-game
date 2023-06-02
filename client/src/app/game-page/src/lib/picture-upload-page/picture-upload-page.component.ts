@@ -1,7 +1,10 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { TripService } from "../services/trip.service";
+import { Trip } from '@client/shared-models';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from '@angular/router';
+import { catchError, switchMap, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
 
 @Component({
   templateUrl: './picture-upload-page.component.html',
@@ -43,56 +46,83 @@ export class PictureUploadPageComponent implements OnInit {
   }
 
   continueTrip() {
-    if (!this._imageUrl) {
+    this.saveImage(this._imageUrl, () => {
       this._router.navigate(['/game/random-train'], 
-        { 
-          queryParams: { 
-            tripId: this._tripId, 
-            uicCode: this._uicCode, 
-            location: this._location 
-          } 
-        });
+      { 
+        queryParams: { 
+          tripId: this._tripId, 
+          uicCode: this._uicCode, 
+          location: this._location 
+        } 
+      });
+    });
+  }
+
+  endTrip() {
+    this.saveImage(this._imageUrl, () => {
+      this._tripService.getTripById(this._tripId).pipe(
+        catchError(({ error }) => {
+          this._snackbar.open(error.errors.join(), "Close");
+          return EMPTY;
+        }),
+        switchMap((trip: Trip) => {
+          trip.isEnded = true;
+          return this._tripService.saveTrip(trip).pipe(
+            catchError(({ error }) => {
+              this._snackbar.open(error.errors.join(), "Close");
+              return EMPTY;
+            })
+          );
+        }), 
+        tap(() => {
+          let ref = this._snackbar.open(
+            "Your trip has ended!",
+            "",
+            { horizontalPosition: 'end', duration: 2000 }
+          );
+  
+          ref.afterDismissed().subscribe(() => {
+            this._router.navigate(['/']);
+          })
+        })
+      ).subscribe();
+    });
+  }
+
+  private saveImage(imageUrl: string, callback: () => void) {
+    if (!imageUrl) {
+      callback();
       return;
     }
-
-    fetch(this._imageUrl as string)
+  
+    fetch(imageUrl)
       .then(response => response.blob())
       .then(blob => {
         if (!this.checkValidImageSize(blob)) {
           this._snackbar.open(
-            "Image size is too big!", 
+            "Image cannot be larger than 1MB!", 
             "Close", 
             { horizontalPosition: 'end', duration: 2000 }
           );
           return;
         }
-
+  
         this._loading = true;
         
         const formData = new FormData();
         formData.append('image', blob);
         formData.append('tripId', this._tripId);
         formData.append('uicCode', this._uicCode);
-
+  
         this._tripService.saveImage(formData).subscribe({
           next: () => {
             this._loading = false;
-            let ref = this._snackbar.open(
+            this._snackbar.open(
               "Image has been uploaded successfully!",
               "",
               { horizontalPosition: 'end', duration: 2000 }
             );
-
-            ref.afterDismissed().subscribe(() => {
-              this._router.navigate(['/game/random-train'], 
-              { 
-                queryParams: { 
-                  tripId: this._tripId, 
-                  uicCode: this._uicCode, 
-                  location: this._location 
-                } 
-              });
-            })
+            callback();
           },
           error: ({ error }) => {
             this._loading = false;
