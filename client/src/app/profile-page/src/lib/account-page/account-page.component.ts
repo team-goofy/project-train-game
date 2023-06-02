@@ -4,15 +4,12 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  ValidationErrors,
-  ValidatorFn,
   Validators
 } from "@angular/forms";
 import {AuthService} from "@client/shared-services";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {UserRequestModel} from "@client/shared-models";
-import {debounceTime, distinctUntilChanged, map, Observable} from "rxjs";
-// import { getAuth } from "firebase/auth";
+import {debounceTime, distinctUntilChanged} from "rxjs";
 
 interface State {
   loading: boolean;
@@ -70,8 +67,6 @@ export class AccountPageComponent implements OnInit {
         ],
         userPasswordForm: [
           { value: '******', disabled: this.state.valueHasNotBeenChanged },
-          [
-          ]
         ],
         userOldPasswordForm: [
           '',
@@ -128,6 +123,15 @@ export class AccountPageComponent implements OnInit {
       });
   }
 
+  private initialState(): State {
+    return {
+      loading: false,
+      error: null,
+      editting: false,
+      valueHasNotBeenChanged: true
+    };
+  }
+
   editingState(): void {
     this.accountEditForm.valueChanges.subscribe((formValue) => {
       if(this.accountEditForm.value.userUsername === this.usernameValue && this.accountEditForm.value.userEmailForm === this.userEmailValue){
@@ -149,16 +153,6 @@ export class AccountPageComponent implements OnInit {
     this.state.loading = true;
     this.state.editting = true;
 
-
-  }
-
-  private initialState(): State {
-    return {
-      loading: false,
-      error: null,
-      editting: false,
-      valueHasNotBeenChanged: true
-    };
   }
 
   onSubmit(): void {
@@ -169,58 +163,74 @@ export class AccountPageComponent implements OnInit {
     };
 
     if(this.accountEditForm.value.userOldPasswordForm != '' &&  this.accountEditForm.value.userNewPasswordForm != '' &&  this.accountEditForm.value.userNewRepeatPasswordForm != ''){
-      // check of userOldPaswordForm overeenkomt het het oude wachtwoord, zo niet error
-
-      // check of de nieuwe 2 passwords met elkaar overeenkomen, zo niet error
-      if(this.accountEditForm.value.userNewPasswordForm === this.accountEditForm.value.userNewRepeatPasswordForm){
-          console.log("wow de wachtwooroden matchen")
-        this.fetchUserData();
-        this.state = this.initialState();
-      }else{
-        //error gooien
-      }
+      // userOldPasswordForm === userOldPass
+      // if(){
+      //   // check of de nieuwe 2 passwords met elkaar overeenkomen, zo niet error
+      //   if(this.accountEditForm.value.userNewPasswordForm === this.accountEditForm.value.userNewRepeatPasswordForm){
+      //     console.log("wow de wachtwooroden matchen")
+      //     this.submitUserPassword()
+      //   }else{
+      //     //throw error
+      //   }
+      // }else{
+      //   // throw error
+      // }
     }
 
     if(user.username !== this.usernameValue){
-      this.authService.changeUserName(user).subscribe({
-        next: (success) => {
-          let ref = this.snackbar.open(
-            "Username changed successfully",
-            "",
-            {horizontalPosition: 'end', duration: 2000}
-          );
-          this.fetchUserData();
-          this.state = this.initialState();
-        },
-        error: (error) => {
-          this.snackbar.open("The username already exists", "", {horizontalPosition: 'end', duration: 3000});
-        }
-      })
+      this.submitUserUsername(user)
     }
 
     if(user.email !== this.userEmailValue){
-      this.authService.changeUserEmail(user.email).subscribe({
-        next: (success) => {
-          let ref = this.snackbar.open(
-            "Email changed successfully",
-            "",
-            {horizontalPosition: 'end', duration: 2000}
-          );
-          this.fetchUserData();
-          this.state = this.initialState();
-        },
-        error: (error) => {
-          this.snackbar.open("The email already exists", "", {horizontalPosition: 'end', duration: 3000});
-        }
-      })
+      this.submitUserEmail(user.email)
     }
 
+  }
+
+  submitUserPassword(){
+    this.fetchUserData();
+    this.state = this.initialState();
+  }
+
+  submitUserUsername(user: UserRequestModel){
+    this.authService.changeUserName(user).subscribe({
+      next: (success) => {
+        let ref = this.snackbar.open(
+          "Username changed successfully",
+          "",
+          {horizontalPosition: 'end', duration: 2000}
+        );
+        this.fetchUserData();
+        this.state = this.initialState();
+      },
+      error: (error) => {
+        this.snackbar.open("The username already exists", "", {horizontalPosition: 'end', duration: 3000});
+      }
+    })
+  }
+
+  submitUserEmail(userEmail: string){
+    this.authService.changeUserEmail(userEmail).subscribe({
+      next: (success) => {
+        let ref = this.snackbar.open(
+          "Email changed successfully",
+          "",
+          {horizontalPosition: 'end', duration: 2000}
+        );
+        this.fetchUserData();
+        this.state = this.initialState();
+      },
+      error: (error) => {
+        this.snackbar.open("The email already exists", "", {horizontalPosition: 'end', duration: 3000});
+      }
+    })
   }
 
   cancel(): void{
     this.fetchUserData();
     this.state = this.initialState();
   }
+
 
   get f(): { [key: string]: AbstractControl } {
     return this.accountEditForm.controls;
