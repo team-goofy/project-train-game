@@ -10,6 +10,7 @@ import {AuthService} from "@client/shared-services";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {UserRequestModel} from "@client/shared-models";
 import {debounceTime, distinctUntilChanged} from "rxjs";
+import {Router} from "@angular/router";
 
 interface State {
   loading: boolean;
@@ -26,6 +27,7 @@ interface State {
 export class AccountPageComponent implements OnInit {
   private formBuilder: FormBuilder = inject(FormBuilder);
   private authService: AuthService = inject(AuthService);
+  private router: Router = inject(Router);
   private snackbar: MatSnackBar = inject(MatSnackBar);
 
   accountEditForm: FormGroup = new FormGroup({
@@ -181,8 +183,25 @@ export class AccountPageComponent implements OnInit {
           "",
           {horizontalPosition: 'end', duration: 2000}
         );
-        this.fetchUserData();
-        this.state = this.initialState();
+
+        this.authService.sendVerificationMail()
+          .subscribe({
+            next: () => {
+              this.snackbar.open(
+                "A verification email has been sent to your email address.",
+                "",
+                { horizontalPosition: 'end', duration: 6000 }
+              );
+              ref.afterDismissed().subscribe(() => {
+                this.authService.logout();
+              });
+            },
+            error: () => {
+              this.snackbar.open(
+                "Something went wrong, please try again later",
+                "", { horizontalPosition: 'end', duration: 3000 });
+            }
+          });
       },
       error: (error) => {
         this.snackbar.open("The email already exists", "", {horizontalPosition: 'end', duration: 3000});
