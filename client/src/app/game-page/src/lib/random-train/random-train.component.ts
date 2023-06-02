@@ -1,8 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RandomTrainService } from "../services/random-train.service";
-import { ExitStationTrain } from "@client/shared-models";
-import { ActivatedRoute } from "@angular/router";
+import { ExitStationTrain, Trip } from "@client/shared-models";
+import { ActivatedRoute, Router } from "@angular/router";
 import { TripService } from "../services/trip.service";
+import { switchMap, tap } from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   templateUrl: './random-train.component.html',
@@ -13,6 +15,8 @@ export class RandomTrainComponent implements OnInit {
   private _route: ActivatedRoute = inject(ActivatedRoute);
   private _tripService: TripService = inject(TripService);
   private _randomTrain!: ExitStationTrain;
+  private _snackbar: MatSnackBar = inject(MatSnackBar);
+  private _router: Router = inject(Router);
 
   private tripId: string = "";
   private uicCode: string = "";
@@ -45,11 +49,30 @@ export class RandomTrainComponent implements OnInit {
   }
 
   saveTrip(): void {
-    //TODO; first get trip by id, add the new station to the array before saving
-    this._tripService.saveTrip({
-      routeStations: [this.randomTrain.exitStation.mediumName],
-      isEnded: false
-    }).subscribe();
+    this._tripService.getTripById(this.tripId).pipe(
+      switchMap((trip: Trip) => {
+        trip.routeStations.push({uicCode: this._randomTrain.exitStation.uicCode ,mediumName: this._randomTrain.exitStation.mediumName});
+        return this._tripService.saveTrip(trip);
+      }),
+      tap((response) => {
+        let ref = this._snackbar.open(
+          "Your trip progress has been saved!",
+          "",
+          { horizontalPosition: 'end', duration: 2000 }
+        );
+
+        ref.afterDismissed().subscribe(() => {
+          this._router.navigate(
+            ['game/picture-upload'],
+            {
+              queryParams: {
+                tripId: response.tripId,
+                uicCode: this.uicCode,
+              }
+            });
+        });
+      })
+    ).subscribe();
   }
 
   get randomTrain(): ExitStationTrain {

@@ -62,10 +62,7 @@ export class LoginPageComponent implements OnInit{
         );
 
         ref.afterDismissed().subscribe(() => {
-          this.router.navigate(['/'])
-            .then(() => {
-              window.location.reload();
-            });
+          this.router.navigate(['/']);
         });
       },
       error: (error) => {

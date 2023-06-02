@@ -1,8 +1,8 @@
-import {inject, Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../../../environments/environment";
-import {Observable} from "rxjs";
-import {Trip, TripResponse} from "@client/shared-models";
+import { inject, Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../../../environments/environment";
+import { Observable } from "rxjs";
+import { Trip, TripResponse } from "@client/shared-models";
 
 @Injectable()
 export class TripService {
@@ -18,6 +18,6 @@ export class TripService {
   }
 
   getTripById(tripId: string): Observable<Trip> {
-    return this.http.get<Trip>(`${this.baseUrl}/trip/id`, {params: {tripId: tripId}});
+    return this.http.get<Trip>(`${this.baseUrl}/trip/${tripId}`);
   }
 }

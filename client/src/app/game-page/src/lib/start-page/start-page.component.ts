@@ -7,7 +7,7 @@ import { TripService } from "../services/trip.service";
 import { Station, Trip } from '@client/shared-models';
 import { catchError, delay, filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { EMPTY, Observable, Subject } from 'rxjs';
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 interface State {
   loading: boolean;
@@ -86,7 +86,7 @@ export class StartPageComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(station => {
       const trip : Trip = {
-        routeStations: station ? [ station.namen.middel ] : [],
+        routeStations: station ? [ {uicCode: station.UICCode, mediumName: station.namen.middel} ] : [],
         isEnded: false,
       }
       this._tripService.saveTrip(trip).subscribe({

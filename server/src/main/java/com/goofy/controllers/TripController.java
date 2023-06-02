@@ -1,13 +1,13 @@
 package com.goofy.controllers;
 
 import com.goofy.dtos.TripDTO;
+import com.goofy.models.Trip;
 import com.goofy.models.TripResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.http.MediaType;
@@ -34,10 +34,10 @@ public class TripController {
                 return ResponseEntity.ok(response);
         }
 
-        @GetMapping(value = "/id")
-        public ResponseEntity<Object> getTripById(@RequestParam() String tripId) throws ExecutionException, InterruptedException {
-                Map<String, Object> test = this.tripService.getTripById(tripId);
-                return ResponseEntity.ok(test);
+        @GetMapping(value = "/{id}")
+        public ResponseEntity<Object> getTripById(@PathVariable String id) throws ExecutionException, InterruptedException {
+                Trip trip = this.tripService.getTripById(id);
+                return ResponseEntity.ok(trip);
         }
 
         @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

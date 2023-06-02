@@ -4,6 +4,7 @@ import com.goofy.dtos.TripDTO;
 import com.goofy.dtos.TripImageDTO;
 import com.goofy.exceptions.NoContentTypeException;
 import com.goofy.exceptions.TripImageAlreadyExistsException;
+import com.goofy.models.Trip;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
@@ -85,12 +86,12 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Map<String, Object> getTripById(String tripId) throws ExecutionException, InterruptedException {
+    public Trip getTripById(String tripId) throws ExecutionException, InterruptedException {
         DocumentReference tripRef = this.firestore.collection("trip").document(tripId);
         ApiFuture<DocumentSnapshot> future = tripRef.get();
         DocumentSnapshot trip = future.get();
 
-        return trip.exists() ? trip.getData() : null;
+        return trip.exists() ? trip.toObject(Trip.class) : null;
     }
 
     private static String getFileExtension(String contentType) {
