@@ -58,6 +58,15 @@ export class PictureUploadPageComponent implements OnInit {
     fetch(this._imageUrl as string)
       .then(response => response.blob())
       .then(blob => {
+        if (!this.checkValidImageSize(blob)) {
+          this._snackbar.open(
+            "Image size is too big!", 
+            "Close", 
+            { horizontalPosition: 'end', duration: 2000 }
+          );
+          return;
+        }
+
         this._loading = true;
         
         const formData = new FormData();
@@ -87,11 +96,17 @@ export class PictureUploadPageComponent implements OnInit {
           },
           error: ({ error }) => {
             this._loading = false;
+            this._imageUrl = "";
             this._snackbar.open(error.errors.join(), "Close");
           }
         })
       }
     )
+  }
+
+  private checkValidImageSize(image: Blob): boolean {
+    const IMAGE_MAX_BYTE_SIZE = 1000000;
+    return image.size < IMAGE_MAX_BYTE_SIZE;
   }
 
   get imageUrl(): string {
