@@ -6,7 +6,7 @@
         <mat-form-field appearance="outline">
           <mat-label>User name</mat-label>
           <input matInput formControlName="userUsername">
-          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+          <mat-icon matSuffix>person_outline</mat-icon>
           <mat-error>
             <span *ngIf="f['userUsername'].hasError('minlength')">Username must be 4 characters long</span>
             <span *ngIf="f['userUsername'].hasError('maxlength')">Username must not exceed 25 characters</span>
@@ -17,7 +17,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input matInput formControlName="userEmailForm">
-          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+          <mat-icon matSuffix>alternate_email</mat-icon>
           <mat-error >
             <span *ngIf="f['userEmailForm'].hasError('pattern')">Email is invalid</span>
           </mat-error>
