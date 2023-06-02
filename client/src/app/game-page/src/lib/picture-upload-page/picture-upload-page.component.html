@@ -1,20 +1,21 @@
 <background-image></background-image>
 <mat-card class="example-card">
-  <mat-card-header>
-    <mat-card-subtitle>
-      <button routerLink="/random-train" mat-button color="primary">
-        <mat-icon>arrow_back_ios</mat-icon>
-        Random train
-      </button>
-    </mat-card-subtitle>
-  </mat-card-header>
   <mat-card-content>
-    <ng-container>
-      <input type="file" accept="image/*" (change)="onFileSelected($event)">
-      <div>
-        <img #previewImg *ngIf="imageUrl" style="max-width: 300px;" [src]="imageUrl" alt="image here">
+    <ng-container *ngIf="!imageUrl">
+      <div class="title-container">
+        <p class="mat-headline-5">Let's take a picture 📸</p>
+        <p class="mat-subtitle-1">Upload your favourite picture that you've taken in <span class="location">{{ location }}</span></p>
       </div>
-      <button (click)="uploadImage()">Upload</button>
+    </ng-container>
+    <ng-container>
+      <div *ngIf="!loading" class="img-container">
+        <div class="input-container">
+          <button mat-raised-button class="input-button" color="primary">{{!imageUrl ? "Upload" : "Change" }}</button>
+          <input class="input" type="file" accept="image/png, image/jpeg" (change)="onFileSelected($event)">
+        </div>
+        <img class="img-preview" *ngIf="imageUrl" [src]="imageUrl" alt="image here">
+      </div>
+      <mat-progress-spinner *ngIf="loading"></mat-progress-spinner>
     </ng-container>
   </mat-card-content>
   <div class="spacer"></div>
@@ -24,9 +25,9 @@
         <mat-icon class="icon">exit_to_app</mat-icon>
         End trip
       </button>
-      <button mat-raised-button color="primary">
+      <button mat-raised-button color="primary" (click)="continueTrip()">
         <mat-icon class="icon">play_arrow</mat-icon>
-        Continue playing
+        Continue trip
       </button>
     </mat-card-actions>
   </ng-container>

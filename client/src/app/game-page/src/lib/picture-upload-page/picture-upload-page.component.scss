@@ -45,6 +45,47 @@ mat-card {
   flex: 1 1 auto;
 }
 
+.img-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-preview {
+  width: 250px;
+  height: auto;
+}
+
+.title-container {
+  text-align: center;
+}
+
+.input-button {
+  margin-top: 12px;
+  float:left; 
+  position:absolute; 
+  z-index:-1;
+}
+
+.input {
+  margin-top: 12px;
+  opacity: 0; //Not visible
+  font-size: 0;
+  width: 90px; 
+  height: 37px; 
+  float: left; 
+}
+
+.input:hover {
+  cursor: pointer;
+}
+
+.location {
+  font-weight: bold;
+}
+
 @media (max-width: $card-width) {
   mat-card {
     width: 90%;

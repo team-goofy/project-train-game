@@ -33,7 +33,7 @@ public class TripServiceImpl implements TripService {
         InputStream inputStream = image.getImage().getInputStream();
         String contentType = image.getImage().getContentType();
 
-        Long tripId = image.getTripId();
+        String tripId = image.getTripId();
         String stationUic = image.getUicCode();
 
         if (contentType == null) {
@@ -42,12 +42,12 @@ public class TripServiceImpl implements TripService {
 
         String extension = getFileExtension(contentType);
 
-        String blobId = String.format("trip-%d_station-%s_user-%s%s", tripId, stationUic, uid, extension);
+        String blobId = String.format("trip-%s_station-%s_user-%s%s", tripId, stationUic, uid, extension);
         Blob blob = storage.bucket().get(blobId);
 
         if (blob != null && blob.exists()) {
             throw new TripImageAlreadyExistsException(String.format(
-                    "Image at station %s for trip %d by user %s already exists", stationUic, tripId, uid)
+                    "Image at at this station for this trip already exists", stationUic, tripId, uid)
             );
         }
 

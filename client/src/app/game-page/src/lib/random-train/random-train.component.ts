@@ -51,7 +51,12 @@ export class RandomTrainComponent implements OnInit {
   saveTrip(): void {
     this._tripService.getTripById(this.tripId).pipe(
       switchMap((trip: Trip) => {
-        trip.routeStations.push({uicCode: this._randomTrain.exitStation.uicCode ,mediumName: this._randomTrain.exitStation.mediumName});
+        trip.routeStations.push(
+          {
+            uicCode: this._randomTrain.exitStation.uicCode, 
+            mediumName: this._randomTrain.exitStation.mediumName
+          }
+        );
         return this._tripService.saveTrip(trip);
       }),
       tap((response) => {
@@ -62,12 +67,12 @@ export class RandomTrainComponent implements OnInit {
         );
 
         ref.afterDismissed().subscribe(() => {
-          this._router.navigate(
-            ['game/picture-upload'],
+          this._router.navigate(['game/picture-upload'],
             {
               queryParams: {
                 tripId: response.tripId,
                 uicCode: this.uicCode,
+                location: this._randomTrain.exitStation.mediumName
               }
             });
         });
