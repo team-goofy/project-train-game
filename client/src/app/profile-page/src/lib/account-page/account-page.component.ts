@@ -1,8 +1,17 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from "@angular/forms";
 import {AuthService} from "@client/shared-services";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {UserRequestModel} from "@client/shared-models";
+import {debounceTime, distinctUntilChanged, map, Observable} from "rxjs";
 // import { getAuth } from "firebase/auth";
 
 interface State {
@@ -12,20 +21,20 @@ interface State {
   valueHasNotBeenChanged: boolean;
 }
 
-
 @Component({
   selector: 'app-account-page',
   templateUrl: './account-page.component.html',
   styleUrls: ['./account-page.component.scss']
 })
 export class AccountPageComponent implements OnInit {
+  private formBuilder: FormBuilder = inject(FormBuilder);
   private authService: AuthService = inject(AuthService);
   private snackbar: MatSnackBar = inject(MatSnackBar);
 
-  accountEditForm = new FormGroup({
+  accountEditForm: FormGroup = new FormGroup({
     userEmailForm: new FormControl(''),
     userUsername: new FormControl(''),
-    userPasswordForm: new FormControl('*******'),
+    userPasswordForm: new FormControl(''),
     userOldPasswordForm: new FormControl(''),
     userNewPasswordForm: new FormControl(''),
     userNewRepeatPasswordForm: new FormControl('')
@@ -42,6 +51,56 @@ export class AccountPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchUserData();
+
+    this.accountEditForm = this.formBuilder.group(
+      {
+        userEmailForm: [
+          { value: '', disabled: this.state.valueHasNotBeenChanged },
+          [
+            Validators.pattern(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/i)
+          ]
+        ],
+        userUsername: [
+          { value: '', disabled: this.state.valueHasNotBeenChanged },
+          [
+            Validators.required,
+            Validators.minLength(4),
+            Validators.maxLength(25),
+          ],
+        ],
+        userPasswordForm: [
+          { value: '******', disabled: this.state.valueHasNotBeenChanged },
+          [
+          ]
+        ],
+        userOldPasswordForm: [
+          '',
+        ],
+        userNewPasswordForm: [
+          '',
+        ],
+        userNewRepeatPasswordForm: [
+          '',
+        ]
+      }
+    );
+
+    this.accountEditForm.controls['userUsername'].valueChanges.pipe(
+      debounceTime(1000),
+      distinctUntilChanged()
+    ).subscribe({
+      next: (value: string) => {
+        if(this.accountEditForm.value.userUsername !== this.usernameValue && this.accountEditForm.value.userEmailForm){
+          this.authService.checkUsername(value).subscribe({
+            next: (exists: boolean) => {
+              if (exists) {
+                this.accountEditForm.controls['userUsername'].setErrors({ usernameExists: true });
+              }
+            }
+          });
+        }
+      }
+    });
   }
 
   fetchUserData(): void{
@@ -109,10 +168,23 @@ export class AccountPageComponent implements OnInit {
       password: this.accountEditForm.value.userPasswordForm
     };
 
+    if(this.accountEditForm.value.userOldPasswordForm != '' &&  this.accountEditForm.value.userNewPasswordForm != '' &&  this.accountEditForm.value.userNewRepeatPasswordForm != ''){
+      // check of userOldPaswordForm overeenkomt het het oude wachtwoord, zo niet error
+
+      // check of de nieuwe 2 passwords met elkaar overeenkomen, zo niet error
+      if(this.accountEditForm.value.userNewPasswordForm === this.accountEditForm.value.userNewRepeatPasswordForm){
+          console.log("wow de wachtwooroden matchen")
+        this.fetchUserData();
+        this.state = this.initialState();
+      }else{
+        console.log('matched niet')
+        //error gooien
+      }
+    }
+
     if(user.username !== this.usernameValue){
       this.authService.changeUserName(user).subscribe({
         next: (success) => {
-          console.log()
           let ref = this.snackbar.open(
             "Username changed successfully",
             "",
@@ -143,14 +215,16 @@ export class AccountPageComponent implements OnInit {
         }
       })
     }
-    this.fetchUserData();
-    this.state = this.initialState();
 
   }
 
   cancel(): void{
     this.fetchUserData();
     this.state = this.initialState();
+  }
+
+  get f(): { [key: string]: AbstractControl } {
+    return this.accountEditForm.controls;
   }
 
   get userEmailValue(): string {

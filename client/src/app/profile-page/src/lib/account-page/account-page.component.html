@@ -1,18 +1,26 @@
 <div class="parent">
   <div class="centered">
-    <h1 class="mat-headline-2">Account</h1>
+    <h1 class="mat-headline-2 text-centered">Account</h1>
       <form [formGroup]="accountEditForm">
         <div class="form-fields">
         <mat-form-field appearance="outline">
           <mat-label>User name</mat-label>
           <input matInput formControlName="userUsername">
           <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+          <mat-error>
+            <span *ngIf="f['userUsername'].hasError('minlength')">Username must be 4 characters long</span>
+            <span *ngIf="f['userUsername'].hasError('maxlength')">Username must not exceed 25 characters</span>
+            <span *ngIf="f['userUsername'].hasError('usernameExists')">Username is not available</span>
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input matInput formControlName="userEmailForm">
           <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+          <mat-error >
+            <span *ngIf="f['userEmailForm'].hasError('pattern')">Email is invalid</span>
+          </mat-error>
         </mat-form-field>
 
 
