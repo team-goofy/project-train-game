@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
+import {AuthService} from "@client/shared-services";
 
 @Component({
   selector: 'app-profile-page',
@@ -6,7 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./profile-page.component.scss']
 })
 export class ProfilePageComponent {
+  authService: AuthService = inject(AuthService);
+
   scroll(el: HTMLElement) {
-    el.scrollIntoView();
+    el.scrollIntoView({behavior: 'smooth'});
   }
 }
