@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { PermissionsService } from '@ng-web-apis/permissions';
 import { StationService } from '../services/station.service';
-import { TripService } from "../services/trip.service";
+import { TripService } from '@client/shared-services';
 import { Station, Trip } from '@client/shared-models';
 import { catchError, delay, filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { EMPTY, Observable, Subject } from 'rxjs';

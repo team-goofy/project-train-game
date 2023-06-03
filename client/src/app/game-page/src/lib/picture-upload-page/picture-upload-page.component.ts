@@ -1,10 +1,10 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { TripService } from "../../../../shared-services/src/lib/trip.service";
 import { Trip } from '@client/shared-models';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
+import { TripService } from '@client/shared-services';
 
 @Component({
   templateUrl: './picture-upload-page.component.html',
