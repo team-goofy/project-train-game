@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RandomTrainService } from "../services/random-train.service";
 import { ExitStationTrain, Trip } from "@client/shared-models";
 import { ActivatedRoute, Router } from "@angular/router";
-import { TripService } from "../services/trip.service";
+import { TripService } from "../../../../shared-services/src/lib/trip.service";
 import { switchMap, tap } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
