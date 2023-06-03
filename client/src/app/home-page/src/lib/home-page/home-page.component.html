@@ -32,11 +32,32 @@
   <!--btn start-->
   <button *ngIf="(authService.user$ | async)" routerLink="/game" class="play-btn" color="accent" mat-raised-button>
     <mat-icon>play_arrow</mat-icon>
-    Start
+    Start new trip
   </button>
 
+  <mat-card *ngIf="trips.length > 0" class="ongoing-trip-card">
+    <mat-card-header>
+      <div class="header">
+        <p class="mat-headline-5">Or continue ongoing trips 🌏</p>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="trips">
+        <mat-card *ngFor="let trip of trips" role="listitem" appearance="outlined" (click)="tripClicked(trip)">
+          <mat-card-content class="trip">
+            <div class="trip-station">
+              <p class="name">Start from station</p>
+              <strong>{{ trip.routeStations[trip.routeStations.length - 1].mediumName }}</strong>
+            </div>
+            <mat-icon class="continue">keyboard_arrow_right</mat-icon>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
   <!--Explanation of the game-->
-  <div class="explanation-btn" (click)="scrollTo(target)">
+  <div *ngIf="!(authService.user$ | async)" class="explanation-btn" (click)="scrollTo(target)">
     <h3 class="game-explanation mat-h1">Explanation of the game</h3>
     <div class="game-explanation-icon">
       <mat-icon>keyboard_arrow_down</mat-icon>
