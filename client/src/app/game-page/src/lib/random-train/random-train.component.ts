@@ -71,7 +71,7 @@ export class RandomTrainComponent implements OnInit {
             {
               queryParams: {
                 tripId: response.tripId,
-                uicCode: this.uicCode,
+                uicCode: this._randomTrain.exitStation.uicCode,
                 location: this._randomTrain.exitStation.mediumName
               }
             });
