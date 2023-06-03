@@ -10,11 +10,10 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { HttpClientModule } from "@angular/common/http";
 import { StationService } from "./services/station.service";
-import {RandomTrainComponent} from "./random-train/random-train.component";
-import {RandomTrainService} from "./services/random-train.service";
-import {MatInputModule} from "@angular/material/input";
+import { RandomTrainComponent } from "./random-train/random-train.component";
+import { RandomTrainService } from "./services/random-train.service";
+import { MatInputModule } from "@angular/material/input";
 import { PictureUploadPageComponent } from "./picture-upload-page/picture-upload-page.component";
-import { TripService } from "./services/trip.service";
 
 @NgModule({
     imports: [
@@ -37,7 +36,6 @@ import { TripService } from "./services/trip.service";
     providers: [
       StationService,
       RandomTrainService,
-      TripService
     ]
 })
 export class GamePageModule {}
