@@ -1,10 +1,18 @@
 import { inject, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "../../../../../environments/environment";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
 import { Trip, TripResponse } from "@client/shared-models";
+import { createHttpParams } from "@client/shared-utils";
 
-@Injectable()
+export interface TripFilter {
+  onGoing: boolean;
+  test: boolean;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class TripService {
   private http: HttpClient = inject(HttpClient)
   private baseUrl: string = environment.apiUrl;
@@ -19,5 +27,10 @@ export class TripService {
 
   getTripById(tripId: string): Observable<Trip> {
     return this.http.get<Trip>(`${this.baseUrl}/trip/${tripId}`);
+  }
+
+  getTrips(filter?: TripFilter): Observable<Trip[]> {
+    const params: HttpParams = createHttpParams({ ...filter });
+    return this.http.get<Trip[]>(`${this.baseUrl}/trip`, { params });
   }
 }
