@@ -1,1 +1,41 @@
-<p>account-page works!</p>
+<div class="parent">
+  <div class="centered">
+    <h1 class="mat-headline-2 text-centered">Account</h1>
+      <form [formGroup]="accountEditForm">
+        <div class="form-fields">
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="userUsername">
+          <mat-icon matSuffix>person_outline</mat-icon>
+          <mat-error>
+            <span *ngIf="f['userUsername'].hasError('minlength')">Username must be 4 characters long</span>
+            <span *ngIf="f['userUsername'].hasError('maxlength')">Username must not exceed 25 characters</span>
+            <span *ngIf="f['userUsername'].hasError('usernameExists')">Username is not available</span>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="userEmailForm">
+          <mat-icon matSuffix>alternate_email</mat-icon>
+          <mat-error >
+            <span *ngIf="f['userEmailForm'].hasError('pattern')">Email is invalid</span>
+          </mat-error>
+        </mat-form-field>
+
+
+        <ng-container *ngIf="!state.editting">
+          <button mat-raised-button color="primary" (click)="editingState()"> <mat-icon matSuffix>edit</mat-icon>Edit</button>
+          <button mat-raised-button color="accent" (click)="changePassword()"><mat-icon matSuffix>security</mat-icon>Change password</button>
+        </ng-container>
+
+        <ng-container *ngIf="state.editting">
+          <button id="submit-button" [disabled]="state.valueHasNotBeenChanged" mat-raised-button color="primary" (click)="onSubmit()"><mat-icon matSuffix>save</mat-icon>Save changes</button>
+          <button mat-raised-button color="accent" (click)="cancel()">  <mat-icon matSuffix>close</mat-icon>Cancel</button>
+        </ng-container>
+        </div>
+      </form>
+  </div>
+</div>
+
+

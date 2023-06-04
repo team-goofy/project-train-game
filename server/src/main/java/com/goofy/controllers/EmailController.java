@@ -43,10 +43,47 @@ public class EmailController {
                 "In order to get access to your account and play the train game, follow this link below to verify your email. \n\n" +
                 verificationLink + "\n\n" +
 
+                "If the above link does not work, copy and paste it into your web browser's address bar.\n" +
+
+                "Please note that this link is valid for a limited time only. \n" +
+
                 "Kind regards, \n" +
                 "WanderTrains";
 
         emailService.sendEmail(env.getProperty("spring.mail.from"), email, subject, messageText);
         return new ResponseEntity<>("Verification mail send successfully", HttpStatus.OK);
     }
+
+    @PostMapping("/sendPassReset")
+    public ResponseEntity<String> sendEmailPassReset(@RequestBody String email) throws Exception {
+        String subject = "WanderTrains - Change your password";
+
+        ActionCodeSettings actionCodeSettings = ActionCodeSettings.builder()
+                .setUrl(env.getProperty("angular.base.url") + "login")
+                .build();
+
+        String verificationLink = this.firebaseAuth.generatePasswordResetLink(email, actionCodeSettings);
+
+        String messageText =
+                "Dear WanderTrain-user,\n\n" +
+                        "We have received a request to change your password for your WanderTrain account. If you did not initiate this request, " +
+                        "please disregard this email and take necessary precautions to secure your account.\n" +
+
+                        "To proceed with the password change, please click on the following verification link: \n\n" +
+                        verificationLink + "\n\n" +
+
+                        "If the above link does not work, copy and paste it into your web browser's address bar.\n" +
+
+                        "Please note that this link is valid for a limited time only. \n\n" +
+
+                        "Kind regards, \n" +
+                        "WanderTrains";
+
+        emailService.sendEmail(env.getProperty("spring.mail.from"), email, subject, messageText);
+        return new ResponseEntity<>("Reset password mail send successfully", HttpStatus.OK);
+    }
+
+
+
+
 }

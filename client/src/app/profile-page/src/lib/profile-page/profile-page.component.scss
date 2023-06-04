@@ -1,0 +1,35 @@
+#backgroundImage {
+  height: 20%;
+  background-image: url("../../../../../../src/assets/profile_page_BG.svg");
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.container {
+  position: relative;
+}
+
+.nav-bar-styling {
+  position: absolute;
+  top: 15%;
+  width: 100%;
+}
+
+.outline-go-back-btn{
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.btn-outline{
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
+
