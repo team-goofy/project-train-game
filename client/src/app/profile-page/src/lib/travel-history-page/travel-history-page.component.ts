@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-travel-history-page',
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class TravelHistoryPageComponent {
 
+//   iets nodig waar data van aantal trips is for forloop expanison panel
 }

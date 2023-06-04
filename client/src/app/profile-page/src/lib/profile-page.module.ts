@@ -13,19 +13,23 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from '@angular/material/button';
+import {MatExpansionModule} from "@angular/material/expansion";
+import {MatStepperModule} from "@angular/material/stepper";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        ProfilePageRoutingModule,
-        HttpClientModule,
-        MatTabsModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        MatButtonModule
-    ],
+  imports: [
+    CommonModule,
+    ProfilePageRoutingModule,
+    HttpClientModule,
+    MatTabsModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatExpansionModule,
+    MatStepperModule
+  ],
     declarations: [
       ProfilePageComponent,
       AccountPageComponent,

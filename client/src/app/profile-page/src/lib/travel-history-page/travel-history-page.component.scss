@@ -2,10 +2,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  /* Add some padding to the parent container */
+  padding: 0 20px 20px;
+  box-sizing: border-box; /* Include padding in the width calculation */
 }
 
 .centered {
+  width: 100%;
+  max-width: 500px; /* Adjust the max-width value as needed */
+  margin-top: 5%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 5%;
 }
+
+.text-centered {
+  text-align: center;
+}
+
+.mat-mdc-form-field + .mat-mdc-form-field {
+  margin-left: 8px;
+}
+
