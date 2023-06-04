@@ -1,5 +1,13 @@
 <background-image></background-image>
 <mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-subtitle>
+      <button class="outline-location" (click)="showTripOverview()" mat-button color="accent">
+        <mat-icon>list_alt</mat-icon>
+        Progress
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
   <mat-card-content>
     <ng-container *ngIf="!imageUrl">
       <div class="title-container">

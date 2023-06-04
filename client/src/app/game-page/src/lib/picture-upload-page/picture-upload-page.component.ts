@@ -2,6 +2,9 @@ import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { TripService } from "../services/trip.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from "@angular/material/dialog";
+import { DialogData, TripOverviewDialogComponent } from "../components/trip-overview-dialog/trip-overview-dialog.component";
+import { take } from "rxjs";
 
 @Component({
   templateUrl: './picture-upload-page.component.html',
@@ -13,6 +16,7 @@ export class PictureUploadPageComponent implements OnInit {
   private _snackbar: MatSnackBar = inject(MatSnackBar);
   private _route: ActivatedRoute = inject(ActivatedRoute);
   private _router: Router = inject(Router);
+  private _dialog: MatDialog = inject(MatDialog);
 
   private _imageUrl!: string ;
   private _tripId: string = "";
@@ -25,6 +29,16 @@ export class PictureUploadPageComponent implements OnInit {
       this._tripId = params['tripId'];
       this._uicCode = params['uicCode'];
       this._location = params['location'];
+    });
+  }
+
+  showTripOverview() {
+    this._pictureUploadService.getTripById(this._tripId).pipe(take(1)).subscribe((trip) => {
+      this._dialog.open(TripOverviewDialogComponent, {
+        data: <DialogData>{
+          stations: trip.routeStations
+        }
+      });
     });
   }
 
@@ -44,13 +58,13 @@ export class PictureUploadPageComponent implements OnInit {
 
   continueTrip() {
     if (!this._imageUrl) {
-      this._router.navigate(['/game/random-train'], 
-        { 
-          queryParams: { 
-            tripId: this._tripId, 
-            uicCode: this._uicCode, 
-            location: this._location 
-          } 
+      this._router.navigate(['/game/random-train'],
+        {
+          queryParams: {
+            tripId: this._tripId,
+            uicCode: this._uicCode,
+            location: this._location
+          }
         });
       return;
     }
@@ -60,15 +74,15 @@ export class PictureUploadPageComponent implements OnInit {
       .then(blob => {
         if (!this.checkValidImageSize(blob)) {
           this._snackbar.open(
-            "Image size is too big!", 
-            "Close", 
+            "Image size is too big!",
+            "Close",
             { horizontalPosition: 'end', duration: 2000 }
           );
           return;
         }
 
         this._loading = true;
-        
+
         const formData = new FormData();
         formData.append('image', blob);
         formData.append('tripId', this._tripId);
@@ -84,13 +98,13 @@ export class PictureUploadPageComponent implements OnInit {
             );
 
             ref.afterDismissed().subscribe(() => {
-              this._router.navigate(['/game/random-train'], 
-              { 
-                queryParams: { 
-                  tripId: this._tripId, 
-                  uicCode: this._uicCode, 
-                  location: this._location 
-                } 
+              this._router.navigate(['/game/random-train'],
+              {
+                queryParams: {
+                  tripId: this._tripId,
+                  uicCode: this._uicCode,
+                  location: this._location
+                }
               });
             })
           },
