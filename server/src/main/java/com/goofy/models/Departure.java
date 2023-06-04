@@ -20,7 +20,6 @@ public class Departure {
     private List<Message> messages;
     private String departureStatus;
 
-
     @Getter
     @Setter
     public static class RouteStation {
