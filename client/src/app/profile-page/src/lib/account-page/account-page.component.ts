@@ -86,6 +86,8 @@ export class AccountPageComponent implements OnInit {
   }
 
   fetchUserData(): void{
+    this.state.loading = true;
+
     this.accountEditForm.controls['userEmailForm'].disable();
     this.accountEditForm.controls['userUsername'].disable();
 
@@ -101,8 +103,10 @@ export class AccountPageComponent implements OnInit {
 
           this.accountEditForm.controls['userEmailForm'].setValue(this.userEmail);
           this.accountEditForm.controls['userUsername'].setValue(this.username);
-        },
+          this.state.loading = false;
+          },
         error: () => {
+          this.state.loading = false;
           this.snackbar.open(
             "Something went wrong, please try again later",
             "", { horizontalPosition: 'end', duration: 3000 });
@@ -120,7 +124,6 @@ export class AccountPageComponent implements OnInit {
   }
 
   editingState(): void {
-
     this.accountEditForm.valueChanges.subscribe((formValue) => {
       if (this.accountEditForm.value.userUsername === this.usernameValue && this.accountEditForm.value.userEmailForm === this.userEmailValue) {
         this.state.valueHasNotBeenChanged = true;
@@ -141,11 +144,13 @@ export class AccountPageComponent implements OnInit {
   }
 
   onSubmit(): void {
+
+    this.state.loading = true;
+
     const user = <UserRequestModel>{
       username: this.accountEditForm.value.userUsername,
       email: this.accountEditForm.value.userEmailForm
     };
-
 
     if(user.username !== this.usernameValue){
       this.submitUserUsername(user)
@@ -165,10 +170,12 @@ export class AccountPageComponent implements OnInit {
           "",
           {horizontalPosition: 'end', duration: 2000}
         );
+        this.state.loading = false;
         this.fetchUserData();
         this.state = this.initialState();
       },
       error: (error) => {
+        this.state.loading = false;
         this.snackbar.open("An error occurred, please log in again", "", {horizontalPosition: 'end', duration: 3000});
       }
     })
@@ -177,6 +184,7 @@ export class AccountPageComponent implements OnInit {
   submitUserEmail(userEmail: string){
     this.authService.changeUserEmail(userEmail).subscribe({
       next: (success) => {
+        this.state.loading = false;
         this.snackbar.open(
           "Email changed successfully",
           "",
@@ -186,6 +194,7 @@ export class AccountPageComponent implements OnInit {
         this.authService.sendVerificationMail()
           .subscribe({
             next: () => {
+              this.state.loading = false;
               let ref = this.snackbar.open(
                 "A verification email has been sent to your email address.",
                 "",
@@ -196,6 +205,7 @@ export class AccountPageComponent implements OnInit {
               });
             },
             error: () => {
+              this.state.loading = false;
               let ref = this.snackbar.open(
                 "Something went wrong sending email, please try again later",
                 "", { horizontalPosition: 'end', duration: 3000 });
@@ -206,6 +216,7 @@ export class AccountPageComponent implements OnInit {
           });
       },
       error: (error) => {
+        this.state.loading = false;
         this.snackbar.open("An error occurred, please log in again", "", {horizontalPosition: 'end', duration: 3000});
       }
     })
@@ -214,6 +225,7 @@ export class AccountPageComponent implements OnInit {
   changePassword(){
     this.authService.sendPassResetmail().subscribe({
       next: () => {
+        this.state.loading = false;
         this.snackbar.open(
           "A reset email has been sent to your email address.",
           "",
@@ -222,6 +234,7 @@ export class AccountPageComponent implements OnInit {
 
       },
       error: () => {
+        this.state.loading = false;
         this.snackbar.open(
           "Something went wrong, please try again later",
           "", { horizontalPosition: 'end', duration: 3000 });

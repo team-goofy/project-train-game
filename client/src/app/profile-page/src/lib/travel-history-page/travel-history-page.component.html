@@ -1,7 +1,10 @@
 <div class="parent">
   <div class="centered">
     <h1 class="mat-headline-2 text-centered">Travel History</h1>
-    <mat-accordion>
+    <ng-template *ngIf="state.loading">
+      <mat-spinner></mat-spinner>
+    </ng-template>
+    <mat-accordion *ngIf="trips.length > 0; else errorMessage">
       <mat-expansion-panel *ngFor="let trip of trips; let i=index">
         <mat-expansion-panel-header>
           <button class="number-btn" mat-mini-fab color="accent">
@@ -12,17 +15,23 @@
               Trip {{i+1}}
             </mat-panel-title>
             <mat-panel-description>
-              {{trip.tripEndDate | date: 'dd/MM/yyyy hh:mm'}}
+              {{trip.tripEndDate | date: 'dd/MM/yyyy HH:mm'}}
             </mat-panel-description>
           </div>
         </mat-expansion-panel-header>
         <mat-stepper orientation="vertical" #stepper>
           <mat-step *ngFor="let route of trip.routeStations" completed="false">
-            <ng-template matStepLabel>{{route.mediumName}}</ng-template>
-            <mat-label>IMAGE</mat-label>
+            <ng-template matStepLabel>{{route.mediumName}} {{route.departureTime | date: 'dd/MM/yyyy HH:mm'}}</ng-template>
           </mat-step>
         </mat-stepper>
       </mat-expansion-panel>
     </mat-accordion>
+    <ng-template #errorMessage>
+      <p class="mat-headline-5">{{state.error}}</p>
+      <button routerLink="/game" class="play-btn" color="accent" mat-raised-button>
+        <mat-icon>play_arrow</mat-icon>
+        Start new trip
+      </button>
+    </ng-template>
   </div>
 </div>

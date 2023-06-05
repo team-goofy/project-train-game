@@ -18,24 +18,26 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatStepperModule} from "@angular/material/stepper";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ProfilePageRoutingModule,
-    HttpClientModule,
-    MatTabsModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatExpansionModule,
-    MatStepperModule,
-    MatCardModule,
-    MatGridListModule,
-    FlexLayoutModule
-  ],
+    imports: [
+        CommonModule,
+        ProfilePageRoutingModule,
+        HttpClientModule,
+        MatTabsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatExpansionModule,
+        MatStepperModule,
+        MatCardModule,
+        MatGridListModule,
+        FlexLayoutModule,
+        MatProgressSpinnerModule
+    ],
   declarations: [
     ProfilePageComponent,
     AccountPageComponent,
