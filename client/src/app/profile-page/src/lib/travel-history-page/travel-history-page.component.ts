@@ -23,6 +23,7 @@ export class TravelHistoryPageComponent implements OnInit{
   private _trips: Trip[] = []
   isAscending: boolean = true;
   currentPage = 0;
+  pageSize = 5;
 
   constructor() {
     this.state = this.initialState();
@@ -48,6 +49,7 @@ export class TravelHistoryPageComponent implements OnInit{
   }
   pageChanged(event: PageEvent) {
     this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
   }
 
   private initialState(): State {
