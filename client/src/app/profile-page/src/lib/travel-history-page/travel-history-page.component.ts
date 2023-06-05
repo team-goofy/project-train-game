@@ -27,9 +27,9 @@ export class TravelHistoryPageComponent implements OnInit{
     const filter = <TripFilter>{ onGoing: false };
     this._tripService.getTrips(filter).subscribe(trips =>{
         if(trips.length == 0){
-          this.state.error = "No trips found"
+          this.state.error = "You have not finished any trips yet. When you finish a trip, it will appear here."
         }else {
-          this._trips = trips
+          this._trips = trips;
         }
         this.state.loading = false;
     });

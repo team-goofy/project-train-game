@@ -4,6 +4,7 @@
     <ng-template *ngIf="state.loading">
       <mat-spinner></mat-spinner>
     </ng-template>
+
     <mat-accordion *ngIf="trips.length > 0; else errorMessage">
       <mat-expansion-panel *ngFor="let trip of trips; let i=index">
         <mat-expansion-panel-header>
@@ -27,11 +28,13 @@
       </mat-expansion-panel>
     </mat-accordion>
     <ng-template #errorMessage>
-      <p class="mat-headline-5">{{state.error}}</p>
-      <button routerLink="/game" class="play-btn" color="accent" mat-raised-button>
-        <mat-icon>play_arrow</mat-icon>
-        Start new trip
-      </button>
+      <p class="mat-headline-5 text-centered">{{state.error}}</p>
+      <div class="button-container">
+        <button routerLink="/game" class="play-btn" color="accent" mat-raised-button>
+          <mat-icon>play_arrow</mat-icon>
+          Start new trip
+        </button>
+      </div>
     </ng-template>
   </div>
 </div>
