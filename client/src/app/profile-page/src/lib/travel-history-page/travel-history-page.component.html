@@ -1,6 +1,12 @@
 <div class="parent">
   <div class="centered">
     <h1 class="mat-headline-2 text-centered">Travel History</h1>
+
+    <button (click)="sortTripsByDate()" class="sort-btn" color="primary" mat-raised-button>
+      <mat-icon>sort</mat-icon>
+      {{ isAscending ? 'Sort date oldest to newest' : 'Sort date newest to oldest' }}
+    </button>
+
     <ng-template *ngIf="state.loading">
       <mat-spinner></mat-spinner>
     </ng-template>

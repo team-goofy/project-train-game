@@ -17,6 +17,7 @@ export class TravelHistoryPageComponent implements OnInit{
   private _tripService: TripService = inject(TripService);
 
   private _trips: Trip[] = []
+  isAscending: boolean = true;
 
   constructor() {
     this.state = this.initialState();
@@ -35,11 +36,15 @@ export class TravelHistoryPageComponent implements OnInit{
     });
   }
 
+  sortTripsByDate() {
+    this._trips = this._trips.reverse();
+    this.isAscending = !this.isAscending;
+  }
 
   private initialState(): State {
     return {
       loading: false,
-      error: null,
+      error: null
     };
   }
 
