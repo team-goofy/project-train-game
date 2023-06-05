@@ -4,6 +4,7 @@ import com.goofy.dtos.TripDTO;
 import com.goofy.dtos.TripImageDTO;
 import com.goofy.exceptions.NoContentTypeException;
 import com.goofy.exceptions.TripImageAlreadyExistsException;
+import com.goofy.models.Departure;
 import com.goofy.models.Trip;
 import com.goofy.models.TripFilter;
 import com.google.api.core.ApiFuture;
@@ -12,6 +13,7 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.firebase.cloud.StorageClient;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
@@ -122,5 +124,19 @@ public class TripServiceImpl implements TripService {
             case "image/png" -> ".png";
             default -> "";
         };
+    }
+
+    @Override
+    public String getMostFrequentStationName(List<Departure.RouteStation> stations) {
+        return stations.stream()
+                .collect(Collectors.groupingBy(Departure.RouteStation::getUicCode, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .flatMap(entry -> stations.stream()
+                        .filter(station -> station.getUicCode().equals(entry.getKey()))
+                        .findFirst()
+                        .map(Departure.RouteStation::getMediumName))
+                .orElse(null);
     }
 }
