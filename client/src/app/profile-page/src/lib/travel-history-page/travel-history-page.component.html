@@ -2,14 +2,14 @@
   <div class="centered">
     <h1 class="mat-headline-2 text-centered">Travel History</h1>
     <mat-accordion>
-      <mat-expansion-panel *ngFor="let trip of trips">
+      <mat-expansion-panel *ngFor="let trip of trips; let i=index">
         <mat-expansion-panel-header>
           <button class="number-btn" mat-mini-fab color="accent">
-            1
+            {{i+1}}
           </button>
           <div>
             <mat-panel-title>
-              Trip 1
+              Trip {{i+1}}
             </mat-panel-title>
             <mat-panel-description>
               04-04-2020
@@ -17,24 +17,9 @@
           </div>
         </mat-expansion-panel-header>
         <mat-stepper orientation="vertical" #stepper>
-          <mat-step completed="false">
-            <ng-template matStepLabel>Amsterdam Central station</ng-template>
-            <mat-label>Hier misschien die afbeeldingen weergeven?</mat-label>
-          </mat-step>
-          <mat-step completed="false">
-            <ng-template matStepLabel>Naarden-Bussum</ng-template>
-          </mat-step>
-          <mat-step completed="false">
-            <ng-template matStepLabel>Utrecht Central Station</ng-template>
-          </mat-step>
-          <mat-step completed="false">
-            <ng-template matStepLabel>Schiphol Airport</ng-template>
-          </mat-step>
-          <mat-step completed="false">
-            <ng-template matStepLabel>Zaandam</ng-template>
-          </mat-step>
-          <mat-step completed="false">
-            <ng-template matStepLabel>Anna-Paulowna</ng-template>
+          <mat-step *ngFor="let route of trip.routeStations" completed="false">
+            <ng-template matStepLabel>{{route.mediumName}}</ng-template>
+            <mat-label>IMAGE</mat-label>
           </mat-step>
         </mat-stepper>
       </mat-expansion-panel>

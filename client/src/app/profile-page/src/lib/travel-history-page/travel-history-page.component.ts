@@ -1,6 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {AuthService, TripFilter, TripService} from "@client/shared-services";
-import {Router} from "@angular/router";
 import {Trip} from "@client/shared-models";
 
 @Component({
@@ -13,10 +12,11 @@ export class TravelHistoryPageComponent implements OnInit{
   private _tripService: TripService = inject(TripService);
 
   private _trips: Trip[] = []
-//   iets nodig waar data van aantal trips is for forloop expanison panel
   ngOnInit(): void {
-    const filter = <TripFilter>{ onGoing: true };
-    this._tripService.getTrips(filter).subscribe(trips => this._trips = trips);
+    const filter = <TripFilter>{ onGoing: false };
+    this._tripService.getTrips(filter).subscribe(trips =>
+      this._trips = trips
+    );
   }
 
   get trips(): Trip[] {
