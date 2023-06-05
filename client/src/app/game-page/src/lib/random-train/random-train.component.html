@@ -17,7 +17,7 @@
       <div class="title-container">
         <p class="mat-headline-6 departure-title">Train towards: <b>{{randomTrain.departure.direction}}</b></p>
         <p class="mat-h2 time-title">Departure time:</p>
-        <p class="mat-headline-2 time-title"><b>{{randomTrain.departure.plannedDateTime}}</b></p>
+        <p class="mat-headline-2 time-title"><b>{{randomTrain.departure.plannedDateTime | date:'shortTime'}}</b></p>
         <p class="mat-headline-5">On platform: <b>{{randomTrain.departure.actualTrack}}</b></p>
         <p class="mat-h2">Exit the train at station: </p>
         <p class="mat-headline-5"><b>{{randomTrain.exitStation.mediumName}}</b></p>

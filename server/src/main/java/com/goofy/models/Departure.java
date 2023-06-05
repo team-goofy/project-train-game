@@ -22,9 +22,11 @@ public class Departure {
 
     @Getter
     @Setter
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class RouteStation {
         private String uicCode;
         private String mediumName;
+        private String departureTime;
     }
 
     @Getter

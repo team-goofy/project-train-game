@@ -39,12 +39,8 @@ export class RandomTrainComponent implements OnInit {
   getRandomTrain(): void {
     this._randomTrainService.getRandomTrain(this.uicCode)
       .subscribe(train => {
-        const date = new Date(train.departure.plannedDateTime);
-        const time = date.toLocaleTimeString([], {timeStyle: 'short'});
-
         this._randomTrain = train
-        this._randomTrain.departure.plannedDateTime = time;
-
+        this._randomTrain.departure.plannedDateTime = train.departure.plannedDateTime;
       });
   }
 
@@ -53,8 +49,9 @@ export class RandomTrainComponent implements OnInit {
       switchMap((trip: Trip) => {
         trip.routeStations.push(
           {
-            uicCode: this._randomTrain.exitStation.uicCode, 
-            mediumName: this._randomTrain.exitStation.mediumName
+            uicCode: this._randomTrain.exitStation.uicCode,
+            mediumName: this._randomTrain.exitStation.mediumName,
+            departureTime: this._randomTrain.departure.plannedDateTime
           }
         );
         return this._tripService.saveTrip(trip);
