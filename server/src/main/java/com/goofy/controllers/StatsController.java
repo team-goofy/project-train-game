@@ -19,8 +19,9 @@ public class StatsController {
     private final TripService tripService;
     private final StatsService statsService;
 
-    @PostMapping
-    public ResponseEntity<String> updateStats(@RequestBody Stats stats, Principal principal) throws ExecutionException, InterruptedException {
+    @PutMapping
+    public ResponseEntity<String> updateStats(@RequestBody Stats stats, Principal principal)
+            throws ExecutionException, InterruptedException {
         TripFilter filter = new TripFilter();
         filter.setOnGoing(false);
 

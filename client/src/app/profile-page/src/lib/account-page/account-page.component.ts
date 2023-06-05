@@ -15,7 +15,7 @@ import {Router} from "@angular/router";
 interface State {
   loading: boolean;
   error: string | null;
-  editting: boolean;
+  editing: boolean;
   valueHasNotBeenChanged: boolean;
 }
 
@@ -114,7 +114,7 @@ export class AccountPageComponent implements OnInit {
     return {
       loading: false,
       error: null,
-      editting: false,
+      editing: false,
       valueHasNotBeenChanged: true
     };
   }
@@ -136,7 +136,7 @@ export class AccountPageComponent implements OnInit {
 
     this.state = this.initialState();
     this.state.loading = true;
-    this.state.editting = true;
+    this.state.editing = true;
 
   }
 
@@ -212,7 +212,7 @@ export class AccountPageComponent implements OnInit {
   }
 
   changePassword(){
-    this.authService.sendPassResetmail().subscribe({
+    this.authService.sendPassResetMail().subscribe({
       next: () => {
         this.snackbar.open(
           "A reset email has been sent to your email address.",
