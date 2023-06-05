@@ -1,10 +1,13 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { Trip } from '@client/shared-models';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from "@angular/material/dialog";
+import { DialogData, TripOverviewDialogComponent } from "../components/trip-overview-dialog/trip-overview-dialog.component";
+import { take } from "rxjs";
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 import { TripService } from '@client/shared-services';
+import { Trip } from '@client/shared-models';
 
 @Component({
   templateUrl: './picture-upload-page.component.html',
@@ -16,6 +19,7 @@ export class PictureUploadPageComponent implements OnInit {
   private _snackbar: MatSnackBar = inject(MatSnackBar);
   private _route: ActivatedRoute = inject(ActivatedRoute);
   private _router: Router = inject(Router);
+  private _dialog: MatDialog = inject(MatDialog);
 
   private _imageUrl!: string ;
   private _tripId: string = "";
@@ -28,6 +32,16 @@ export class PictureUploadPageComponent implements OnInit {
       this._tripId = params['tripId'];
       this._uicCode = params['uicCode'];
       this._location = params['location'];
+    });
+  }
+
+  showTripOverview() {
+    this._tripService.getTripById(this._tripId).pipe(take(1)).subscribe((trip) => {
+      this._dialog.open(TripOverviewDialogComponent, {
+        data: <DialogData>{
+          stations: trip.routeStations
+        }
+      });
     });
   }
 

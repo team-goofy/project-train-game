@@ -7,7 +7,6 @@ import { createHttpParams } from "@client/shared-utils";
 
 export interface TripFilter {
   onGoing: boolean;
-  test: boolean;
 }
 
 @Injectable({

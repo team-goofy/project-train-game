@@ -11,9 +11,12 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { HttpClientModule } from "@angular/common/http";
 import { StationService } from "./services/station.service";
 import { RandomTrainComponent } from "./random-train/random-train.component";
-import { RandomTrainService } from "./services/random-train.service";
 import { MatInputModule } from "@angular/material/input";
 import { PictureUploadPageComponent } from "./picture-upload-page/picture-upload-page.component";
+import { MatDialogModule } from "@angular/material/dialog";
+import { TripOverviewDialogComponent } from './components/trip-overview-dialog/trip-overview-dialog.component';
+import { MatListModule } from "@angular/material/list";
+import { RandomTrainService } from "./services/random-train.service";
 
 @NgModule({
     imports: [
@@ -26,16 +29,19 @@ import { PictureUploadPageComponent } from "./picture-upload-page/picture-upload
         MatIconModule,
         MatProgressSpinnerModule,
         HttpClientModule,
-        MatInputModule
+        MatInputModule,
+        MatDialogModule,
+        MatListModule
     ],
     declarations: [
       StartPageComponent,
       RandomTrainComponent,
-      PictureUploadPageComponent
+      PictureUploadPageComponent,
+      TripOverviewDialogComponent
     ],
     providers: [
-      StationService,
-      RandomTrainService,
+      StationService, 
+      RandomTrainService
     ]
 })
 export class GamePageModule {}
