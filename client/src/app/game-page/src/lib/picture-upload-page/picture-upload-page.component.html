@@ -1,0 +1,42 @@
+<background-image></background-image>
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-subtitle>
+      <button class="outline-location" (click)="showTripOverview()" mat-button color="accent">
+        <mat-icon>list_alt</mat-icon>
+        Progress
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-container *ngIf="!imageUrl">
+      <div class="title-container">
+        <p class="mat-headline-5">Let's take a picture 📸</p>
+        <p class="mat-subtitle-1">Upload your favourite picture that you've taken in <span class="location">{{ location }}</span></p>
+      </div>
+    </ng-container>
+    <ng-container>
+      <div *ngIf="!loading" class="img-container">
+        <div class="input-container">
+          <button mat-raised-button class="input-button" color="primary">{{!imageUrl ? "Upload" : "Change" }}</button>
+          <input class="input" type="file" accept="image/png, image/jpeg" (change)="onFileSelected($event)">
+        </div>
+        <img class="img-preview" *ngIf="imageUrl" [src]="imageUrl" alt="image here">
+      </div>
+      <mat-progress-spinner *ngIf="loading" mode="indeterminate"></mat-progress-spinner>
+    </ng-container>
+  </mat-card-content>
+  <div class="spacer"></div>
+  <ng-container>
+    <mat-card-actions>
+      <button mat-raised-button color="accent" (click)="endTrip()">
+        <mat-icon class="icon">exit_to_app</mat-icon>
+        End trip
+      </button>
+      <button mat-raised-button color="primary" (click)="continueTrip()">
+        <mat-icon class="icon">play_arrow</mat-icon>
+        Continue trip
+      </button>
+    </mat-card-actions>
+  </ng-container>
+</mat-card>

@@ -40,8 +40,7 @@
         <mat-icon>location_on</mat-icon>
         Refetch
       </button>
-
-      <button mat-raised-button color="accent" routerLink="/game/random-train" [queryParams]="{uicCode: station?.UICCode, location: station.namen.lang}">
+      <button mat-raised-button color="accent" (click)="navigateToRandomTrain()">
         <mat-icon>play_arrow</mat-icon>
         Start
       </button>
