@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ import org.springframework.validation.FieldError;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<String> errors = ex.getBindingResult().getFieldErrors()
                 .stream().map(FieldError::getDefaultMessage).collect(Collectors.toList());
         ErrorResponse errorsResponse = ErrorResponse.builder()
@@ -33,7 +34,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UsernameExistsException.class)
-    public ResponseEntity<ErrorResponse> handleUsernameErrors(UsernameExistsException ex) {
+    public ResponseEntity<ErrorResponse> handleUsernameExceptions(UsernameExistsException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         ErrorResponse errorsResponse = ErrorResponse.builder()
                 .errors(errors)

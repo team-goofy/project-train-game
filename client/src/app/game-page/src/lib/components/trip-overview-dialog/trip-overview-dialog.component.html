@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Trip progress 🌍</h2>
+<mat-dialog-content>
+  <p class="mat-subtitle-1">You've come so far! Here you can see the progress you have made so far:</p>
+  <div class="centered-list">
+    <ul>
+      <li *ngFor="let station of data.stations; let i = index" [ngClass]="{ 'current': i === data.stations.length - 1 || i === 0 }">
+        {{station.mediumName}}</li>
+    </ul>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
