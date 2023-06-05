@@ -3,13 +3,16 @@ import {
   Auth,
   idToken,
   signInWithEmailAndPassword,
-  user
+  user,
+  getAuth,
+  updateEmail
 } from '@angular/fire/auth';
 import { Router } from "@angular/router";
 import {catchError, from, Observable, switchMap, tap, throwError} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {UserLoginModel, UserRequestModel} from "@client/shared-models";
 import { environment } from "../../../../environments/environment";
+import {User} from "firebase/auth";
 
 @Injectable({
     providedIn: 'root'
@@ -19,6 +22,7 @@ export class AuthService {
     private router: Router = inject(Router);
     private http: HttpClient = inject(HttpClient);
     private baseUrl: string = environment.apiUrl;
+
 
     user$ = user(this.auth);
     idToken$ = idToken(this.auth);
@@ -65,7 +69,74 @@ export class AuthService {
       return this.http.get(`${this.baseUrl}/user/username`, { params: { username } });
     }
 
+
+    getUsername(): Observable<any> {
+      const httpOptions: Object = {
+        headers: new HttpHeaders().set('Content-Type', 'application/json'),
+        responseType: 'text'
+      }
+      return this.http.post<any>(`${this.baseUrl}/user/profile`, this.auth.currentUser!.uid, httpOptions);
+    }
+
     isLoggedIn(): boolean {
       return !!localStorage.getItem('tokenId');
     }
+
+//    account-page
+  getUserData(): User {
+    const currUser = this.auth.currentUser;
+    if(currUser){
+      return currUser;
+    }else{
+      throw new TypeError("There is no currentUser");
+    }
+  }
+
+  changeUserName(userRequestModel: UserRequestModel): Observable<any>{
+    const httpOptions: Object = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      responseType: 'text'
+    }
+    let username = userRequestModel.username;
+    return this.http.put<any>(`${this.baseUrl}/user/profileUsername`, username, httpOptions);
+  }
+
+  changeUserEmail(newUserEmail: string): Observable<any> {
+    if (this.auth.currentUser) {
+      if (newUserEmail != null && newUserEmail !== this.auth.currentUser.email) {
+        return new Observable((observer) => {
+          if (this.auth.currentUser) {
+            updateEmail(this.auth.currentUser, newUserEmail)
+              .then(() => {
+                observer.next(); // Emit a value to complete the Observable
+                observer.complete(); // Complete the Observable
+              })
+              .catch((error) => {
+                observer.error(error); // Emit an error to the Observable
+              });
+          }
+        });
+      } else {
+        return new Observable((observer) => {
+          observer.next(); // Emit a value to complete the Observable
+          observer.complete(); // Complete the Observable
+        });
+      }
+    } else {
+      return new Observable((observer) => {
+        observer.next(); // Emit a value to complete the Observable
+        observer.complete(); // Complete the Observable
+      });
+    }
+  }
+
+  sendPassResetmail() {
+    const httpOptions: Object = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      responseType: 'text'
+    }
+
+    return this.http
+      .post<any>(`${this.baseUrl}/mail/sendPassReset`, this.auth.currentUser!.email, httpOptions)
+  }
 }
