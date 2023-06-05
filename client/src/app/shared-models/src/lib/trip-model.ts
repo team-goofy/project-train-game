@@ -4,4 +4,5 @@ export interface Trip {
   tripId?: string;
   routeStations: RouteStation[];
   isEnded: boolean;
+  tripEndDate?: string;
 }

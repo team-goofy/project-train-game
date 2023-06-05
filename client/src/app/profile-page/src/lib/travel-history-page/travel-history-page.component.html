@@ -12,7 +12,7 @@
               Trip {{i+1}}
             </mat-panel-title>
             <mat-panel-description>
-              04-04-2020
+              {{trip.tripEndDate | date: 'dd/MM/yyyy hh:mm'}}
             </mat-panel-description>
           </div>
         </mat-expansion-panel-header>
