@@ -1,10 +1,13 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, OnDestroy } from '@angular/core';
+import { Router } from "@angular/router";
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { PermissionsService } from '@ng-web-apis/permissions';
 import { StationService } from '../services/station.service';
-import { Station } from '@client/shared-models';
-import { catchError, delay, filter, switchMap, take, tap } from 'rxjs/operators';
-import { EMPTY, Observable } from 'rxjs';
+import { TripService } from '@client/shared-services';
+import { Station, Trip } from '@client/shared-models';
+import { catchError, delay, filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { EMPTY, Observable, Subject } from 'rxjs';
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 interface State {
   loading: boolean;
@@ -16,13 +19,17 @@ interface State {
   templateUrl: './start-page.component.html',
   styleUrls: ['./start-page.component.scss']
 })
-export class StartPageComponent implements OnInit {
+export class StartPageComponent implements OnInit, OnDestroy {
   private readonly _geoLocationService: GeolocationService = inject(GeolocationService);
   private readonly _permissionService: PermissionsService = inject(PermissionsService);
   private readonly _stationService: StationService = inject(StationService);
+  private _tripService: TripService = inject(TripService);
+  private _router: Router = inject(Router);
+  private _snackbar: MatSnackBar = inject(MatSnackBar);
 
   state: State;
   nearestStation$: Observable<Station | null>;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor() {
     this.state = this.initialState();
@@ -31,6 +38,11 @@ export class StartPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchLocation();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   fetchLocation(): void {
@@ -63,8 +75,37 @@ export class StartPageComponent implements OnInit {
         this.state = this.initialState();
         this.state.error = 'Something went wrong. Please try again later.';
         return EMPTY;
-      })
+      }),
+      takeUntil(this.destroy$)
     ).subscribe();
+  }
+
+  navigateToRandomTrain(): void {
+    this.nearestStation$.pipe(
+      filter(station => station !== null),
+      takeUntil(this.destroy$)
+    ).subscribe(station => {
+      const trip : Trip = {
+        routeStations: station ? [ {uicCode: station.UICCode, mediumName: station.namen.middel} ] : [],
+        isEnded: false,
+      }
+      this._tripService.saveTrip(trip).subscribe({
+        next: (response) => {
+          this._router.navigate(
+            ['game/random-train'],
+            {
+              queryParams: {
+                tripId: response.tripId,
+                uicCode: station?.UICCode,
+                location: station?.namen.lang
+              }
+            });
+        },
+        error: (error) => {
+          this._snackbar.open(error.errors.join, "Close");
+        }
+      });
+    });
   }
 
   private initialState(): State {

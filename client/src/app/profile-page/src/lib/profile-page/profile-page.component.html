@@ -3,6 +3,10 @@
     <mat-icon>arrow_back_ios</mat-icon>
     Home
   </button>
+  <button class="btn-outline" color="primary" mat-raised-button (click)="authService.logout()">
+    <mat-icon>person</mat-icon>
+    Logout
+  </button>
 </div>
 <mat-tab-group fitInkBarToContent class="nav-bar-styling">
   <mat-tab label="Account">
