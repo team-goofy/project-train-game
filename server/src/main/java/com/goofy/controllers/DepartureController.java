@@ -42,10 +42,8 @@ public class DepartureController {
         JsonNode jsonNode = objectMapper.readTree(response.getBody());
         JsonNode unsortedStations = jsonNode.get("payload").get("departures");
 
-        List<Departure> departures = objectMapper.readValue(unsortedStations.toString(),
-                objectMapper.getTypeFactory().constructCollectionType(List.class, Departure.class));
-
-        return ResponseEntity.ok(departures);
+        return ResponseEntity.ok(this.departureService.filterByFutureDepartures(objectMapper.readValue(
+                unsortedStations.toString(), objectMapper.getTypeFactory().constructCollectionType(List.class, Departure.class))));
     }
 
     @GetMapping("/random")
