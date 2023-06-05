@@ -19,25 +19,27 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatStepperModule} from "@angular/material/stepper";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        ProfilePageRoutingModule,
-        HttpClientModule,
-        MatTabsModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatExpansionModule,
-        MatStepperModule,
-        MatCardModule,
-        MatGridListModule,
-        FlexLayoutModule,
-        MatProgressSpinnerModule
-    ],
+  imports: [
+    CommonModule,
+    ProfilePageRoutingModule,
+    HttpClientModule,
+    MatTabsModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatExpansionModule,
+    MatStepperModule,
+    MatCardModule,
+    MatGridListModule,
+    FlexLayoutModule,
+    MatProgressSpinnerModule,
+    MatPaginatorModule
+  ],
   declarations: [
     ProfilePageComponent,
     AccountPageComponent,

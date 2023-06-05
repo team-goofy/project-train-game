@@ -12,7 +12,7 @@
     </ng-template>
 
     <mat-accordion *ngIf="state.hasTrips">
-      <mat-expansion-panel *ngFor="let trip of trips; let i=index">
+      <mat-expansion-panel *ngFor="let trip of trips.slice(currentPage * 5, (currentPage + 1) * 5); let i=index">
         <mat-expansion-panel-header>
           <button class="number-btn" mat-mini-fab color="accent">
             {{i+1}}
@@ -43,5 +43,8 @@
         </button>
       </div>
     </div>
+    <mat-paginator [length]="trips.length" [pageSize]="5" [pageIndex]="currentPage" [pageSizeOptions]="[5, 15, 30, 50, 100]" aria-label="Select page"
+                   (page)="pageChanged($event)">
+    </mat-paginator>
   </div>
 </div>

@@ -1,11 +1,15 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, Injectable, OnInit} from '@angular/core';
 import {TripFilter, TripService} from "@client/shared-services";
 import {Trip} from "@client/shared-models";
+import {MatPaginatorIntl, PageEvent} from "@angular/material/paginator";
+import {Subject} from "rxjs";
 
 interface State {
   loading: boolean;
   hasTrips: boolean;
 }
+
+
 
 @Component({
   selector: 'app-travel-history-page',
@@ -18,6 +22,7 @@ export class TravelHistoryPageComponent implements OnInit{
 
   private _trips: Trip[] = []
   isAscending: boolean = true;
+  currentPage = 0;
 
   constructor() {
     this.state = this.initialState();
@@ -40,6 +45,9 @@ export class TravelHistoryPageComponent implements OnInit{
   sortTripsByDate() {
     this._trips = this._trips.reverse();
     this.isAscending = !this.isAscending;
+  }
+  pageChanged(event: PageEvent) {
+    this.currentPage = event.pageIndex;
   }
 
   private initialState(): State {
