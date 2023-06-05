@@ -19,7 +19,7 @@
           </button>
           <div>
             <mat-panel-title>
-              Trip {{i+1}}
+              {{trip.routeStations[0].mediumName}} -> {{trip.routeStations[trip.routeStations.length - 1].mediumName}}
             </mat-panel-title>
             <mat-panel-description>
               {{trip.tripEndDate | date: 'dd/MM/yyyy HH:mm'}}
@@ -28,7 +28,8 @@
         </mat-expansion-panel-header>
         <mat-stepper orientation="vertical" #stepper>
           <mat-step *ngFor="let route of trip.routeStations" completed="false">
-            <ng-template matStepLabel>{{route.mediumName}} {{route.departureTime | date: 'dd/MM/yyyy HH:mm'}}</ng-template>
+            <ng-template matStepLabel>{{route.mediumName}} </ng-template>
+            <p *ngIf="route.departureTime">Departure time: {{route.departureTime | date: 'dd/MM/yyyy HH:mm'}}</p>
           </mat-step>
         </mat-stepper>
       </mat-expansion-panel>

@@ -9,8 +9,6 @@ interface State {
   hasTrips: boolean;
 }
 
-
-
 @Component({
   selector: 'app-travel-history-page',
   templateUrl: './travel-history-page.component.html',
@@ -21,9 +19,9 @@ export class TravelHistoryPageComponent implements OnInit{
   private _tripService: TripService = inject(TripService);
 
   private _trips: Trip[] = []
-  isAscending: boolean = true;
-  currentPage = 0;
-  pageSize = 5;
+  private _isAscending: boolean = true;
+  private _currentPage = 0;
+  private _pageSize = 5;
 
   constructor() {
     this.state = this.initialState();
@@ -45,11 +43,11 @@ export class TravelHistoryPageComponent implements OnInit{
 
   sortTripsByDate() {
     this._trips = this._trips.reverse();
-    this.isAscending = !this.isAscending;
+    this._isAscending = !this._isAscending;
   }
   pageChanged(event: PageEvent) {
-    this.currentPage = event.pageIndex;
-    this.pageSize = event.pageSize;
+    this._currentPage = event.pageIndex;
+    this._pageSize = event.pageSize;
   }
 
   private initialState(): State {
@@ -57,6 +55,18 @@ export class TravelHistoryPageComponent implements OnInit{
       loading: false,
       hasTrips: true
     };
+  }
+
+  get isAscending(): boolean {
+    return this._isAscending;
+  }
+
+  get currentPage(): number {
+    return this._currentPage;
+  }
+
+  get pageSize(): number {
+    return this._pageSize;
   }
 
   get trips(): Trip[] {
