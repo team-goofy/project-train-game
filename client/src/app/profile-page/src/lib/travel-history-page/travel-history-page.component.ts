@@ -1,8 +1,7 @@
-import {Component, inject, Injectable, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {TripFilter, TripService} from "@client/shared-services";
 import {Trip} from "@client/shared-models";
-import {MatPaginatorIntl, PageEvent} from "@angular/material/paginator";
-import {Subject} from "rxjs";
+import {PageEvent} from "@angular/material/paginator";
 
 interface State {
   loading: boolean;
