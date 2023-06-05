@@ -70,11 +70,11 @@ public class TripController {
 
     @PostMapping("/duration")
     @ResponseBody
-    public ResponseEntity<Integer> getTripsDuration(@RequestBody NsTrip nsTrips) throws JsonProcessingException {
+    public ResponseEntity<Integer> getTripsDuration(@RequestBody List<NsTrip> nsTrips) throws JsonProcessingException {
         List <NsTrip.TripDuration> tripDurationList = new ArrayList<>();
         int totalTripDuration = 0;
 
-        for (NsTrip.TrainTrip trainTrip : nsTrips.getTrainTrips()) {
+        for (NsTrip trainTrip : nsTrips) {
             ResponseEntity<String> response = restTemplate.exchange(
                     env.getProperty("ns.api.base.url.v3") + "/trips?originUicCode=" + trainTrip.getOriginUicCode()
                             + "&destinationUicCode=" + trainTrip.getDestinationUicCode() + "&dateTime=" + trainTrip.getDepartureTime(),

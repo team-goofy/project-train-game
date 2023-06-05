@@ -23,7 +23,6 @@ export class AuthService {
     private http: HttpClient = inject(HttpClient);
     private baseUrl: string = environment.apiUrl;
 
-
     user$ = user(this.auth);
     idToken$ = idToken(this.auth);
 
@@ -146,12 +145,12 @@ export class AuthService {
       { params: { uid: this.auth.currentUser!.uid } });
   }
 
-  updateStats(stats: Stats) {
+  updateStats(totalDuration: number) {
     const httpOptions: Object = {
       headers: new HttpHeaders().set('Content-Type', 'application/json'),
       responseType: 'text'
     }
 
-    return this.http.put<any>(`${this.baseUrl}/stats`, stats, httpOptions);
+    return this.http.put<any>(`${this.baseUrl}/stats`, totalDuration, httpOptions);
   }
 }

@@ -20,7 +20,7 @@ public class StatsController {
     private final StatsService statsService;
 
     @PutMapping
-    public ResponseEntity<String> updateStats(@RequestBody Stats stats, Principal principal)
+    public ResponseEntity<String> updateStats(@RequestBody Integer totalTripDuration, Principal principal)
             throws ExecutionException, InterruptedException {
         TripFilter filter = new TripFilter();
         filter.setOnGoing(false);
@@ -43,11 +43,13 @@ public class StatsController {
                 .distinct()
                 .count();
 
-        stats.setMostUsedStartLocation(mostUsedStartStation);
-        stats.setMostVisitedStation(mostVisitedStation);
-        stats.setTotalStations((int) totalUniqueStationsVisited);
+        Stats statsToUpdate = new Stats();
+        statsToUpdate.setTotalMinutes(totalTripDuration);
+        statsToUpdate.setMostUsedStartLocation(mostUsedStartStation);
+        statsToUpdate.setMostVisitedStation(mostVisitedStation);
+        statsToUpdate.setTotalStations((int) totalUniqueStationsVisited);
 
-        String statsId = this.statsService.updateStats(stats, principal.getName());
+        String statsId = this.statsService.updateStats(statsToUpdate, principal.getName());
         return ResponseEntity.ok(statsId);
     }
 
