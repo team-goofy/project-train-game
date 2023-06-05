@@ -50,10 +50,14 @@ export class RandomTrainComponent implements OnInit {
         trip.routeStations.push(
           {
             uicCode: this._randomTrain.exitStation.uicCode,
-            mediumName: this._randomTrain.exitStation.mediumName,
-            departureTime: this._randomTrain.departure.plannedDateTime
+            mediumName: this._randomTrain.exitStation.mediumName
           }
         );
+
+        // Add the departureTime to the second last station
+        const secondLastIndex = trip.routeStations.length - 2;
+        trip.routeStations[secondLastIndex].departureTime = this._randomTrain.departure.plannedDateTime;
+
         return this._tripService.saveTrip(trip);
       }),
       tap((response) => {
