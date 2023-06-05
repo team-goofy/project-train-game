@@ -137,7 +137,6 @@ export class AccountPageComponent implements OnInit {
     this.state = this.initialState();
     this.state.loading = true;
     this.state.editing = true;
-
   }
 
   onSubmit(): void {
@@ -146,7 +145,6 @@ export class AccountPageComponent implements OnInit {
       email: this.accountEditForm.value.userEmailForm
     };
 
-
     if(user.username !== this.usernameValue){
       this.submitUserUsername(user)
     }
@@ -154,7 +152,6 @@ export class AccountPageComponent implements OnInit {
     if(user.email !== this.userEmailValue){
       this.submitUserEmail(user.email)
     }
-
   }
 
   submitUserUsername(user: UserRequestModel){
