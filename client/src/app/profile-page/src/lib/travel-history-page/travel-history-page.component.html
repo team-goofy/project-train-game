@@ -2,7 +2,7 @@
   <div class="centered">
     <h1 class="mat-headline-2 text-centered">Travel History</h1>
 
-    <button (click)="sortTripsByDate()" class="sort-btn" color="primary" mat-raised-button>
+    <button *ngIf="state.hasTrips" (click)="sortTripsByDate()" class="sort-btn" color="primary" mat-raised-button>
       <mat-icon>sort</mat-icon>
       {{ isAscending ? 'Sort date oldest to newest' : 'Sort date newest to oldest' }}
     </button>
@@ -11,7 +11,7 @@
       <mat-spinner></mat-spinner>
     </ng-template>
 
-    <mat-accordion *ngIf="trips.length > 0; else errorMessage">
+    <mat-accordion *ngIf="state.hasTrips">
       <mat-expansion-panel *ngFor="let trip of trips; let i=index">
         <mat-expansion-panel-header>
           <button class="number-btn" mat-mini-fab color="accent">
@@ -33,14 +33,15 @@
         </mat-stepper>
       </mat-expansion-panel>
     </mat-accordion>
-    <ng-template #errorMessage>
-      <p class="mat-headline-5 text-centered">{{state.error}}</p>
+    <div *ngIf="!state.hasTrips" class="text-centered">
+      <h1>It seems like you still haven't finished any trips or played a game yet 😢</h1>
+      <h2>Click the button below to start a new game. After completion your stats will be visible here.</h2>
       <div class="button-container">
         <button routerLink="/game" class="play-btn" color="accent" mat-raised-button>
           <mat-icon>play_arrow</mat-icon>
           Start new trip
         </button>
       </div>
-    </ng-template>
+    </div>
   </div>
 </div>

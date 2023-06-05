@@ -4,7 +4,7 @@ import {Trip} from "@client/shared-models";
 
 interface State {
   loading: boolean;
-  error: string | null;
+  hasTrips: boolean;
 }
 
 @Component({
@@ -28,7 +28,8 @@ export class TravelHistoryPageComponent implements OnInit{
     const filter = <TripFilter>{ onGoing: false };
     this._tripService.getTrips(filter).subscribe(trips =>{
         if(trips.length == 0){
-          this.state.error = "You have not finished any trips yet. When you finish a trip, it will appear here."
+          this.state.hasTrips = false;
+          return;
         }else {
           this._trips = trips;
         }
@@ -44,7 +45,7 @@ export class TravelHistoryPageComponent implements OnInit{
   private initialState(): State {
     return {
       loading: false,
-      error: null
+      hasTrips: true
     };
   }
 
