@@ -1,5 +1,6 @@
 package com.goofy.configs;
 
+import com.goofy.exceptions.UnsupportedFileExtensionException;
 import com.goofy.exceptions.UsernameExistsException;
 import com.google.firebase.FirebaseException;
 import lombok.AllArgsConstructor;
@@ -42,6 +43,17 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(errorsResponse, new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(UnsupportedFileExtensionException.class)
+    public ResponseEntity<ErrorResponse> handleUnsupportedFileExtensionExceptions(UnsupportedFileExtensionException ex) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        ErrorResponse errorsResponse = ErrorResponse.builder()
+                .errors(errors)
+                .code(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value())
+                .build();
+
+        return new ResponseEntity<>(errorsResponse, new HttpHeaders(), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     }
 
     @ExceptionHandler(FirebaseException.class)
