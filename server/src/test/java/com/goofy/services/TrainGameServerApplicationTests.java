@@ -1,4 +1,4 @@
-package com.goofy;
+package com.goofy.services;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
