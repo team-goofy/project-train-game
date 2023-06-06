@@ -96,6 +96,8 @@ public class TripServiceImpl implements TripService {
 
         if (filter.getOnGoing() != null) {
             query = query.whereNotEqualTo("isEnded", filter.getOnGoing());
+        } else {
+            query = query.whereEqualTo("isEnded", true);
         }
 
         query = query.whereEqualTo("uid", uid);
