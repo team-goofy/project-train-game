@@ -8,6 +8,30 @@
   margin: 5% auto 0;
 }
 
+.noTripsSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 5% auto 0;
+  text-align: center;
+
+  .play-btn {
+    width: 200px !important;
+    min-width: unset !important;
+    height: 60px !important;
+    min-height: unset !important;
+    margin-bottom: 20px;
+    font-size: 18px;
+
+    mat-icon {
+      font-size: 25px;
+      width: unset;
+      height: unset;
+    }
+  }
+}
+
 .icon__center {
   font-size: 40px;
   margin: 0 auto;

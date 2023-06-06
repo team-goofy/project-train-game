@@ -10,7 +10,7 @@ import {
 import { Router } from "@angular/router";
 import {catchError, from, Observable, switchMap, tap, throwError} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {UserLoginModel, UserRequestModel} from "@client/shared-models";
+import {UserLoginModel, UserRequestModel, Stats} from "@client/shared-models";
 import { environment } from "../../../../environments/environment";
 import {User} from "firebase/auth";
 
@@ -22,7 +22,6 @@ export class AuthService {
     private router: Router = inject(Router);
     private http: HttpClient = inject(HttpClient);
     private baseUrl: string = environment.apiUrl;
-
 
     user$ = user(this.auth);
     idToken$ = idToken(this.auth);
@@ -69,7 +68,6 @@ export class AuthService {
       return this.http.get(`${this.baseUrl}/user/username`, { params: { username } });
     }
 
-
     getUsername(): Observable<any> {
       const httpOptions: Object = {
         headers: new HttpHeaders().set('Content-Type', 'application/json'),
@@ -85,9 +83,10 @@ export class AuthService {
 //    account-page
   getUserData(): User {
     const currUser = this.auth.currentUser;
-    if(currUser){
+
+    if (currUser) {
       return currUser;
-    }else{
+    } else{
       throw new TypeError("There is no currentUser");
     }
   }
@@ -97,6 +96,7 @@ export class AuthService {
       headers: new HttpHeaders().set('Content-Type', 'application/json'),
       responseType: 'text'
     }
+
     let username = userRequestModel.username;
     return this.http.put<any>(`${this.baseUrl}/user/profileUsername`, username, httpOptions);
   }
@@ -130,7 +130,7 @@ export class AuthService {
     }
   }
 
-  sendPassResetmail() {
+  sendPassResetMail() {
     const httpOptions: Object = {
       headers: new HttpHeaders().set('Content-Type', 'application/json'),
       responseType: 'text'
@@ -138,5 +138,19 @@ export class AuthService {
 
     return this.http
       .post<any>(`${this.baseUrl}/mail/sendPassReset`, this.auth.currentUser!.email, httpOptions)
+  }
+
+  getStatsByUid(): Observable<Stats> {
+    return this.http.get<Stats>(`${this.baseUrl}/stats`,
+      { params: { uid: this.auth.currentUser!.uid } });
+  }
+
+  updateStats(totalDuration: number) {
+    const httpOptions: Object = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      responseType: 'text'
+    }
+
+    return this.http.put<any>(`${this.baseUrl}/stats`, totalDuration, httpOptions);
   }
 }

@@ -1,8 +1,8 @@
 import { inject, Injectable } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
-import { Trip, TripResponse } from "@client/shared-models";
+import {NsTrip, Trip, TripResponse} from "@client/shared-models";
 import { createHttpParams } from "@client/shared-utils";
 
 export interface TripFilter {
@@ -26,6 +26,15 @@ export class TripService {
 
   getTripById(tripId: string): Observable<Trip> {
     return this.http.get<Trip>(`${this.baseUrl}/trip/${tripId}`);
+  }
+
+  getTripDuration(nsTrips: NsTrip[]): Observable<number> {
+    const httpOptions: Object = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      responseType: 'text'
+    }
+
+    return this.http.post<number>(`${this.baseUrl}/trip/duration`, nsTrips, httpOptions);
   }
 
   getTrips(filter?: TripFilter): Observable<Trip[]> {

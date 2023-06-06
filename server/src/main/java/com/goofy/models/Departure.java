@@ -2,6 +2,7 @@ package com.goofy.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,9 +24,14 @@ public class Departure {
     @Getter
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @EqualsAndHashCode
     public static class RouteStation {
         private String uicCode;
+
+        @EqualsAndHashCode.Exclude
         private String mediumName;
+
+        @EqualsAndHashCode.Exclude
         private String departureTime;
     }
 

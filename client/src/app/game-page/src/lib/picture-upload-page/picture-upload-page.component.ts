@@ -3,11 +3,10 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from "@angular/material/dialog";
 import { DialogData, TripOverviewDialogComponent } from "../components/trip-overview-dialog/trip-overview-dialog.component";
-import { take } from "rxjs";
+import { take, EMPTY} from "rxjs";
 import { catchError, switchMap, tap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
-import { TripService } from '@client/shared-services';
-import { Trip } from '@client/shared-models';
+import { AuthService, TripService} from '@client/shared-services';
+import { NsTrip, RouteStation, Trip } from '@client/shared-models';
 
 @Component({
   templateUrl: './picture-upload-page.component.html',
@@ -15,17 +14,19 @@ import { Trip } from '@client/shared-models';
 })
 export class PictureUploadPageComponent implements OnInit {
   @ViewChild('previewImg') private _previewImg?: ElementRef;
+  private _authService: AuthService = inject(AuthService);
   private _tripService: TripService = inject(TripService);
   private _snackbar: MatSnackBar = inject(MatSnackBar);
   private _route: ActivatedRoute = inject(ActivatedRoute);
   private _router: Router = inject(Router);
   private _dialog: MatDialog = inject(MatDialog);
 
-  private _imageUrl!: string ;
+  private _imageUrl!: string;
   private _tripId: string = "";
   private _uicCode: string = "";
   private _location: string = "";
   private _loading: boolean = false;
+  private _totalTripDuration: number = 0;
 
   ngOnInit(): void {
     this._route.queryParams.subscribe((params) => {
@@ -86,8 +87,28 @@ export class PictureUploadPageComponent implements OnInit {
             catchError(({ error }) => {
               this._snackbar.open(error.errors.join(), "Close");
               return EMPTY;
-            })
-          );
+            }),
+            switchMap(() => {
+              const tripStations: RouteStation[] = trip.routeStations;
+
+              const nsTrips: NsTrip[] = tripStations.map((station, index) => {
+                const nextStation = tripStations[index + 1];
+                return {
+                  originUicCode: station.uicCode,
+                  destinationUicCode: nextStation ? nextStation.uicCode : "",
+                  departureTime: station.departureTime
+                }
+              }).filter(nsTrip => nsTrip.departureTime !== null);
+
+              return this._tripService.getTripDuration(nsTrips).pipe(catchError(({ error }) => {
+                this._snackbar.open(error.errors.join(), "Close");
+                return EMPTY;
+              }), switchMap((tripDuration) => {
+                this._totalTripDuration = tripDuration;
+                return this._authService.updateStats(this._totalTripDuration);
+              }));
+            }
+          ));
         }),
         tap(() => {
           let ref = this._snackbar.open(

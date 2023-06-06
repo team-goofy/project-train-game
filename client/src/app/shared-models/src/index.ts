@@ -6,3 +6,5 @@ export * from './lib/route-station.model';
 export * from './lib/trip-model';
 export * from './lib/station.model';
 export * from './lib/trip-response.model';
+export * from './lib/stats.model';
+export * from './lib/nsTrip.model';

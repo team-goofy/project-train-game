@@ -2,14 +2,24 @@
   <div class="centered">
     <h1 class="mat-headline-2 text__centered">Stats</h1>
 
-    <div class="cardWrapper" fxLayoutAlign="space-between center">
+    <div class="noTripsSection" *ngIf="!state.hasTrips">
+      <h1>It seems like you still haven't finished any trips or played a game yet 😢</h1>
+      <h2>Click the button below to start a new game. After completion your stats will be visible here.</h2>
+
+      <button routerLink="/game" class="play-btn" color="accent" mat-raised-button>
+        <mat-icon>play_arrow</mat-icon>
+        Start new trip
+      </button>
+    </div>
+
+    <div class="cardWrapper" fxLayoutAlign="space-between center" *ngIf="state.hasTrips">
       <mat-card class="statsCard statsCard__width" fxFlex="45">
         <mat-card-header class="icon__center">
           <mat-icon class="icon__circle mat-icon">transfer_within_a_station</mat-icon>
         </mat-card-header>
 
         <mat-card-content>
-          <mat-card-title class="text__centered">{{totalStations}} Stations</mat-card-title>
+          <mat-card-title class="text__centered">{{totalVisitedStations}} Stations</mat-card-title>
           <mat-card-subtitle class="text__centered mat-subtitle-1">Total stations visited</mat-card-subtitle>
         </mat-card-content>
       </mat-card>
@@ -20,7 +30,7 @@
         </mat-card-header>
 
         <mat-card-content>
-          <mat-card-title class="text__centered">{{totalHours}} Hours</mat-card-title>
+          <mat-card-title class="text__centered">{{totalMinutes}}</mat-card-title>
           <mat-card-subtitle class="text__centered mat-subtitle-1">Total travel time</mat-card-subtitle>
         </mat-card-content>
       </mat-card>
@@ -42,7 +52,7 @@
         </mat-card-header>
 
         <mat-card-content>
-          <mat-card-title class="text__centered">{{mostUsedStartStation}}</mat-card-title>
+          <mat-card-title class="text__centered">{{mostUsedStartLocation}}</mat-card-title>
           <mat-card-subtitle class="text__centered mat-subtitle-1">Most used start station</mat-card-subtitle>
         </mat-card-content>
       </mat-card>

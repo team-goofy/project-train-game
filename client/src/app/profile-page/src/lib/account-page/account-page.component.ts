@@ -15,7 +15,7 @@ import {Router} from "@angular/router";
 interface State {
   loading: boolean;
   error: string | null;
-  editting: boolean;
+  editing: boolean;
   valueHasNotBeenChanged: boolean;
 }
 
@@ -118,7 +118,7 @@ export class AccountPageComponent implements OnInit {
     return {
       loading: false,
       error: null,
-      editting: false,
+      editing: false,
       valueHasNotBeenChanged: true
     };
   }
@@ -139,8 +139,7 @@ export class AccountPageComponent implements OnInit {
 
     this.state = this.initialState();
     this.state.loading = true;
-    this.state.editting = true;
-
+    this.state.editing = true;
   }
 
   onSubmit(): void {
@@ -159,7 +158,6 @@ export class AccountPageComponent implements OnInit {
     if(user.email !== this.userEmailValue){
       this.submitUserEmail(user.email)
     }
-
   }
 
   submitUserUsername(user: UserRequestModel){
@@ -223,7 +221,7 @@ export class AccountPageComponent implements OnInit {
   }
 
   changePassword(){
-    this.authService.sendPassResetmail().subscribe({
+    this.authService.sendPassResetMail().subscribe({
       next: () => {
         this.state.loading = false;
         this.snackbar.open(
