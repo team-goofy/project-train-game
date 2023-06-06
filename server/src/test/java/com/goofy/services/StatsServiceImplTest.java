@@ -58,7 +58,7 @@ class StatsServiceImplTest {
 
     // Test: Retrieve stats from a user that does not exist
     @Test
-    void test_retrieve_stats_from_non_existing_user() throws ExecutionException, InterruptedException {
+    void test_retrieve_stats_of_non_existing_user() throws ExecutionException, InterruptedException {
         // Arrange
         String uid = "generalUid";
 
@@ -83,5 +83,68 @@ class StatsServiceImplTest {
         // Verify
         verify(firestore.collection("stats"), times(1)).document(uid);
         verify(documentReference, times(1)).get();
+    }
+
+    // Test: Update stats of a user
+    @Test
+    void test_update_stats() throws ExecutionException, InterruptedException {
+        // Arrange
+        String uid = "generalUid";
+        Stats statsToBeExpected = statsTestDataBuilder.buildStats();
+
+        // Mock
+        DocumentReference documentReference = mock(DocumentReference.class);
+        ApiFuture<DocumentSnapshot> future = mock(ApiFuture.class);
+        DocumentSnapshot snapshot = mock(DocumentSnapshot.class);
+        ApiFuture<WriteResult> writeResult = mock(ApiFuture.class);
+
+        // (Mock) When
+        when(firestore.collection("stats")).thenReturn(mock(CollectionReference.class));
+        when(firestore.collection("stats").document(anyString())).thenReturn(documentReference);
+        when(documentReference.getId()).thenReturn(uid);
+        when(documentReference.get()).thenReturn(future);
+        when(future.get()).thenReturn(snapshot);
+        when(snapshot.exists()).thenReturn(true);
+        when(snapshot.toObject(Stats.class)).thenReturn(statsToBeExpected);
+        when(documentReference.set(anyMap(), any())).thenReturn(writeResult);
+        when(writeResult.get()).thenReturn(mock(WriteResult.class));
+
+        // Act
+        String statsId = statsService.updateStats(statsToBeExpected, uid);
+
+        // Assert
+        assertNotNull(statsId);
+        assertEquals(uid, statsId);
+
+        // Verify
+        verify(firestore.collection("stats"), times(1)).document(uid);
+        verify(documentReference, times(1)).get();
+        verify(documentReference, times(1)).set(anyMap(), any());
+    }
+
+    @Test
+    void test_update_stats_of_non_existing_user_exception() throws ExecutionException, InterruptedException {
+        // Arrange
+        String uid = "generalUid";
+        Stats statsToBeExpected = statsTestDataBuilder.buildStats();
+
+        // Mock
+        DocumentReference documentReference = mock(DocumentReference.class);
+        ApiFuture<DocumentSnapshot> future = mock(ApiFuture.class);
+        DocumentSnapshot snapshot = mock(DocumentSnapshot.class);
+        ApiFuture<WriteResult> writeResult = mock(ApiFuture.class);
+
+        // (Mock) When
+        when(firestore.collection("stats")).thenReturn(mock(CollectionReference.class));
+        when(firestore.collection("stats").document(anyString())).thenReturn(documentReference);
+        when(documentReference.getId()).thenReturn(uid);
+        when(documentReference.get()).thenReturn(future);
+        when(future.get()).thenReturn(snapshot);
+        when(snapshot.exists()).thenReturn(false);
+        when(documentReference.set(anyMap(), any())).thenReturn(writeResult);
+        when(writeResult.get()).thenThrow(mock(RuntimeException.class));
+
+        // Act + Assert
+        assertThrows(RuntimeException.class, () -> statsService.updateStats(statsToBeExpected, uid));
     }
 }
