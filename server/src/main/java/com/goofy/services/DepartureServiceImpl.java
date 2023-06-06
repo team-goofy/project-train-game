@@ -22,6 +22,10 @@ public class DepartureServiceImpl implements DepartureService {
         ZonedDateTime timeMax = timeNow.plusMinutes(30);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX");
 
+        if (departures == null || departures.isEmpty()) {
+            return List.of();
+        }
+
         return departures.stream()
                 .filter(departure -> {
                     ZonedDateTime timestamp = ZonedDateTime.parse(departure.getPlannedDateTime(), formatter);
