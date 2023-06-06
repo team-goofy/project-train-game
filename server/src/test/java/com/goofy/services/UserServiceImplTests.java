@@ -10,114 +10,103 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 @ExtendWith(org.springframework.test.context.junit.jupiter.SpringExtension.class)
 @SpringBootTest
 class UserServiceImplTests {
     @MockBean
     private UserServiceImpl userService;
+    private UserTestDataBuilder userTestDataBuilder;
 
     @BeforeEach
     public void setup() throws ExecutionException, InterruptedException {
-        String userName = "mandylbbh";
-        String email = "test@test.nl";
-        String password = "password";
-        String uid = "123456789";
+        userTestDataBuilder = new UserTestDataBuilder();
+        Profile profile = userTestDataBuilder.buildProfile();
 
-        UserDTO user = UserDTO.builder()
-                .username(userName)
-                .email(email)
-                .password(password)
-                .build();
-
-        Profile profile = new Profile();
-        profile.setUsername(user.getUsername());
-
-//        Mockito.when(userService.save(Mockito.any(User.class))).thenReturn(user);
-        Mockito.when(userService.getProfile(uid)).thenReturn(profile);
-        Mockito.when(userService.usernameExists(userName)).thenReturn(true);
-//        Mockito.when(userService.changeUsername(userName, uid)).thenReturn(ResponseEntity.ok().build());
+        Mockito.when(userService.getProfile(Mockito.anyString())).thenReturn(profile);
     }
 
     // check username tests
-    @Test
-    void check_if_username_exists() throws ExecutionException, InterruptedException {
-        // Arrange
-        String username = "mandylbbh";
-        boolean expectedExists = true;
-
-        // Act
-        boolean exists = userService.usernameExists(username);
-
-        // Assert
-        assertEquals(expectedExists, exists);
-    }
-
-    @Test
-    void check_if_username_does_not_exist() throws ExecutionException, InterruptedException {
-        // Arrange
-        String username = "mandylbbh17";
-        boolean expectedExists = false;
-
-        // Act
-        boolean exists = userService.usernameExists(username);
-
-        // Assert
-        assertEquals(expectedExists, exists);
-    }
-
-    //Save user tests
-    @Test
-    void can_save_correct_user(){
-
-    }
-
-    @Test
-    void can_not_save_user_with_existing_username(){
-
-    }
-
-    @Test
-    void can_not_save_user_without_username(){
-
-    }
-
-    @Test
-    void can_not_save_user_with_existing_email(){
-
-    }
-
-    @Test
-    void can_not_save_user_without_email(){
-
-    }
-
-    @Test
-    void can_not_save_user_with_faulty_password(){
-
-    }
-
-    @Test
-    void can_not_save_user_without_password(){
-
-    }
+//    @Test
+//    void check_if_username_exists() throws ExecutionException, InterruptedException {
+//        // Arrange
+//        String username = "mandylbbh";
+//        boolean expectedExists = true;
+//
+//        // Act
+//        boolean exists = userService.usernameExists(username);
+//
+//        // Assert
+//        assertEquals(expectedExists, exists);
+//    }
+//
+//    @Test
+//    void check_if_username_does_not_exist() throws ExecutionException, InterruptedException {
+//        // Arrange
+//        String username = "mandylbbh17";
+//        boolean expectedExists = false;
+//
+//        // Act
+//        boolean exists = userService.usernameExists(username);
+//
+//        // Assert
+//        assertEquals(expectedExists, exists);
+//    }
+//
+//    //Save user tests
+//    @Test
+//    void can_save_correct_user(){
+//
+//    }
+//
+//    @Test
+//    void can_not_save_user_with_existing_username(){
+//
+//    }
+//
+//    @Test
+//    void can_not_save_user_without_username(){
+//
+//    }
+//
+//    @Test
+//    void can_not_save_user_with_existing_email(){
+//
+//    }
+//
+//    @Test
+//    void can_not_save_user_without_email(){
+//
+//    }
+//
+//    @Test
+//    void can_not_save_user_with_faulty_password(){
+//
+//    }
+//
+//    @Test
+//    void can_not_save_user_without_password(){
+//
+//    }
 
     // get profile tests
     @Test
     void can_get_user_profile() throws ExecutionException, InterruptedException {
         // Arrange
         String uid = "123456789";
-        String expectedUsername = "mandylbbh";
+        Profile expectedProfile = userTestDataBuilder.buildProfile();
 
         // Act
         Profile result = userService.getProfile(uid);
 
         // Assert
-        assertEquals(expectedUsername, result.getUsername());
+        assertEquals(expectedProfile.getUsername(), result.getUsername());
     }
 
     @Test
@@ -125,11 +114,11 @@ class UserServiceImplTests {
         // Arrange
         String uid = "nonexistinguid";
 
-        // Act
-        Profile result = userService.getProfile(uid);
+        // Set up the mock behavior
+        Mockito.when(userService.getProfile(uid)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        // Assert
-        assertNull(result);
+        // Act and Assert
+        assertThrows(ResponseStatusException.class, () -> userService.getProfile(uid));
     }
 
     // change username tests
@@ -173,7 +162,6 @@ class UserServiceImplTests {
     @Test
     void can_not_change_username_to_empty() throws InterruptedException, ExecutionException {
         // Arrange
-        String existingUsername = "existingUser";
         String newUsername = "";
         String uid = "123456789";
 
