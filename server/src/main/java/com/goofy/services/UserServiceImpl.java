@@ -5,7 +5,6 @@ import com.goofy.dtos.UserDTO;
 import com.goofy.exceptions.UsernameExistsException;
 import com.goofy.models.Profile;
 import com.google.api.core.ApiFuture;
-import com.google.cloud.AsyncPageImpl;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
