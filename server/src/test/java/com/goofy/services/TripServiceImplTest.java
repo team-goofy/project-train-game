@@ -7,12 +7,16 @@ import com.goofy.exceptions.TripImageAlreadyExistsException;
 import com.goofy.exceptions.UnsupportedFileExtensionException;
 import com.goofy.models.Departure.RouteStation;
 import com.goofy.models.Trip;
+import com.goofy.models.TripFilter;
 import com.goofy.utils.UUIDGenerator;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.SetOptions;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
@@ -25,6 +29,8 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -247,5 +253,84 @@ class TripServiceImplTest {
         verify(storage.bucket(), times(1)).get(anyString());
         verify(blob, times(1)).exists();
         verify(storage.bucket(), times(1)).create(anyString(), any(InputStream.class), anyString());
+    }
+
+    @Test
+    void getTrips_WithOnGoingFilter_ReturnsOnGoingTrips() throws InterruptedException, ExecutionException {
+        // Arrange
+        TripFilter filter = new TripFilter();
+        filter.setOnGoing(true);
+        String uid = "user-123";
+
+        Trip trip1 = new Trip();
+        trip1.setTripId("trip-1");
+        trip1.setIsEnded(false);
+
+        Trip trip2 = new Trip();
+        trip2.setTripId("trip-2");
+        trip2.setIsEnded(false);
+
+        Trip trip3 = new Trip();
+        trip3.setTripId("trip-3");
+        trip3.setIsEnded(true);
+
+        // Mock
+        CollectionReference collectionRef = mock(CollectionReference.class);
+        when(firestore.collection("trip")).thenReturn(collectionRef);
+        Query query = mock(Query.class);
+        when(collectionRef.whereNotEqualTo("isEnded", filter.getOnGoing())).thenReturn(query);
+        when(query.whereEqualTo("uid", uid)).thenReturn(query);
+        ApiFuture<QuerySnapshot> future = mock(ApiFuture.class);
+        when(query.get()).thenReturn(future);
+        QuerySnapshot snapshot = mock(QuerySnapshot.class);
+        when(future.get()).thenReturn(snapshot);
+        List<QueryDocumentSnapshot> documents = Arrays.asList(mock(QueryDocumentSnapshot.class), mock(QueryDocumentSnapshot.class));
+        when(snapshot.getDocuments()).thenReturn(documents);
+        when(documents.get(0).toObject(Trip.class)).thenReturn(trip1);
+        when(documents.get(1).toObject(Trip.class)).thenReturn(trip2);
+
+        // Act
+        List<Trip> result = tripService.getTrips(filter, uid);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(trip1, result.get(0));
+        assertEquals(trip2, result.get(1));
+        verify(firestore, times(1)).collection("trip");
+        verify(collectionRef, times(1)).whereNotEqualTo("isEnded", filter.getOnGoing());
+        verify(query, times(1)).whereEqualTo("uid", uid);
+        verify(query, times(1)).get();
+    }
+
+    @Test
+    void getTrips_WithNoMatchingTrips_ReturnsEmptyList() throws InterruptedException, ExecutionException {
+        // Arrange
+        TripFilter filter = new TripFilter();
+        filter.setOnGoing(true);
+        String uid = "user-123";
+
+        // Mock
+        CollectionReference collectionRef = mock(CollectionReference.class);
+        when(firestore.collection("trip")).thenReturn(collectionRef);
+        Query query = mock(Query.class);
+        when(collectionRef.whereNotEqualTo("isEnded", filter.getOnGoing())).thenReturn(query);
+        when(query.whereEqualTo("uid", uid)).thenReturn(query);
+        ApiFuture<QuerySnapshot> future = mock(ApiFuture.class);
+        when(query.get()).thenReturn(future);
+        QuerySnapshot snapshot = mock(QuerySnapshot.class);
+        when(future.get()).thenReturn(snapshot);
+        when(snapshot.toObjects(Trip.class)).thenReturn(Collections.emptyList());
+
+        // Act
+        List<Trip> result = tripService.getTrips(filter, uid);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(firestore, times(1)).collection("trip");
+        verify(collectionRef, times(1)).whereNotEqualTo("isEnded", filter.getOnGoing());
+        verify(query, times(1)).whereEqualTo("uid", uid);
+        verify(query, times(1)).get();
     }
 }
