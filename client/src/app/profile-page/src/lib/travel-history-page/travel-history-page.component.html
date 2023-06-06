@@ -18,7 +18,7 @@
             {{i+1}}
           </button>
           <div>
-            <mat-panel-title>
+            <mat-panel-title class="trip-title-text">
               {{trip.routeStations[0].mediumName}} -> {{trip.routeStations[trip.routeStations.length - 1].mediumName}}
             </mat-panel-title>
             <mat-panel-description>
@@ -36,7 +36,7 @@
     </mat-accordion>
     <div *ngIf="!state.hasTrips" class="text-centered">
       <h1>It seems like you still haven't finished any trips or played a game yet 😢</h1>
-      <h2>Click the button below to start a new game. After completion your stats will be visible here.</h2>
+      <h2>Click the button below to start a new game. After completion your travel history will be visible here.</h2>
       <div class="button-container">
         <button routerLink="/game" class="play-btn" color="accent" mat-raised-button>
           <mat-icon>play_arrow</mat-icon>
@@ -44,8 +44,8 @@
         </button>
       </div>
     </div>
-    <mat-paginator [length]="trips.length" [pageSize]="pageSize" [pageIndex]="currentPage" [pageSizeOptions]="[5, 15, 30, 50, 100]"
+    <mat-paginator [length]="trips.length" [pageSize]="pageSize" [pageIndex]="currentPage" [pageSizeOptions]="[5, 10, 15, 20]"
                    aria-label="Select page" (page)="pageChanged($event)">
     </mat-paginator>
   </div>
-</div>
+  </div>

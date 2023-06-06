@@ -34,9 +34,11 @@ export class TravelHistoryPageComponent implements OnInit{
           this.state.hasTrips = false;
           return;
         }else {
-          this._trips = trips;
+          this._trips = trips
+            .filter(trip => trip.tripEndDate !== undefined)
+            .sort((a, b) => new Date(a.tripEndDate!).getTime() - new Date(b.tripEndDate!).getTime());
         }
-        this.state.loading = false;
+      this.state.loading = false;
     });
   }
 
