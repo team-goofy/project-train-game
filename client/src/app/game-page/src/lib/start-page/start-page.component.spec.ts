@@ -14,13 +14,11 @@ describe('StartPageComponent', () => {
   let geolocationServiceSpy: jasmine.SpyObj<GeolocationService>;
   let permissionsServiceSpy: jasmine.SpyObj<PermissionsService>;
   let stationServiceSpy: jasmine.SpyObj<StationService>;
-  let tripServiceSpy: jasmine.SpyObj<TripService>;
 
   beforeEach(() => {
     geolocationServiceSpy = jasmine.createSpyObj('GeolocationService', ['pipe']);
     permissionsServiceSpy = jasmine.createSpyObj('PermissionsService', ['state']);
     stationServiceSpy = jasmine.createSpyObj('StationService', ['init']);
-    tripServiceSpy = jasmine.createSpyObj('TripService', ['saveTrip']);
 
     TestBed.configureTestingModule({
       declarations: [ StartPageComponent ],
@@ -29,7 +27,6 @@ describe('StartPageComponent', () => {
         { provide: GeolocationService, useValue: geolocationServiceSpy },
         { provide: PermissionsService, useValue: permissionsServiceSpy },
         { provide: StationService, useValue: stationServiceSpy },
-        { provide: TripService, useValue: tripServiceSpy },
       ],
     }).compileComponents();
 
