@@ -5,7 +5,7 @@ import { PermissionsService } from '@ng-web-apis/permissions';
 import { StationService } from '../services/station.service';
 import { TripService } from '@client/shared-services';
 import { Station, Trip } from '@client/shared-models';
-import { catchError, delay, filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { catchError, filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { EMPTY, Observable, Subject } from 'rxjs';
 import { MatSnackBar } from "@angular/material/snack-bar";
 
@@ -53,27 +53,25 @@ export class StartPageComponent implements OnInit, OnDestroy {
       tap((state: PermissionState) => this.state.permission = state),
       filter((state: PermissionState) => state === 'granted'),
       switchMap(() => this._geoLocationService.pipe(take(1))),
-      catchError((error: GeolocationPositionError) => {
-        this.state = this.initialState();
-
-        if (error.code === error.PERMISSION_DENIED) {
-          this.state.permission = 'denied';
-        } else if (error.code === error.POSITION_UNAVAILABLE) {
-          this.state.error = 'Location information is unavailable.';
-        } else if (error.code === error.TIMEOUT) {
-          this.state.error = 'The request to get user location timed out.';
-        }
-
-        return EMPTY;
-      }),
-      delay(1000),
       tap((position: GeolocationPosition) => {
         this._stationService.init(position.coords.latitude, position.coords.longitude)
         this.state.loading = false;
       }),
-      catchError(() => {
+      catchError((error: any) => {
         this.state = this.initialState();
-        this.state.error = 'Something went wrong. Please try again later.';
+
+        if ([GeolocationPositionError.PERMISSION_DENIED, GeolocationPositionError.POSITION_UNAVAILABLE, GeolocationPositionError.TIMEOUT].includes(error.code)) {
+          if (error.code === GeolocationPositionError.PERMISSION_DENIED) {
+            this.state.permission = 'denied';
+          } else if (error.code === GeolocationPositionError.POSITION_UNAVAILABLE) {
+            this.state.error = 'Location information is unavailable.';
+          } else if (error.code === GeolocationPositionError.TIMEOUT) {
+            this.state.error = 'The request to get user location timed out.';
+          }
+        } else {
+          this.state.error = 'Something went wrong. Please try again later.';
+        }
+
         return EMPTY;
       }),
       takeUntil(this.destroy$)
@@ -108,7 +106,7 @@ export class StartPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  private initialState(): State {
+  initialState(): State {
     return {
       loading: false,
       error: null,
