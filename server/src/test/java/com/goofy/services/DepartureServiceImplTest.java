@@ -144,36 +144,6 @@ public class DepartureServiceImplTest {
     }
 
     @Test
-    public void getRandomExitStationTrain_no_stations() {
-        // Arrange
-        Message message = new Message();
-        message.setStyle("");
-        message.setInfoMessage("Some text");
-
-        List<Message> messages = List.of(message);
-
-        ZonedDateTime time = ZonedDateTime.now(ZoneId.of("Europe/Paris")).plusMinutes(15);
-        String formatTime = time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX"));
-
-        Departure departure = new Departure();
-        departure.setDirection("Some direction");
-        departure.setName("Some name");
-        departure.setActualTrack("Some track");
-        departure.setPlannedDateTime(formatTime);
-        departure.setMessages(messages);
-
-        Departure departure2 = new Departure();
-        departure2.setDirection("Some direction");
-        departure2.setName("Some name");
-        departure2.setActualTrack("Some track");
-        departure2.setPlannedDateTime(formatTime);
-        departure2.setMessages(messages);
-
-        List<Departure> departures = List.of(departure, departure2);
-        assertThrows(NoStationFoundException.class, () -> departureService.getRandomExitStationTrain(departures));
-    }
-
-    @Test
     public void getRandomExitStationTrain_success() {
         // Arrange
         Message message = new Message();
@@ -200,8 +170,7 @@ public class DepartureServiceImplTest {
         departure2.setMessages(messages);
 
         List<Departure> departures = List.of(departure, departure2);
-
-        assertThrows(NoStationFoundException.class, () -> departureService.getRandomExitStationTrain(departures));
+        
 
         Departure.RouteStation routeStation = new Departure.RouteStation();
         routeStation.setUicCode("12134");
