@@ -1,39 +1,43 @@
 <div class="parent">
   <div class="centered">
     <h1 class="mat-headline-2 text-centered">Travel History</h1>
-
-    <button *ngIf="state.hasTrips" (click)="sortTripsByDate()" class="sort-btn" color="primary" mat-raised-button>
-      <mat-icon>sort</mat-icon>
-      {{ isAscending ? 'Sort date oldest to newest' : 'Sort date newest to oldest' }}
-    </button>
-
     <ng-template *ngIf="state.loading">
       <mat-spinner></mat-spinner>
     </ng-template>
+    <div *ngIf="state.hasTrips">
+      <button (click)="sortTripsByDate()" class="sort-btn" color="primary" mat-raised-button>
+        <mat-icon>sort</mat-icon>
+        {{ isAscending ? 'Sort date oldest to newest' : 'Sort date newest to oldest' }}
+      </button>
+      <mat-accordion >
+        <mat-expansion-panel *ngFor="let trip of trips.slice(currentPage * pageSize, (currentPage + 1) * pageSize); let i=index">
+          <mat-expansion-panel-header>
+            <button class="number-btn" mat-mini-fab color="accent">
+              {{i+1}}
+            </button>
+            <div>
+              <mat-panel-title class="trip-title-text">
+                {{trip.routeStations[0].mediumName}} -> {{trip.routeStations[trip.routeStations.length - 1].mediumName}}
+              </mat-panel-title>
+              <mat-panel-description>
+                {{trip.tripEndDate | date: 'dd/MM/yyyy HH:mm'}}
+              </mat-panel-description>
+            </div>
+          </mat-expansion-panel-header>
+          <mat-stepper orientation="vertical" #stepper>
+            <mat-step *ngFor="let route of trip.routeStations" completed="false">
+              <ng-template matStepLabel>{{route.mediumName}} </ng-template>
+              <p *ngIf="route.departureTime">Departure time: {{route.departureTime | date: 'dd/MM/yyyy HH:mm'}}</p>
+            </mat-step>
+          </mat-stepper>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-paginator [length]="trips.length" [pageSize]="pageSize" [pageIndex]="currentPage" [pageSizeOptions]="[5, 10, 15, 20]"
+                     aria-label="Select page" (page)="pageChanged($event)">
+      </mat-paginator>
+    </div>
 
-    <mat-accordion *ngIf="state.hasTrips">
-      <mat-expansion-panel *ngFor="let trip of trips.slice(currentPage * pageSize, (currentPage + 1) * pageSize); let i=index">
-        <mat-expansion-panel-header>
-          <button class="number-btn" mat-mini-fab color="accent">
-            {{i+1}}
-          </button>
-          <div>
-            <mat-panel-title class="trip-title-text">
-              {{trip.routeStations[0].mediumName}} -> {{trip.routeStations[trip.routeStations.length - 1].mediumName}}
-            </mat-panel-title>
-            <mat-panel-description>
-              {{trip.tripEndDate | date: 'dd/MM/yyyy HH:mm'}}
-            </mat-panel-description>
-          </div>
-        </mat-expansion-panel-header>
-        <mat-stepper orientation="vertical" #stepper>
-          <mat-step *ngFor="let route of trip.routeStations" completed="false">
-            <ng-template matStepLabel>{{route.mediumName}} </ng-template>
-            <p *ngIf="route.departureTime">Departure time: {{route.departureTime | date: 'dd/MM/yyyy HH:mm'}}</p>
-          </mat-step>
-        </mat-stepper>
-      </mat-expansion-panel>
-    </mat-accordion>
+
     <div *ngIf="!state.hasTrips" class="text-centered">
       <h1>It seems like you still haven't finished any trips or played a game yet 😢</h1>
       <h2>Click the button below to start a new game. After completion your travel history will be visible here.</h2>
@@ -44,8 +48,5 @@
         </button>
       </div>
     </div>
-    <mat-paginator [length]="trips.length" [pageSize]="pageSize" [pageIndex]="currentPage" [pageSizeOptions]="[5, 10, 15, 20]"
-                   aria-label="Select page" (page)="pageChanged($event)">
-    </mat-paginator>
   </div>
   </div>
