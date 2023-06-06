@@ -6,75 +6,84 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class UserServiceImplTests {
 
-
     // check username tests
     @Test
-    void creating_user_with_non_existing_username(){
+    void check_if_username_exists(){
 
     }
 
     @Test
-    void creating_user_with_existing_username(){
+    void check_if_username_does_not_exist(){
 
     }
 
     //Save user tests
     @Test
-    void creating_correct_user(){
+    void can_save_correct_user(){
 
     }
 
     @Test
-    void creating_user_without_username(){
+    void can_not_save_user_with_existing_username(){
 
     }
 
     @Test
-    void creating_user_with_non_existing_email(){
+    void can_not_save_user_without_username(){
 
     }
 
     @Test
-    void creating_user_with_existing_email(){
+    void can_not_save_user_with_existing_email(){
 
     }
 
     @Test
-    void creating_user_without_email(){
+    void can_not_save_user_without_email(){
 
     }
 
     @Test
-    void creating_user_without_password(){
+    void can_not_save_user_with_faulty_password(){
+
+    }
+
+    @Test
+    void can_not_save_user_without_password(){
 
     }
 
     // get profile tests
     @Test
-    void get_user_profile(){
+    void can_get_user_profile(){
 
     }
 
     @Test
-    void get_profile_when_user_not_existing(){
+    void can_not_get_profile_when_user_not_existing(){
 
     }
 
 
     // change username tests
     @Test
-    void change_username_to_existing_username(){
+    void can_not_change_username_to_existing_username(){
 
     }
 
     @Test
-    void change_username_to_non_existing_username(){
+    void can_change_username_to_non_existing_username(){
 
     }
 
     @Test
-    void change_username_to_empty(){
+    void can_not_change_username_to_empty(){
 
+    }
+
+    @Test
+    void can_add_username_with_unconventional_characters(){
+        //like japanese
     }
 
 
