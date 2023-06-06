@@ -2,12 +2,10 @@ package com.goofy.services;
 
 import com.goofy.dtos.TripDTO;
 import com.goofy.models.Departure.RouteStation;
+import com.goofy.models.Trip;
 import com.goofy.utils.UUIDGenerator;
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.SetOptions;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.StorageClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,9 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -47,7 +45,7 @@ class TripServiceImplTest {
 
         // Mock
         DocumentReference docRef = mock(DocumentReference.class);
-        when(docRef.getId()).thenReturn(uuidTrip); // Specify behavior of getId method
+        when(docRef.getId()).thenReturn(uuidTrip);
         when(firestore.collection("trip")).thenReturn(mock(CollectionReference.class));
         when(firestore.collection("trip").document(anyString())).thenReturn(docRef);
         when(docRef.set(any(Map.class))).thenReturn(mock(ApiFuture.class));
@@ -81,7 +79,7 @@ class TripServiceImplTest {
 
         // Mock
         DocumentReference docRef = mock(DocumentReference.class);
-        when(docRef.getId()).thenReturn(trip.getTripId()); // Specify behavior of getId method
+        when(docRef.getId()).thenReturn(trip.getTripId());
         when(firestore.collection("trip")).thenReturn(mock(CollectionReference.class));
         when(firestore.collection("trip").document(anyString())).thenReturn(docRef);
         when(docRef.set(any(Map.class), any(SetOptions.class))).thenReturn(mock(ApiFuture.class));
@@ -94,5 +92,58 @@ class TripServiceImplTest {
         assertEquals(trip.getTripId(), returnedTripId);
         verify(firestore.collection("trip"), times(1)).document(trip.getTripId());
         verify(docRef, times(1)).set(any(Map.class), any(SetOptions.class));
+    }
+
+    @Test
+    void getTripById_ExistingTripId_ReturnsTrip() throws ExecutionException, InterruptedException {
+        // Arrange
+        String tripId = "trip-123";
+
+        Trip trip = new Trip();
+        trip.setTripId(tripId);
+
+        // Mock
+        DocumentReference docRef = mock(DocumentReference.class);
+        when(firestore.collection("trip")).thenReturn(mock(CollectionReference.class));
+        when(firestore.collection("trip").document(anyString())).thenReturn(docRef);
+        ApiFuture<DocumentSnapshot> future = mock(ApiFuture.class);
+        when(docRef.get()).thenReturn(future);
+        DocumentSnapshot snapshot = mock(DocumentSnapshot.class);
+        when(future.get()).thenReturn(snapshot);
+        when(snapshot.exists()).thenReturn(true);
+        when(snapshot.toObject(Trip.class)).thenReturn(trip);
+
+        // Act
+        Trip result = tripService.getTripById(tripId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(tripId, result.getTripId());
+        verify(firestore.collection("trip"), times(1)).document(tripId);
+        verify(docRef, times(1)).get();
+    }
+
+    @Test
+    void getTripById_NonExistingTripId_ReturnsNull() throws ExecutionException, InterruptedException {
+        // Arrange
+        String tripId = "trip-123";
+
+        // Mock
+        DocumentReference docRef = mock(DocumentReference.class);
+        when(firestore.collection("trip")).thenReturn(mock(CollectionReference.class));
+        when(firestore.collection("trip").document(anyString())).thenReturn(docRef);
+        ApiFuture<DocumentSnapshot> future = mock(ApiFuture.class);
+        when(docRef.get()).thenReturn(future);
+        DocumentSnapshot snapshot = mock(DocumentSnapshot.class);
+        when(future.get()).thenReturn(snapshot);
+        when(snapshot.exists()).thenReturn(false);
+
+        // Act
+        Trip result = tripService.getTripById(tripId);
+
+        // Assert
+        assertNull(result);
+        verify(firestore.collection("trip"), times(1)).document(tripId);
+        verify(docRef, times(1)).get();
     }
 }
