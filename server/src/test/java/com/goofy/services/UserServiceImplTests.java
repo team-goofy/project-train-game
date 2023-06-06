@@ -1,17 +1,15 @@
 package com.goofy.services;
 
-import com.goofy.controllers.EmailController;
 import com.goofy.dtos.UserDTO;
 import com.goofy.models.Profile;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Firestore;
-import com.google.firebase.auth.FirebaseAuth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.concurrent.ExecutionException;
 
@@ -42,6 +40,7 @@ class UserServiceImplTests {
 //        Mockito.when(userService.save(Mockito.any(User.class))).thenReturn(user);
         Mockito.when(userService.getProfile(uid)).thenReturn(profile);
         Mockito.when(userService.usernameExists(userName)).thenReturn(true);
+//        Mockito.when(userService.changeUsername(userName, uid)).thenReturn(ResponseEntity.ok().build());
     }
 
     // check username tests
@@ -133,26 +132,77 @@ class UserServiceImplTests {
         assertNull(result);
     }
 
-
     // change username tests
     @Test
-    void can_not_change_username_to_existing_username(){
+    void can_not_change_username_to_existing_username() throws InterruptedException, ExecutionException {
+        // Arrange
+        String existingUsername = "existingUser";
+        String newUsername = existingUsername;
+        String uid = "123456789";
 
+        // Set up the mock behavior
+        Mockito.when(userService.usernameExists(newUsername)).thenReturn(true);
+        Mockito.when(userService.changeUsername(newUsername, uid)).thenReturn(ResponseEntity.badRequest().build());
+
+        // Act
+        ResponseEntity<String> response = userService.changeUsername(newUsername, uid);
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void can_change_username_to_non_existing_username(){
+    void can_change_username_when_username_does_not_exist() throws InterruptedException, ExecutionException {
+        // Arrange
+        String existingUsername = "existingUser";
+        String newUsername = "newUsername";
+        String uid = "123456789";
 
+        // Set up the mock behavior
+        Mockito.when(userService.usernameExists(newUsername)).thenReturn(false);
+        Mockito.when(userService.changeUsername(newUsername, uid)).thenReturn(ResponseEntity.ok(newUsername));
+
+        // Act
+        ResponseEntity<String> response = userService.changeUsername(newUsername, uid);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(newUsername, response.getBody());
     }
 
     @Test
-    void can_not_change_username_to_empty(){
+    void can_not_change_username_to_empty() throws InterruptedException, ExecutionException {
+        // Arrange
+        String existingUsername = "existingUser";
+        String newUsername = "";
+        String uid = "123456789";
 
+        // Set up the mock behavior
+        Mockito.when(userService.changeUsername(newUsername, uid)).thenReturn(ResponseEntity.badRequest().build());
+
+        // Act
+        ResponseEntity<String> response = userService.changeUsername(newUsername, uid);
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    void can_add_username_with_unconventional_characters(){
-        //like japanese
+    void can_add_username_with_unconventional_characters() throws InterruptedException, ExecutionException {
+        // Arrange
+        String newUsername = "ユーザー名";
+        String uid = "123456789";
+
+        // Set up the mock behavior
+        Mockito.when(userService.usernameExists(newUsername)).thenReturn(false);
+        Mockito.when(userService.changeUsername(newUsername, uid)).thenReturn(ResponseEntity.ok(newUsername));
+
+        // Act
+        ResponseEntity<String> response = userService.changeUsername(newUsername, uid);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(newUsername, response.getBody());
     }
 
 
