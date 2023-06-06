@@ -25,7 +25,8 @@ public class DepartureServiceImpl implements DepartureService {
         return departures.stream()
                 .filter(departure -> {
                     ZonedDateTime timestamp = ZonedDateTime.parse(departure.getPlannedDateTime(), formatter);
-                    return timestamp.isBefore(timeMax) && timestamp.isAfter(timeNow);
+                    return timestamp.isBefore(timeMax) && timestamp.isAfter(timeNow)
+                            && departure.getMessages().stream().noneMatch(message -> "WARNING".equals(message.getStyle()));
                 })
                 .toList();
     }
@@ -42,7 +43,7 @@ public class DepartureServiceImpl implements DepartureService {
         Departure randomDeparture = filteredDepartures.get(randomDepartureIndex);
         List<RouteStation> stations = randomDeparture.getRouteStations();
 
-        if(stations.isEmpty()){
+        if(stations.isEmpty()) {
             throw new NoStationFoundException("This station has no route stations.");
         }
 

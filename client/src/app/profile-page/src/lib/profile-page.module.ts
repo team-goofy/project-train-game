@@ -13,27 +13,41 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from "@angular/material/card";
+import {MatGridListModule} from "@angular/material/grid-list";
+import {FlexLayoutModule} from "@angular/flex-layout";
+import {MatExpansionModule} from "@angular/material/expansion";
+import {MatStepperModule} from "@angular/material/stepper";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        ProfilePageRoutingModule,
-        HttpClientModule,
-        MatTabsModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        MatButtonModule
-    ],
-    declarations: [
-      ProfilePageComponent,
-      AccountPageComponent,
-      TravelHistoryPageComponent,
-      AchievementsPageComponent,
-      StatsPageComponent,
-    ],
-    providers: [
-    ]
+  imports: [
+    CommonModule,
+    ProfilePageRoutingModule,
+    HttpClientModule,
+    MatTabsModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatExpansionModule,
+    MatStepperModule,
+    MatCardModule,
+    MatGridListModule,
+    FlexLayoutModule,
+    MatProgressSpinnerModule,
+    MatPaginatorModule
+  ],
+  declarations: [
+    ProfilePageComponent,
+    AccountPageComponent,
+    TravelHistoryPageComponent,
+    AchievementsPageComponent,
+    StatsPageComponent,
+  ],
+  providers: [
+  ]
 })
 export class ProfilePageModule {}

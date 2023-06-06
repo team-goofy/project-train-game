@@ -61,13 +61,13 @@ export class PictureUploadPageComponent implements OnInit {
 
   continueTrip() {
     this.saveImage(this._imageUrl, () => {
-      this._router.navigate(['/game/random-train'], 
-      { 
-        queryParams: { 
-          tripId: this._tripId, 
-          uicCode: this._uicCode, 
-          location: this._location 
-        } 
+      this._router.navigate(['/game/random-train'],
+      {
+        queryParams: {
+          tripId: this._tripId,
+          uicCode: this._uicCode,
+          location: this._location
+        }
       });
     });
   }
@@ -81,20 +81,21 @@ export class PictureUploadPageComponent implements OnInit {
         }),
         switchMap((trip: Trip) => {
           trip.isEnded = true;
+          trip.tripEndDate = new Date().toISOString();
           return this._tripService.saveTrip(trip).pipe(
             catchError(({ error }) => {
               this._snackbar.open(error.errors.join(), "Close");
               return EMPTY;
             })
           );
-        }), 
+        }),
         tap(() => {
           let ref = this._snackbar.open(
             "Your trip has ended!",
             "",
             { horizontalPosition: 'end', duration: 2000 }
           );
-  
+
           ref.afterDismissed().subscribe(() => {
             this._router.navigate(['/']);
           })
@@ -108,26 +109,26 @@ export class PictureUploadPageComponent implements OnInit {
       callback();
       return;
     }
-  
+
     fetch(imageUrl)
       .then(response => response.blob())
       .then(blob => {
         if (!this.checkValidImageSize(blob)) {
           this._snackbar.open(
-            "Image cannot be larger than 1MB!", 
-            "Close", 
+            "Image cannot be larger than 1MB!",
+            "Close",
             { horizontalPosition: 'end', duration: 2000 }
           );
           return;
         }
-  
+
         this._loading = true;
-        
+
         const formData = new FormData();
         formData.append('image', blob);
         formData.append('tripId', this._tripId);
         formData.append('uicCode', this._uicCode);
-  
+
         this._tripService.saveImage(formData).subscribe({
           next: () => {
             this._loading = false;

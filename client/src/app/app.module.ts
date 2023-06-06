@@ -11,6 +11,7 @@ import { InterceptorService } from '@client/shared-services';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AuthGuardModule } from "@angular/fire/auth-guard";
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
   ],
   imports: [
     BrowserModule,
+    FlexLayoutModule,
     BrowserAnimationsModule,
     AuthGuardModule,
     AppRoutingModule,
