@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, of } from 'rxjs';
 import { GeolocationService } from '@ng-web-apis/geolocation';
 import { PermissionsService } from '@ng-web-apis/permissions';
@@ -16,14 +15,12 @@ describe('StartPageComponent', () => {
   let permissionsServiceSpy: jasmine.SpyObj<PermissionsService>;
   let stationServiceSpy: jasmine.SpyObj<StationService>;
   let tripServiceSpy: jasmine.SpyObj<TripService>;
-  let snackbarSpy: jasmine.SpyObj<MatSnackBar>;
 
   beforeEach(() => {
     geolocationServiceSpy = jasmine.createSpyObj('GeolocationService', ['pipe']);
     permissionsServiceSpy = jasmine.createSpyObj('PermissionsService', ['state']);
     stationServiceSpy = jasmine.createSpyObj('StationService', ['init']);
     tripServiceSpy = jasmine.createSpyObj('TripService', ['saveTrip']);
-    snackbarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     TestBed.configureTestingModule({
       declarations: [ StartPageComponent ],
@@ -33,7 +30,6 @@ describe('StartPageComponent', () => {
         { provide: PermissionsService, useValue: permissionsServiceSpy },
         { provide: StationService, useValue: stationServiceSpy },
         { provide: TripService, useValue: tripServiceSpy },
-        { provide: MatSnackBar, useValue: snackbarSpy }, 
       ],
     }).compileComponents();
 
