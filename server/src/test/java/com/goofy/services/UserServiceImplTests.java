@@ -1,137 +1,113 @@
 package com.goofy.services;
 
-import com.goofy.dtos.UserDTO;
+import com.goofy.controllers.EmailController;
 import com.goofy.models.Profile;
-import org.junit.jupiter.api.BeforeEach;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.*;
+import com.google.firebase.auth.FirebaseAuth;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(org.springframework.test.context.junit.jupiter.SpringExtension.class)
 @SpringBootTest
 class UserServiceImplTests {
-    @MockBean
-    private UserServiceImpl userService;
-    private UserTestDataBuilder userTestDataBuilder;
 
-    @BeforeEach
-    public void setup() throws ExecutionException, InterruptedException {
-        userTestDataBuilder = new UserTestDataBuilder();
-        Profile profile = userTestDataBuilder.buildProfile();
-
-        Mockito.when(userService.getProfile(Mockito.anyString())).thenReturn(profile);
-    }
-
-    // check username tests
-//    @Test
-//    void check_if_username_exists() throws ExecutionException, InterruptedException {
-//        // Arrange
-//        String username = "mandylbbh";
-//        boolean expectedExists = true;
-//
-//        // Act
-//        boolean exists = userService.usernameExists(username);
-//
-//        // Assert
-//        assertEquals(expectedExists, exists);
-//    }
-//
-//    @Test
-//    void check_if_username_does_not_exist() throws ExecutionException, InterruptedException {
-//        // Arrange
-//        String username = "mandylbbh17";
-//        boolean expectedExists = false;
-//
-//        // Act
-//        boolean exists = userService.usernameExists(username);
-//
-//        // Assert
-//        assertEquals(expectedExists, exists);
-//    }
-//
-//    //Save user tests
-//    @Test
-//    void can_save_correct_user(){
-//
-//    }
-//
-//    @Test
-//    void can_not_save_user_with_existing_username(){
-//
-//    }
-//
-//    @Test
-//    void can_not_save_user_without_username(){
-//
-//    }
-//
-//    @Test
-//    void can_not_save_user_with_existing_email(){
-//
-//    }
-//
-//    @Test
-//    void can_not_save_user_without_email(){
-//
-//    }
-//
-//    @Test
-//    void can_not_save_user_with_faulty_password(){
-//
-//    }
-//
-//    @Test
-//    void can_not_save_user_without_password(){
-//
-//    }
+    private final Firestore firestore = mock(Firestore.class);
+    private final FirebaseAuth firebaseAuth = mock(FirebaseAuth.class);
+    private final EmailController emailController = mock(EmailController.class);
+    private final UserService userService = new UserServiceImpl(emailController, firebaseAuth, firestore);
 
     // get profile tests
     @Test
     void can_get_user_profile() throws ExecutionException, InterruptedException {
         // Arrange
         String uid = "123456789";
+        UserTestDataBuilder userTestDataBuilder = new UserTestDataBuilder();
+        Profile profile = userTestDataBuilder.buildProfile();
         Profile expectedProfile = userTestDataBuilder.buildProfile();
+
+        // Mock
+        CollectionReference collectionReference = mock(CollectionReference.class);
+        DocumentReference documentReference = mock(DocumentReference.class);
+        ApiFuture<DocumentSnapshot> future = mock(ApiFuture.class);
+        DocumentSnapshot snapshot = mock(DocumentSnapshot.class);
+
+        when(firestore.collection("user")).thenReturn(collectionReference);
+        when(collectionReference.document(uid)).thenReturn(documentReference);
+        when(documentReference.get()).thenReturn(future);
+        when(future.get()).thenReturn(snapshot);
+        when(snapshot.toObject(Profile.class)).thenReturn(expectedProfile);
 
         // Act
         Profile result = userService.getProfile(uid);
 
         // Assert
         assertEquals(expectedProfile.getUsername(), result.getUsername());
+        verify(firestore, times(1)).collection("user");
+        verify(collectionReference, times(1)).document(uid);
+        verify(documentReference, times(1)).get();
     }
 
     @Test
     void can_not_get_profile_when_user_not_existing() throws ExecutionException, InterruptedException {
         // Arrange
-        String uid = "nonexistinguid";
+        String uid = "123456789";
+        UserTestDataBuilder userTestDataBuilder = new UserTestDataBuilder();
+        Profile profile = userTestDataBuilder.buildProfile();
+        Profile expectedProfile = userTestDataBuilder.buildProfile();
 
-        // Set up the mock behavior
-        Mockito.when(userService.getProfile(uid)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        // Mock
+        CollectionReference collectionReference = mock(CollectionReference.class);
+        DocumentReference documentReference = mock(DocumentReference.class);
+        ApiFuture<DocumentSnapshot> future = mock(ApiFuture.class);
+        DocumentSnapshot snapshot = mock(DocumentSnapshot.class);
 
-        // Act and Assert
-        assertThrows(ResponseStatusException.class, () -> userService.getProfile(uid));
+        when(firestore.collection("user")).thenReturn(collectionReference);
+        when(collectionReference.document(uid)).thenReturn(documentReference);
+        when(documentReference.get()).thenReturn(future);
+        when(future.get()).thenReturn(snapshot);
+        when(snapshot.exists()).thenReturn(false);
+
+        // Act
+        Profile result = userService.getProfile(uid);
+
+        // Assert
+        assertNull(result);
+        verify(firestore, times(1)).collection("user");
+        verify(collectionReference, times(1)).document(uid);
+        verify(documentReference, times(1)).get();
     }
 
     // change username tests
     @Test
-    void can_not_change_username_to_existing_username() throws InterruptedException, ExecutionException {
+    public void can_not_change_username_to_existing_username() throws InterruptedException, ExecutionException {
         // Arrange
         String existingUsername = "existingUser";
         String newUsername = existingUsername;
         String uid = "123456789";
+        UserTestDataBuilder userTestDataBuilder = new UserTestDataBuilder();
+        Profile profile = userTestDataBuilder.buildProfile();
+        Profile expectedProfile = userTestDataBuilder.buildProfile();
 
-        // Set up the mock behavior
-        Mockito.when(userService.usernameExists(newUsername)).thenReturn(true);
-        Mockito.when(userService.changeUsername(newUsername, uid)).thenReturn(ResponseEntity.badRequest().build());
+        // Mock
+        CollectionReference collectionReference = mock(CollectionReference.class);
+        when(firestore.collection("user")).thenReturn(collectionReference);
+        Query query = mock(Query.class);
+        when(collectionReference.whereEqualTo("username", existingUsername)).thenReturn(query);
+        ApiFuture<QuerySnapshot> future = mock(ApiFuture.class);
+        when(query.get()).thenReturn(future);
+        QuerySnapshot snapshot = mock(QuerySnapshot.class);
+        when(future.get()).thenReturn(snapshot);
+        when(snapshot.isEmpty()).thenReturn(false);
 
         // Act
         ResponseEntity<String> response = userService.changeUsername(newUsername, uid);
@@ -141,15 +117,34 @@ class UserServiceImplTests {
     }
 
     @Test
-    void can_change_username_when_username_does_not_exist() throws InterruptedException, ExecutionException {
+    void can_change_username_when_username_does_not_exist() throws ExecutionException, InterruptedException {
         // Arrange
         String existingUsername = "existingUser";
-        String newUsername = "newUsername";
+        String newUsername = existingUsername;
         String uid = "123456789";
+        UserTestDataBuilder userTestDataBuilder = new UserTestDataBuilder();
+        Profile profile = userTestDataBuilder.buildProfile();
 
-        // Set up the mock behavior
-        Mockito.when(userService.usernameExists(newUsername)).thenReturn(false);
-        Mockito.when(userService.changeUsername(newUsername, uid)).thenReturn(ResponseEntity.ok(newUsername));
+        // Mock
+        CollectionReference collectionReference = mock(CollectionReference.class);
+        when(firestore.collection("user")).thenReturn(collectionReference);
+        DocumentReference documentReference = mock(DocumentReference.class);
+        when(collectionReference.document(uid)).thenReturn(documentReference);
+        ApiFuture<DocumentSnapshot> future = mock(ApiFuture.class);
+        DocumentSnapshot snapshot = mock(DocumentSnapshot.class);
+        when(documentReference.get()).thenReturn(future);
+        when(future.get()).thenReturn(snapshot);
+        when(snapshot.exists()).thenReturn(true);
+        when(snapshot.toObject(Profile.class)).thenReturn(profile);
+        when(documentReference.set(any(Profile.class))).thenReturn(null);
+
+        Query query = mock(Query.class);
+        when(collectionReference.whereEqualTo("username", existingUsername)).thenReturn(query);
+        ApiFuture<QuerySnapshot> queryFuture = mock(ApiFuture.class);
+        when(query.get()).thenReturn(queryFuture);
+        QuerySnapshot querySnapshot = mock(QuerySnapshot.class);
+        when(queryFuture.get()).thenReturn(querySnapshot);
+        when(querySnapshot.isEmpty()).thenReturn(true);
 
         // Act
         ResponseEntity<String> response = userService.changeUsername(newUsername, uid);
@@ -157,6 +152,7 @@ class UserServiceImplTests {
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(newUsername, response.getBody());
+
     }
 
     @Test
@@ -165,25 +161,50 @@ class UserServiceImplTests {
         String newUsername = "";
         String uid = "123456789";
 
+        // Mock UserService
+        UserService userService = mock(UserService.class);
+
         // Set up the mock behavior
-        Mockito.when(userService.changeUsername(newUsername, uid)).thenReturn(ResponseEntity.badRequest().build());
+        ResponseEntity<String> badRequestResponse = ResponseEntity.badRequest().build();
+        when(userService.changeUsername(eq(newUsername), eq(uid))).thenReturn(badRequestResponse);
 
         // Act
         ResponseEntity<String> response = userService.changeUsername(newUsername, uid);
 
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        verify(userService).changeUsername(eq(newUsername), eq(uid));
     }
 
     @Test
     void can_add_username_with_unconventional_characters() throws InterruptedException, ExecutionException {
         // Arrange
-        String newUsername = "ユーザー名";
+        String existingUsername = "ユーザー名";
+        String newUsername = existingUsername;
         String uid = "123456789";
+        UserTestDataBuilder userTestDataBuilder = new UserTestDataBuilder();
+        Profile profile = userTestDataBuilder.buildProfile();
 
-        // Set up the mock behavior
-        Mockito.when(userService.usernameExists(newUsername)).thenReturn(false);
-        Mockito.when(userService.changeUsername(newUsername, uid)).thenReturn(ResponseEntity.ok(newUsername));
+        // Mock
+        CollectionReference collectionReference = mock(CollectionReference.class);
+        when(firestore.collection("user")).thenReturn(collectionReference);
+        DocumentReference documentReference = mock(DocumentReference.class);
+        when(collectionReference.document(uid)).thenReturn(documentReference);
+        ApiFuture<DocumentSnapshot> future = mock(ApiFuture.class);
+        DocumentSnapshot snapshot = mock(DocumentSnapshot.class);
+        when(documentReference.get()).thenReturn(future);
+        when(future.get()).thenReturn(snapshot);
+        when(snapshot.exists()).thenReturn(true);
+        when(snapshot.toObject(Profile.class)).thenReturn(profile);
+        when(documentReference.set(any(Profile.class))).thenReturn(null);
+
+        Query query = mock(Query.class);
+        when(collectionReference.whereEqualTo("username", existingUsername)).thenReturn(query);
+        ApiFuture<QuerySnapshot> queryFuture = mock(ApiFuture.class);
+        when(query.get()).thenReturn(queryFuture);
+        QuerySnapshot querySnapshot = mock(QuerySnapshot.class);
+        when(queryFuture.get()).thenReturn(querySnapshot);
+        when(querySnapshot.isEmpty()).thenReturn(true);
 
         // Act
         ResponseEntity<String> response = userService.changeUsername(newUsername, uid);
