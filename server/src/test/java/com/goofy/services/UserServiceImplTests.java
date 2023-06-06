@@ -1,5 +1,6 @@
 package com.goofy.services;
 
+import com.goofy.builders.UserTestDataBuilder;
 import com.goofy.controllers.EmailController;
 import com.goofy.models.Profile;
 import com.google.api.core.ApiFuture;
@@ -89,7 +90,7 @@ class UserServiceImplTests {
 
     // change username tests
     @Test
-    public void can_not_change_username_to_existing_username() throws InterruptedException, ExecutionException {
+    void can_not_change_username_to_existing_username() throws InterruptedException, ExecutionException {
         // Arrange
         String existingUsername = "existingUser";
         String newUsername = existingUsername;
@@ -213,6 +214,4 @@ class UserServiceImplTests {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(newUsername, response.getBody());
     }
-
-
 }

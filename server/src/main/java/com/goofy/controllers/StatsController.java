@@ -1,4 +1,5 @@
 package com.goofy.controllers;
+import com.goofy.builders.StatsDataBuilder;
 import com.goofy.models.*;
 import com.goofy.services.StatsService;
 import com.goofy.services.TripService;
@@ -43,11 +44,12 @@ public class StatsController {
                 .distinct()
                 .count();
 
-        Stats statsToUpdate = new Stats();
-        statsToUpdate.setTotalMinutes(totalTripDuration);
-        statsToUpdate.setMostUsedStartLocation(mostUsedStartStation);
-        statsToUpdate.setMostVisitedStation(mostVisitedStation);
-        statsToUpdate.setTotalStations((int) totalUniqueStationsVisited);
+        Stats statsToUpdate = new StatsDataBuilder()
+                .withMostUsedStartLocation(mostUsedStartStation)
+                .withMostVisitedStation(mostVisitedStation)
+                .withTotalMinutes(totalTripDuration)
+                .withTotalStations((int) totalUniqueStationsVisited)
+                .buildStats();
 
         String statsId = this.statsService.updateStats(statsToUpdate, principal.getName());
         return ResponseEntity.ok(statsId);

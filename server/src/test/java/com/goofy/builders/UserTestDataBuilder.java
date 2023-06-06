@@ -1,9 +1,9 @@
-package com.goofy.services;
+package com.goofy.builders;
 
 import com.goofy.dtos.UserDTO;
 import com.goofy.models.Profile;
 
-class UserTestDataBuilder {
+public class UserTestDataBuilder {
     public Profile buildProfile() {
         String userName = "mandylbbh";
         String email = "test@test.nl";

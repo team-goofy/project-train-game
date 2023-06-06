@@ -1,6 +1,5 @@
 package com.goofy.services;
 
-import com.goofy.models.Profile;
 import com.goofy.models.Stats;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
