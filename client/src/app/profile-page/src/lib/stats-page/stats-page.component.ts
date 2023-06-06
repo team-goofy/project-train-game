@@ -36,8 +36,6 @@ export class StatsPageComponent implements OnInit {
 
   getUserStats(): void {
     this.authService.getStatsByUid().pipe().subscribe(stats => {
-      console.log(stats);
-
       if (stats.totalStations === 0) {
         this.state.hasTrips = false;
         return;
