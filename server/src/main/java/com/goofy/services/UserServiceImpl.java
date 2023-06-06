@@ -50,9 +50,9 @@ public class UserServiceImpl implements UserService {
             this.firestore.collection("user").document(createdUser.getUid()).set(userData);
 
             // Create Stats-Document where the user's stats will be stored
-            Map<String, String> statsData = Map.of(
-                    "totalStations", String.valueOf(0),
-                    "totalMinutes", String.valueOf(0),
+            Map<String, Object> statsData = Map.of(
+                    "totalStations", 0,
+                    "totalMinutes", 0,
                     "mostVisitedStation", "",
                     "mostUsedStartLocation", "");
             this.firestore.collection("stats").document(createdUser.getUid()).set(statsData);
