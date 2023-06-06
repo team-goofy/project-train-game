@@ -4,17 +4,16 @@ import com.goofy.dtos.TripDTO;
 import com.goofy.dtos.TripImageDTO;
 import com.goofy.exceptions.NoContentTypeException;
 import com.goofy.exceptions.TripImageAlreadyExistsException;
+import com.goofy.exceptions.UnsupportedFileExtensionException;
 import com.goofy.models.Departure;
 import com.goofy.models.Trip;
 import com.goofy.models.TripFilter;
+import com.goofy.utils.UUIDGenerator;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.firebase.cloud.StorageClient;
-
-import java.util.Optional;
-import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 
@@ -32,6 +31,7 @@ import org.springframework.stereotype.Service;
 public class TripServiceImpl implements TripService {
     private final StorageClient storage;
     private final Firestore firestore;
+    private final UUIDGenerator uuidGenerator;
 
     @Override
     public BlobId saveImage(TripImageDTO image, String uid) throws IOException {
@@ -51,8 +51,7 @@ public class TripServiceImpl implements TripService {
         Blob blob = storage.bucket().get(blobId);
 
         if (blob != null && blob.exists()) {
-            throw new TripImageAlreadyExistsException(String.format(
-                    "Image at at this station for this trip already exists", stationUic, tripId, uid));
+            throw new TripImageAlreadyExistsException("Image at at this station for this trip already exists");
         }
 
         return storage.bucket().create(blobId, inputStream, contentType).getBlobId();
@@ -61,7 +60,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public String saveTrip(TripDTO trip, String uid) {
         boolean hasTripId = trip.getTripId() != null;
-        String tripId = hasTripId ? trip.getTripId() : UUID.randomUUID().toString();
+        String tripId = hasTripId ? trip.getTripId() : uuidGenerator.generateUUID().toString();
 
         Map<String, Object> saveTrip = Map.of(
                 "tripId", tripId,
@@ -121,11 +120,11 @@ public class TripServiceImpl implements TripService {
         return trip.exists() ? trip.toObject(Trip.class) : null;
     }
 
-    private static String getFileExtension(String contentType) {
+    private static String getFileExtension(String contentType) throws UnsupportedFileExtensionException {
         return switch (contentType) {
             case "image/jpeg" -> ".jpg";
             case "image/png" -> ".png";
-            default -> "";
+            default -> throw new UnsupportedFileExtensionException("File extension is not supported");
         };
     }
 
