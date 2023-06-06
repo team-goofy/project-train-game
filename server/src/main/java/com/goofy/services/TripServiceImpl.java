@@ -4,6 +4,7 @@ import com.goofy.dtos.TripDTO;
 import com.goofy.dtos.TripImageDTO;
 import com.goofy.exceptions.NoContentTypeException;
 import com.goofy.exceptions.TripImageAlreadyExistsException;
+import com.goofy.exceptions.UnsupportedFileExtensionException;
 import com.goofy.models.Departure;
 import com.goofy.models.Trip;
 import com.goofy.models.TripFilter;
@@ -50,8 +51,7 @@ public class TripServiceImpl implements TripService {
         Blob blob = storage.bucket().get(blobId);
 
         if (blob != null && blob.exists()) {
-            throw new TripImageAlreadyExistsException(String.format(
-                    "Image at at this station for this trip already exists", stationUic, tripId, uid));
+            throw new TripImageAlreadyExistsException("Image at at this station for this trip already exists");
         }
 
         return storage.bucket().create(blobId, inputStream, contentType).getBlobId();
@@ -120,11 +120,11 @@ public class TripServiceImpl implements TripService {
         return trip.exists() ? trip.toObject(Trip.class) : null;
     }
 
-    private static String getFileExtension(String contentType) {
+    private static String getFileExtension(String contentType) throws UnsupportedFileExtensionException {
         return switch (contentType) {
             case "image/jpeg" -> ".jpg";
             case "image/png" -> ".png";
-            default -> "";
+            default -> throw new UnsupportedFileExtensionException("File extension is not supported");
         };
     }
 

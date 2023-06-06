@@ -1,15 +1,30 @@
 package com.goofy.services;
 
 import com.goofy.dtos.TripDTO;
+import com.goofy.dtos.TripImageDTO;
+import com.goofy.exceptions.NoContentTypeException;
+import com.goofy.exceptions.TripImageAlreadyExistsException;
+import com.goofy.exceptions.UnsupportedFileExtensionException;
 import com.goofy.models.Departure.RouteStation;
 import com.goofy.models.Trip;
 import com.goofy.utils.UUIDGenerator;
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.SetOptions;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Bucket;
 import com.google.firebase.cloud.StorageClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -145,5 +160,92 @@ class TripServiceImplTest {
         assertNull(result);
         verify(firestore.collection("trip"), times(1)).document(tripId);
         verify(docRef, times(1)).get();
+    }
+
+    @Test
+    public void saveImage_NoContentType_ThrowsNoContentTypeException() {
+        // Arrange
+        String uid = "testUid";
+        TripImageDTO tripImageDTO = new TripImageDTO();
+        MockMultipartFile image = new MockMultipartFile("image", "image.jpg", null, "image data".getBytes());
+        tripImageDTO.setImage(image);
+        tripImageDTO.setTripId("testTripId");
+        tripImageDTO.setUicCode("testUicCode");
+
+        // Act and Assert
+        assertThrows(NoContentTypeException.class, () -> tripService.saveImage(tripImageDTO, uid));
+        verifyNoInteractions(storage);
+    }
+
+    @Test
+    public void saveImage_UnsupportedFileExtensions_ThrowsUnsupportedFileExtensionException() throws IOException {
+        // Arrange
+        String uid = "testUid";
+        TripImageDTO tripImageDTO = new TripImageDTO();
+        MockMultipartFile image = new MockMultipartFile("gif", "image.gif", "image/gif", "image data".getBytes());
+        tripImageDTO.setImage(image);
+        tripImageDTO.setTripId("testTripId");
+        tripImageDTO.setUicCode("testUicCode");
+
+        // Act and Assert
+        assertThrows(UnsupportedFileExtensionException.class, () -> tripService.saveImage(tripImageDTO, uid));
+        verifyNoInteractions(storage);
+    }
+
+    @Test
+    public void saveImage_TripImageAlreadyExists_ThrowsTripImageAlreadyExistsException() throws IOException {
+        // Arrange
+        String uid = "testUid";
+        TripImageDTO tripImageDTO = new TripImageDTO();
+        MockMultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", "image data".getBytes());
+        tripImageDTO.setImage(image);
+        tripImageDTO.setTripId("testTripId");
+        tripImageDTO.setUicCode("testUicCode");
+
+        // Mock
+        Blob blob = mock(Blob.class);
+        when(blob.exists()).thenReturn(true);
+        when(storage.bucket()).thenReturn(mock(Bucket.class));
+        when(storage.bucket().get(anyString())).thenReturn(blob);
+
+        // Act and Assert
+        assertThrows(
+            TripImageAlreadyExistsException.class, () -> tripService.saveImage(tripImageDTO, uid), 
+            "Image at at this station for this trip already exists"
+        );
+        verify(storage.bucket(), times(1)).get(anyString());     
+        verify(blob, times(1)).exists();
+        verify(storage.bucket(), times(0)).create(anyString(), any(byte[].class), anyString());
+    }
+
+    @Test
+    public void saveImage_ValidInput_ReturnsBlobId() throws IOException {
+        // Arrange
+        String uid = "testUid";
+        TripImageDTO tripImageDTO = new TripImageDTO();
+        MockMultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", "image data".getBytes());
+        tripImageDTO.setImage(image);
+        tripImageDTO.setTripId("testTripId");
+        tripImageDTO.setUicCode("testUicCode");
+
+        // Mock
+        Blob blob = mock(Blob.class);
+        when(blob.exists()).thenReturn(false);
+        when(storage.bucket()).thenReturn(mock(Bucket.class));
+        when(storage.bucket().get(anyString())).thenReturn(blob);
+        when(storage.bucket().create(anyString(), any(InputStream.class), anyString())).thenReturn(blob);        
+        
+        BlobId blobId = BlobId.of("bucketName", "blobName");
+        
+        when(blob.getBlobId()).thenReturn(blobId);
+
+        // Act
+        BlobId returnedBlobId = tripService.saveImage(tripImageDTO, uid);
+
+        // Assert
+        assertEquals(blobId, returnedBlobId);
+        verify(storage.bucket(), times(1)).get(anyString());
+        verify(blob, times(1)).exists();
+        verify(storage.bucket(), times(1)).create(anyString(), any(InputStream.class), anyString());
     }
 }
