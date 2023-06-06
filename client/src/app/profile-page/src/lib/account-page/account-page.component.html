@@ -1,6 +1,10 @@
 <div class="parent">
   <div class="centered">
     <h1 class="mat-headline-2 text-centered">Account</h1>
+    <ng-template *ngIf="state.loading">
+      <mat-spinner></mat-spinner>
+    </ng-template>
+
       <form [formGroup]="accountEditForm">
         <div class="form-fields">
         <mat-form-field appearance="outline">

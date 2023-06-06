@@ -2,10 +2,51 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  /* Add some padding to the parent container */
+  padding: 0 20px 20px;
+  box-sizing: border-box; /* Include padding in the width calculation */
 }
 
 .centered {
+  width: 100%;
+  max-width: 500px; /* Adjust the max-width value as needed */
+  margin-top: 5%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 5%;
 }
+
+.text-centered {
+  text-align: center;
+}
+
+.mat-mdc-form-field + .mat-mdc-form-field {
+  margin-left: 8px;
+}
+
+.number-btn{
+  margin-right: 5%;
+  margin-left:0;
+  padding-left:0;
+  color: white;
+  box-shadow: none !important;
+}
+.mat-expansion-panel{
+  margin-bottom: 2%;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.sort-btn{
+  margin-bottom: 5%;
+}
+
+@media screen and (max-width: 1280px) {
+  .trip-title-text {
+    font-size: 90%;
+  }
+}
+

@@ -9,4 +9,5 @@ public class TripDTO {
     private String tripId;
     private List<RouteStation> routeStations;
     private Boolean isEnded;
+    private String tripEndDate;
 }

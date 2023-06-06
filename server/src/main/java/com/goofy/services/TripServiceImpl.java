@@ -67,7 +67,8 @@ public class TripServiceImpl implements TripService {
                 "tripId", tripId,
                 "uid", uid,
                 "isEnded", trip.getIsEnded(),
-                "routeStations", trip.getRouteStations());
+                "routeStations", trip.getRouteStations(),
+                "tripEndDate", trip.getTripEndDate());
 
         DocumentReference tripRef = firestore.collection("trip").document(tripId);
 

@@ -88,6 +88,7 @@ export class StartPageComponent implements OnInit, OnDestroy {
       const trip : Trip = {
         routeStations: station ? [ {uicCode: station.UICCode, mediumName: station.namen.middel} ] : [],
         isEnded: false,
+        tripEndDate: ""
       }
       this._tripService.saveTrip(trip).subscribe({
         next: (response) => {

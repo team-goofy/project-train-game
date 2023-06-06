@@ -82,6 +82,7 @@ export class PictureUploadPageComponent implements OnInit {
         }),
         switchMap((trip: Trip) => {
           trip.isEnded = true;
+          trip.tripEndDate = new Date().toISOString();
           return this._tripService.saveTrip(trip).pipe(
             catchError(({ error }) => {
               this._snackbar.open(error.errors.join(), "Close");
