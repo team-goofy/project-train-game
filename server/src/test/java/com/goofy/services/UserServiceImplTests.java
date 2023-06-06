@@ -3,18 +3,25 @@ package com.goofy.services;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+
 @SpringBootTest
-public class UserServiceImplTests {
+class UserServiceImplTests {
 
     // check username tests
     @Test
     void check_if_username_exists(){
+        String username = "mandylbbh";
 
+//        assertNotSame();
     }
 
     @Test
     void check_if_username_does_not_exist(){
+        String username = "mandylbbh";
 
+//        assertSame();
     }
 
     //Save user tests
