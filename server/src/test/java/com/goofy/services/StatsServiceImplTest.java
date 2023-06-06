@@ -122,6 +122,7 @@ class StatsServiceImplTest {
         verify(documentReference, times(1)).set(anyMap(), any());
     }
 
+    // Test: Update stats of a user that does not exist
     @Test
     void test_update_stats_of_non_existing_user_exception() throws ExecutionException, InterruptedException {
         // Arrange
