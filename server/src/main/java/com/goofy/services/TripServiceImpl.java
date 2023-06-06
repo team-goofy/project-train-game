@@ -7,14 +7,12 @@ import com.goofy.exceptions.TripImageAlreadyExistsException;
 import com.goofy.models.Departure;
 import com.goofy.models.Trip;
 import com.goofy.models.TripFilter;
+import com.goofy.utils.UUIDGenerator;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.firebase.cloud.StorageClient;
-
-import java.util.Optional;
-import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 
@@ -32,6 +30,7 @@ import org.springframework.stereotype.Service;
 public class TripServiceImpl implements TripService {
     private final StorageClient storage;
     private final Firestore firestore;
+    private final UUIDGenerator uuidGenerator;
 
     @Override
     public BlobId saveImage(TripImageDTO image, String uid) throws IOException {
@@ -61,7 +60,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public String saveTrip(TripDTO trip, String uid) {
         boolean hasTripId = trip.getTripId() != null;
-        String tripId = hasTripId ? trip.getTripId() : UUID.randomUUID().toString();
+        String tripId = hasTripId ? trip.getTripId() : uuidGenerator.generateUUID().toString();
 
         Map<String, Object> saveTrip = Map.of(
                 "tripId", tripId,
