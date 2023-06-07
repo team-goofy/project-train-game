@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/mail")
 public class EmailController {
     private final Environment env;
-
     private final EmailService emailService;
     private final FirebaseAuth firebaseAuth;
 
@@ -82,8 +81,4 @@ public class EmailController {
         emailService.sendEmail(env.getProperty("spring.mail.from"), email, subject, messageText);
         return new ResponseEntity<>("Reset password mail send successfully", HttpStatus.OK);
     }
-
-
-
-
 }
