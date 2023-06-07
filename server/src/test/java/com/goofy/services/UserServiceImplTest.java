@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(org.springframework.test.context.junit.jupiter.SpringExtension.class)
 @SpringBootTest
-class UserServiceImplTests {
+class UserServiceImplTest {
 
     private final Firestore firestore = mock(Firestore.class);
     private final FirebaseAuth firebaseAuth = mock(FirebaseAuth.class);
