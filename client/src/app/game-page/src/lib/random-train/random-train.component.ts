@@ -18,6 +18,8 @@ export class RandomTrainComponent implements OnInit {
   private _snackbar: MatSnackBar = inject(MatSnackBar);
   private _router: Router = inject(Router);
 
+  private _trainIsNull: boolean = false;
+
   private tripId: string = "";
   private uicCode: string = "";
   private departureLocation: string = "";
@@ -39,8 +41,13 @@ export class RandomTrainComponent implements OnInit {
   getRandomTrain(): void {
     this._randomTrainService.getRandomTrain(this.uicCode)
       .subscribe(train => {
-        this._randomTrain = train
-        this._randomTrain.departure.plannedDateTime = train.departure.plannedDateTime;
+        if(train !== null){
+          this._randomTrain = train
+          this._randomTrain.departure.plannedDateTime = train.departure.plannedDateTime;
+        }else{
+          this._trainIsNull = true;
+        }
+
       });
   }
 
@@ -84,4 +91,10 @@ export class RandomTrainComponent implements OnInit {
   get randomTrain(): ExitStationTrain {
     return this._randomTrain;
   }
+
+
+  get trainIsNull(): boolean {
+    return this._trainIsNull;
+  }
+
 }

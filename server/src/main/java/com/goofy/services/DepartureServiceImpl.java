@@ -22,6 +22,10 @@ public class DepartureServiceImpl implements DepartureService {
         ZonedDateTime timeMax = timeNow.plusMinutes(30);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX");
 
+        if (departures == null || departures.isEmpty()) {
+            return List.of();
+        }
+
         return departures.stream()
                 .filter(departure -> {
                     ZonedDateTime timestamp = ZonedDateTime.parse(departure.getPlannedDateTime(), formatter);
@@ -43,11 +47,21 @@ public class DepartureServiceImpl implements DepartureService {
         Departure randomDeparture = filteredDepartures.get(randomDepartureIndex);
         List<RouteStation> stations = randomDeparture.getRouteStations();
 
-        if(stations.isEmpty()) {
-            throw new NoStationFoundException("This station has no route stations.");
+//        if(stations == null || stations.isEmpty()) {
+//            throw new NoStationFoundException("This station has no route stations.");
+//        }
+        int randomExitStationIndex = -1; // Initialize with a negative value
+
+        if (stations != null && !stations.isEmpty()) {
+            randomExitStationIndex = this.random.nextInt(stations.size());
+            RouteStation randomExitStation = stations.get(randomExitStationIndex);
+        } else {
+            // Handle the error in the front-end
+            // You can set a flag or return a specific value indicating the error
+            // For example:
+            return null; // Or any other value that represents the error condition
         }
 
-        int randomExitStationIndex = this.random.nextInt(stations.size());
         RouteStation randomExitStation = stations.get(randomExitStationIndex);
         return new ExitStationTrain(randomDeparture, randomExitStation);
     }
