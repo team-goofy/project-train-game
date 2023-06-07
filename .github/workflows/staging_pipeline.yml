@@ -10,12 +10,28 @@ env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
 jobs:
-  deploy-fe:
+  test-be:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Setup JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+      - name: Test BE
+        run: |
+          cd server
+          mvn clean test
+    continue-on-error: false
 
+  deploy-fe:
+    needs: test-be
+    runs-on: ubuntu-latest
+    if: ${{ needs.test-be.result == 'success' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Deploy to Heroku FE
         run: |
           set GIT_TRACE_PACKET=1
@@ -31,7 +47,9 @@ jobs:
           git branch -D splitting-fe
 
   deploy-be:
+    needs: test-be
     runs-on: ubuntu-latest
+    if: ${{ needs.test-be.result == 'success' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
