@@ -5,10 +5,10 @@ import com.goofy.dtos.UserDTO;
 import com.goofy.exceptions.UsernameExistsException;
 import com.goofy.models.Profile;
 import com.google.api.core.ApiFuture;
-import com.google.cloud.AsyncPageImpl;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserRecord;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,17 +17,12 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final EmailController emailController;
     private final FirebaseAuth firebaseAuth;
     private final Firestore firestore;
-
-    public UserServiceImpl(EmailController emailController, FirebaseAuth firebaseAuth, Firestore firestore) {
-        this.emailController = emailController;
-        this.firebaseAuth = firebaseAuth;
-        this.firestore = firestore;
-    }
 
     public UserRecord saveUser(UserDTO user) throws Exception {
         try {

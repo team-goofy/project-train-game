@@ -91,8 +91,11 @@ export class AccountPageComponent implements OnInit {
     this.accountEditForm.controls['userEmailForm'].disable();
     this.accountEditForm.controls['userUsername'].disable();
 
-    this.userEmail = this.authService.getUserData().email;
+    const userData = this.authService.getUserData();
+    if(userData && userData.email){
+      this.userEmail = userData.email;
 
+    }
 
     this.authService.getUsername()
       .subscribe({
@@ -114,7 +117,7 @@ export class AccountPageComponent implements OnInit {
       });
   }
 
-  private initialState(): State {
+  initialState(): State {
     return {
       loading: false,
       error: null,
@@ -257,5 +260,7 @@ export class AccountPageComponent implements OnInit {
   get usernameValue(): string {
     return this.username;
   }
+
+
 
 }
