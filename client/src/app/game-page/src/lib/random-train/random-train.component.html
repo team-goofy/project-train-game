@@ -37,7 +37,7 @@
         <mat-icon class="icon">location_on</mat-icon>
         Missed train
       </button>
-      <button mat-raised-button color="accent" (click)="saveTrip()">
+      <button *ngIf="randomTrain" mat-raised-button color="accent" (click)="saveTrip()">
         <mat-icon class="icon">train</mat-icon>
         Arrived
       </button>
