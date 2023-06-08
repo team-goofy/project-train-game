@@ -13,7 +13,7 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngIf="!trainIsNull && randomTrain">
+    <ng-container *ngIf="randomTrain">
       <div class="title-container">
         <p class="mat-headline-6 departure-title">Train towards: <b>{{randomTrain.departure.direction}}</b></p>
         <p class="mat-h2 time-title">Departure time:</p>
@@ -23,7 +23,7 @@
         <p class="mat-headline-5"><b>{{randomTrain.exitStation.mediumName}}</b></p>
       </div>
     </ng-container>
-    <ng-container *ngIf="trainIsNull">
+    <ng-container *ngIf="!randomTrain">
       <div class="title-container">
         <p class="mat-headline-6 departure-title">There are no trains departing from this station in the next 30 minutes. Please come back later 😅</p>
       </div>
