@@ -43,13 +43,13 @@
         <div class="form-fields">
           <!--    scan or click code-->
           <div style="display: flex;">
-            <qrcode (qrCodeURL)="onChangeURL($event)" [qrdata]="myAngularxQrCode" [width]="245" [errorCorrectionLevel]="'M'" [margin]="2"></qrcode>
+            <qrcode class="text-centered" (qrCodeURL)="onChangeURL($event)" [qrdata]="myAngularxQrCode" [width]="245" [errorCorrectionLevel]="'M'" [margin]="2"></qrcode>
 <!--            REMOVE INLINE STYLE-->
             <div class="content" style="display: flex; flex-direction: column;">
               <h2 class="mat-headline-6 text-centered" style="padding-top: 6px">SCAN THE QR CODE</h2>
               <p class="text-centered">Open the authentication app and <br>scan the QR using your phone</p>
               <p class="text-centered">OR: manually add this code: <b>{{secret}}</b> to your authentication app</p>
-              <form [formGroup]="twoFAForm">
+              <form [formGroup]="twoFAForm" class="text-centered">
                 <mat-form-field appearance="outline">
                   <mat-label>6-digit code</mat-label>
                   <input type="number" matInput formControlName="phoneNumber" pattern="[0-9]*">

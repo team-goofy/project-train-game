@@ -26,5 +26,10 @@
   text-align: center;
 }
 
-.content
+@media (max-width: 600px) {
+  .form-fields > div {
+    flex-direction: column;
+  }
+}
+
 
