@@ -54,18 +54,16 @@ export class LoginPageComponent implements OnInit{
     };
 
     this.authService.login(user).subscribe({
-      next: (success) => {
-        let ref = this.snackbar.open(
+      next: () => {
+        this.snackbar.open(
           "Logged in successfully",
           "",
           { horizontalPosition: 'end', duration: 2000 }
         );
 
-        ref.afterDismissed().subscribe(() => {
-          this.router.navigate(['/']);
-        });
+        this.router.navigate(['/']);
       },
-      error: (error) => {
+      error: () => {
         this.snackbar.open("Something went wrong, please try again", "", { horizontalPosition: 'end', duration: 3000 });
       }
     });

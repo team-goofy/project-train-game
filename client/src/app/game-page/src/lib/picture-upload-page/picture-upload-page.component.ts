@@ -111,15 +111,13 @@ export class PictureUploadPageComponent implements OnInit {
           ));
         }),
         tap(() => {
-          let ref = this._snackbar.open(
+          this._snackbar.open(
             "Your trip has ended!",
             "",
             { horizontalPosition: 'end', duration: 2000 }
           );
 
-          ref.afterDismissed().subscribe(() => {
-            this._router.navigate(['/']);
-          })
+          this._router.navigate(['/']);
         })
       ).subscribe();
     });

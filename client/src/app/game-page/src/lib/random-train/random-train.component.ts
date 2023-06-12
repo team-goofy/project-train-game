@@ -63,21 +63,18 @@ export class RandomTrainComponent implements OnInit {
         return this._tripService.saveTrip(trip);
       }),
       tap((response) => {
-        let ref = this._snackbar.open(
+        this._snackbar.open(
           "Your trip progress has been saved!",
           "",
           { horizontalPosition: 'end', duration: 2000 }
         );
 
-        ref.afterDismissed().subscribe(() => {
-          this._router.navigate(['game/picture-upload'],
-            {
-              queryParams: {
-                tripId: response.tripId,
-                uicCode: this._randomTrain.exitStation.uicCode,
-                location: this._randomTrain.exitStation.mediumName
-              }
-            });
+        this._router.navigate(['game/picture-upload'], {
+          queryParams: {
+            tripId: response.tripId,
+            uicCode: this._randomTrain.exitStation.uicCode,
+            location: this._randomTrain.exitStation.mediumName
+          }
         });
       })
     ).subscribe();
