@@ -3,7 +3,7 @@ import { RandomTrainService } from "../services/random-train.service";
 import { ExitStationTrain, Trip } from "@client/shared-models";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TripService } from "../../../../shared-services/src/lib/trip.service";
-import { switchMap, tap } from "rxjs";
+import { delay, switchMap, tap } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
@@ -21,6 +21,7 @@ export class RandomTrainComponent implements OnInit {
   private tripId: string = "";
   private uicCode: string = "";
   private departureLocation: string = "";
+  private _loading: boolean = false;
 
   get departureLocationValue(): string {
     return this.departureLocation;
@@ -37,16 +38,22 @@ export class RandomTrainComponent implements OnInit {
   }
 
   getRandomTrain(): void {
+    this._loading = true;
+
     this._randomTrainService.getRandomTrain(this.uicCode)
+      .pipe(delay(1000))
       .subscribe(train => {
         if(train !== null) {
           this._randomTrain = train
           this._randomTrain.departure.plannedDateTime = train.departure.plannedDateTime;
+          this._loading = false;
         }
       });
   }
 
   saveTrip(): void {
+    this._loading = true;
+
     this._tripService.getTripById(this.tripId).pipe(
       switchMap((trip: Trip) => {
         trip.routeStations.push(
@@ -63,6 +70,7 @@ export class RandomTrainComponent implements OnInit {
         return this._tripService.saveTrip(trip);
       }),
       tap((response) => {
+        this._loading = false;
         this._snackbar.open(
           "Your trip progress has been saved!",
           "",
@@ -82,5 +90,9 @@ export class RandomTrainComponent implements OnInit {
 
   get randomTrain(): ExitStationTrain {
     return this._randomTrain;
+  }
+
+  public get loading(): boolean {
+    return this._loading;
   }
 }
