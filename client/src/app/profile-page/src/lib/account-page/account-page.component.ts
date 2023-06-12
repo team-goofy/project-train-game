@@ -43,6 +43,7 @@ export class AccountPageComponent implements OnInit {
 
   private username: string = "";
   private userEmail: string | null  = "";
+  private _secret: string = this.generateSecretKey(16);
 
   state: State;
 
@@ -51,7 +52,22 @@ export class AccountPageComponent implements OnInit {
 
   constructor() {
     this.state = this.initialState();
-    this.myAngularxQrCode = 'otpauth://totp/NoUserNameFound?secret=W4AU5VIXXCPZ3S6T&issuer=WanderTrains';
+  }
+
+  generateSecretKey(length: number): string {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+    let secret = '';
+
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * chars.length);
+      secret += chars[randomIndex];
+    }
+
+    return secret;
+  }
+
+  generateQRCode(): void {
+    this.myAngularxQrCode = `otpauth://totp/${this.username}?secret=W4AU5VIXXCPZ3S6T&issuer=WanderTrains`;
   }
 
   onChangeURL(url: SafeUrl) {
@@ -134,8 +150,7 @@ export class AccountPageComponent implements OnInit {
           this.accountEditForm.controls['userEmailForm'].setValue(this.userEmail);
           this.accountEditForm.controls['userUsername'].setValue(this.username);
 
-          // eigen functie waarin de QR name + secret komen
-          this.myAngularxQrCode = 'otpauth://totp/'+this.username+'?secret=W4AU5VsdfsdPZ3S6T&issuer=WanderTrains';
+          this.generateQRCode();
 
           this.state.loading = false;
           },
@@ -302,5 +317,7 @@ export class AccountPageComponent implements OnInit {
   }
 
 
-
+  get secret(): string {
+    return this._secret;
+  }
 }
