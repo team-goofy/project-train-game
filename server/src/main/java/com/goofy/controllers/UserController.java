@@ -46,4 +46,9 @@ public class UserController {
     public ResponseEntity<String> updateUserName(@RequestBody() @Valid String username, Principal principal) throws Exception {
         return userService.changeUsername(username, principal.getName());
     }
+
+    @PutMapping("/verify2FA")
+    public ResponseEntity<String> verify2FA(@RequestBody() @Valid String secret, String uid) throws Exception {
+        return userService.verify2FA(secret, uid);
+    }
 }

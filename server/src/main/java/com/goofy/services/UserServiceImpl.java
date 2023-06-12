@@ -76,7 +76,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public ResponseEntity<String> changeUsername(String newUsername, String uid) throws InterruptedException, ExecutionException {
-
         if (usernameExists(newUsername)) {
             return ResponseEntity.badRequest().build();
         } else {
@@ -105,4 +104,14 @@ public class UserServiceImpl implements UserService {
             }
         }
     }
+
+    public ResponseEntity<String> verify2FA(String secret, String uid) throws InterruptedException, ExecutionException {
+        DocumentReference userReference = this.firestore.collection("user").document(uid);
+
+        userReference.set(Map.of("secret", secret, "is2FaActivated", "true"), SetOptions.merge());
+
+        return ResponseEntity.ok("2FA activated");
+    }
+
+
 }

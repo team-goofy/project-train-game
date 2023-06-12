@@ -101,6 +101,15 @@ export class AuthService {
     return this.http.put<any>(`${this.baseUrl}/user/profileUsername`, username, httpOptions);
   }
 
+  verify2FA(secret: string): Observable<any> {
+    const httpOptions: Object = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      responseType: 'text'
+    }
+    console.log(secret);
+    return this.http.put<any>(`${this.baseUrl}/user/verify2FA`, {params: {secret: secret, uid: this.auth.currentUser!.uid}}, httpOptions);
+  }
+
   changeUserEmail(newUserEmail: string): Observable<any> {
     if (this.auth.currentUser) {
       if (newUserEmail != null && newUserEmail !== this.auth.currentUser.email) {

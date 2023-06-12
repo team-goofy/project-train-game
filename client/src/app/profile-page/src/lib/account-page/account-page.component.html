@@ -30,7 +30,8 @@
         <ng-container *ngIf="!state.editing">
           <button mat-raised-button color="primary" (click)="editingState()"> <mat-icon matSuffix>edit</mat-icon>Edit</button>
           <button mat-raised-button color="accent" (click)="changePassword()"><mat-icon matSuffix>security</mat-icon>Change password</button>
-          <button mat-raised-button color="accent" (click)="enable2FA()"><mat-icon matSuffix>security</mat-icon>Enable two factor authentication</button>
+          <button *ngIf="!twoFAEnabled" mat-raised-button color="accent" (click)="enable2FA()"><mat-icon matSuffix>security</mat-icon>Enable two factor authentication</button>
+          <button *ngIf="twoFAEnabled" mat-raised-button color="accent" (click)="enable2FA()"><mat-icon matSuffix>security</mat-icon>Disable two factor authentication</button>
         </ng-container>
 
         <ng-container *ngIf="state.editing">
@@ -52,19 +53,19 @@
               <form [formGroup]="twoFAForm" class="text-centered">
                 <mat-form-field appearance="outline">
                   <mat-label>6-digit code</mat-label>
-                  <input type="number" matInput formControlName="phoneNumber" pattern="[0-9]*">
+                  <input type="number" matInput formControlName="authCode" pattern="[0-9]*">
                   <mat-icon matSuffix>lock</mat-icon>
                   <mat-error>
-                    <span *ngIf="e['phoneNumber'].hasError('minlength')">Code must be 6 characters long</span>
-                    <span *ngIf="e['phoneNumber'].hasError('maxlength')">Code must be 6 characters long</span>
-                    <span *ngIf="e['phoneNumber'].hasError('required')">Code is required</span>
+                    <span *ngIf="e['authCode'].hasError('minlength')">Code must be 6 characters long</span>
+                    <span *ngIf="e['authCode'].hasError('maxlength')">Code must be 6 characters long</span>
+                    <span *ngIf="e['authCode'].hasError('required')">Code is required</span>
                   </mat-error>
                 </mat-form-field>
               </form>
             </div>
           </div>
 
-          <button mat-raised-button color="primary" (click)="cancel()"><mat-icon matSuffix>edit</mat-icon>Verify 2FA</button>
+          <button mat-raised-button color="primary" (click)="verify2FA()"><mat-icon matSuffix>edit</mat-icon>Verify 2FA</button>
           <button mat-raised-button color="accent" (click)="cancel()"><mat-icon matSuffix>close</mat-icon>Cancel</button>
         </div>
       </ng-container>

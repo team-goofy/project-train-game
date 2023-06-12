@@ -19,4 +19,5 @@ public interface UserService {
 
     ResponseEntity<String> changeUsername(@Valid String username, String uid) throws InterruptedException, ExecutionException;
 
+    ResponseEntity<String> verify2FA( @Valid String secret, String uid) throws InterruptedException, ExecutionException;
 }

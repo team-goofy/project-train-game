@@ -38,11 +38,12 @@ export class AccountPageComponent implements OnInit {
   });
 
   twoFAForm: FormGroup = new FormGroup({
-    phoneNumber: new FormControl('')
+    authCode: new FormControl('')
   });
 
   private username: string = "";
   private userEmail: string | null  = "";
+  private _twoFAEnabled: boolean = false;
   private _secret: string = this.generateSecretKey(16);
 
   state: State;
@@ -98,7 +99,7 @@ export class AccountPageComponent implements OnInit {
     );
 
     this.twoFAForm = this.formBuilder.group({
-      phoneNumber: [
+      authCode: [
         '', // Empty starting value
         [
           Validators.required,
@@ -143,9 +144,11 @@ export class AccountPageComponent implements OnInit {
     this.authService.getUsername()
       .subscribe({
         next: (data:any) => {
-          this.username = data;
-          const parsedData = JSON.parse(this.username);
+
+          const parsedData = JSON.parse(data);
           this.username = parsedData.username;
+          // needed for string boolean interpretation
+          this._twoFAEnabled = parsedData.is2FaActivated == true;
 
           this.accountEditForm.controls['userEmailForm'].setValue(this.userEmail);
           this.accountEditForm.controls['userUsername'].setValue(this.username);
@@ -291,6 +294,29 @@ export class AccountPageComponent implements OnInit {
 
   }
 
+  verify2FA() {
+    this.state.loading = true;
+
+    const secret = this._secret;
+
+    this.authService.verify2FA(secret).subscribe({
+      next: (success) => {
+        let ref = this.snackbar.open(
+          "2FA enabled successfully",
+          "",
+          {horizontalPosition: 'end', duration: 2000}
+        );
+        this.state.loading = false;
+        this.fetchUserData();
+        this.state = this.initialState();
+      },
+      error: (error) => {
+        this.state.loading = false;
+        this.snackbar.open("An error occurred", "", {horizontalPosition: 'end', duration: 3000});
+      }
+    });
+  }
+
   enable2FA(){
     this.state.enable2FA = true;
   }
@@ -316,8 +342,12 @@ export class AccountPageComponent implements OnInit {
     return this.username;
   }
 
-
   get secret(): string {
     return this._secret;
+  }
+
+
+  get twoFAEnabled(): boolean {
+    return this._twoFAEnabled;
   }
 }
