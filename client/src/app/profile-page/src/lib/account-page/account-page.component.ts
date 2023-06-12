@@ -11,12 +11,14 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {UserRequestModel} from "@client/shared-models";
 import {debounceTime, distinctUntilChanged} from "rxjs";
 import {Router} from "@angular/router";
+import {SafeUrl} from "@angular/platform-browser";
 
 interface State {
   loading: boolean;
   error: string | null;
   editing: boolean;
   valueHasNotBeenChanged: boolean;
+  enable2FA: boolean;
 }
 
 @Component({
@@ -35,13 +37,25 @@ export class AccountPageComponent implements OnInit {
     userUsername: new FormControl(''),
   });
 
+  twoFAForm: FormGroup = new FormGroup({
+    phoneNumber: new FormControl('')
+  });
+
   private username: string = "";
   private userEmail: string | null  = "";
 
   state: State;
 
+  public myAngularxQrCode: string = "";
+  public qrCodeDownloadLink: SafeUrl = "";
+
   constructor() {
     this.state = this.initialState();
+    this.myAngularxQrCode = 'otpauth://totp/NoUserNameFound?secret=W4AU5VIXXCPZ3S6T&issuer=WanderTrains';
+  }
+
+  onChangeURL(url: SafeUrl) {
+    this.qrCodeDownloadLink = url;
   }
 
   ngOnInit(): void {
@@ -66,6 +80,19 @@ export class AccountPageComponent implements OnInit {
         ]
       }
     );
+
+    this.twoFAForm = this.formBuilder.group({
+      phoneNumber: [
+        '', // Empty starting value
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+          Validators.minLength(6),
+          Validators.maxLength(6),
+        ]
+      ]
+    });
+
 
     this.accountEditForm.controls['userUsername'].valueChanges.pipe(
       debounceTime(1000),
@@ -106,6 +133,10 @@ export class AccountPageComponent implements OnInit {
 
           this.accountEditForm.controls['userEmailForm'].setValue(this.userEmail);
           this.accountEditForm.controls['userUsername'].setValue(this.username);
+
+          // eigen functie waarin de QR name + secret komen
+          this.myAngularxQrCode = 'otpauth://totp/'+this.username+'?secret=W4AU5VsdfsdPZ3S6T&issuer=WanderTrains';
+
           this.state.loading = false;
           },
         error: () => {
@@ -122,7 +153,8 @@ export class AccountPageComponent implements OnInit {
       loading: false,
       error: null,
       editing: false,
-      valueHasNotBeenChanged: true
+      valueHasNotBeenChanged: true,
+      enable2FA: false
     };
   }
 
@@ -244,6 +276,10 @@ export class AccountPageComponent implements OnInit {
 
   }
 
+  enable2FA(){
+    this.state.enable2FA = true;
+  }
+
   cancel(): void{
     this.fetchUserData();
     this.state = this.initialState();
@@ -251,6 +287,10 @@ export class AccountPageComponent implements OnInit {
 
   get f(): { [key: string]: AbstractControl } {
     return this.accountEditForm.controls;
+  }
+
+  get e(): { [key: string]: AbstractControl } {
+    return this.twoFAForm.controls;
   }
 
   get userEmailValue(): string {
