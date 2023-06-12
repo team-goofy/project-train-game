@@ -21,8 +21,9 @@ public class UserDTO {
     @Size(min = 4, max = 25, message = "Username should be between 4 and 25 characters")
     private String username;
 
+
     @Builder
-    UserDTO(String email, String password, String username) {
+    UserDTO(String email, String password, String username){
         this.email = email;
         this.password = password;
         this.username = username;
