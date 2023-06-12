@@ -31,7 +31,7 @@
     Start new trip
   </button>
 
-  <mat-card *ngIf="trips.length > 0 && !(authService.user$ | async)" class="ongoing-trip-card">
+  <mat-card *ngIf="trips.length > 0 && (authService.user$ | async)" class="ongoing-trip-card">
     <mat-card-header>
       <div class="header">
         <p class="mat-headline-5">Or continue your ongoing trip 🌏</p>
