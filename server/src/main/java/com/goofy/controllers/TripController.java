@@ -68,6 +68,12 @@ public class TripController {
         return ResponseEntity.ok(blobId);
     }
 
+    @GetMapping(value = "/{tripId}/images")
+    public ResponseEntity<Object> getTripImages(@PathVariable String tripId, Principal principal) {
+        List<Object> images = this.tripService.getTripImages(tripId, principal.getName());
+        return ResponseEntity.ok(images);
+    }
+
     @PostMapping("/duration")
     @ResponseBody
     public ResponseEntity<Integer> getTripsDuration(@RequestBody List<NsTrip> nsTrips) throws JsonProcessingException {

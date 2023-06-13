@@ -9,6 +9,7 @@ import com.goofy.models.Departure;
 import com.goofy.models.Trip;
 import com.goofy.models.TripFilter;
 import com.goofy.utils.UUIDGenerator;
+import com.google.api.gax.paging.Page;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
@@ -19,6 +20,8 @@ import lombok.AllArgsConstructor;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -39,7 +42,7 @@ public class TripServiceImpl implements TripService {
         String contentType = image.getImage().getContentType();
 
         String tripId = image.getTripId();
-        String stationUic = image.getUicCode();        
+        String stationUic = image.getUicCode();
         String ltd = image.getLtd();
         String lng = image.getLng();
 
@@ -49,7 +52,8 @@ public class TripServiceImpl implements TripService {
 
         String extension = getFileExtension(contentType);
 
-        String blobId = String.format("trip-%s_station-%s_user-%s_ltd-%s_lng-%s%s", tripId, stationUic, uid, ltd, lng, extension);
+        String blobId = String.format("trip-%s_station-%s_user-%s_ltd-%s_lng-%s%s", tripId, stationUic, uid, ltd, lng,
+                extension);
         Blob blob = storage.bucket().get(blobId);
 
         if (blob != null && blob.exists()) {
@@ -57,6 +61,24 @@ public class TripServiceImpl implements TripService {
         }
 
         return storage.bucket().create(blobId, inputStream, contentType).getBlobId();
+    }
+
+    @Override
+    public List<Object> getTripImages(String tripId, String uid) {
+        List<Object> results = new ArrayList<>();
+        Page<Blob> blobs = storage.bucket().list();
+
+        for (Blob blob : blobs.iterateAll()) {
+            if (blob.getName().contains(uid) && blob.getName().contains(tripId)) {
+                String[] split = blob.getName().split("_");
+                String ltd = split[3].split("-")[1];
+                String lngWithExtension = split[4].split("-")[1];
+                String lng = lngWithExtension.substring(0, lngWithExtension.lastIndexOf("."));
+                results.add(Map.of("ltd", ltd, "lng", lng, "image", blob.getContent()));
+            }
+        }
+
+        return results;
     }
 
     @Override
@@ -108,7 +130,7 @@ public class TripServiceImpl implements TripService {
             List<QueryDocumentSnapshot> documents = future.get().getDocuments();
             return documents.stream().map(doc -> doc.toObject(Trip.class)).collect(Collectors.toList());
         } catch (InterruptedException | ExecutionException e) {
-        
+
             throw new RuntimeException("Error getting trips from Firestore", e);
         }
     }

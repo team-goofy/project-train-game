@@ -12,13 +12,15 @@ import com.goofy.models.TripFilter;
 import com.google.cloud.storage.BlobId;
 
 public interface TripService {
-    BlobId saveImage(TripImageDTO image, String userId) throws IOException;
+    BlobId saveImage(TripImageDTO image, String uid) throws IOException;
+    
+    List<Object> getTripImages(String tripId, String uid);
 
     String saveTrip(TripDTO trip, String uid);
 
     List<Trip> getTrips(TripFilter filter, String uid);
 
-    Trip getTripById(String tripId) throws ExecutionException, InterruptedException;
+    Trip getTripById(String tripId) throws ExecutionException, InterruptedException;    
 
     String getMostFrequentStationName(List<Departure.RouteStation> stations);
 }
