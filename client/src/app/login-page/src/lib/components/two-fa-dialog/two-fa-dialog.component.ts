@@ -27,6 +27,8 @@ export class TwoFaDialogComponent {
     authCode: new FormControl('')
   });
 
+  private secret: string = "";
+
   ngOnInit(): void {
     this.twoFAForm = this.formBuilder.group({
       authCode: [
@@ -40,7 +42,52 @@ export class TwoFaDialogComponent {
       ]
     });
 
+    this.authService.getUserCollectionData()
+      .subscribe({
+        next: (data:any) => {
+          const parsedData = JSON.parse(data);
+          this.secret= parsedData.secret;
+        },
+        error: () => {
+          this.snackbar.open(
+            "Something went wrong, please try again later",
+            "", { horizontalPosition: 'end', duration: 3000 });
+        }
+      });
+
   }
+
+  verify2FA() {
+    let givenAuthCode = this.twoFAForm.controls['authCode'].value.toString();
+    console.log(givenAuthCode);
+
+    this.authService.verify2FA(this.secret, givenAuthCode).subscribe({
+      next: (success) => {
+        let ref = this.snackbar.open(
+          "2FA login successfull",
+          "",
+          {horizontalPosition: 'end', duration: 2000}
+        );
+
+        ref.afterDismissed().subscribe(() => {
+            this.router.navigate(['/']);
+        });
+
+      },
+      error: (error) => {
+        let ref = this.snackbar.open(
+          "It looks like you entered the wrong code, please try again",
+          "",
+          {horizontalPosition: 'end', duration: 2000}
+        );
+
+        ref.afterDismissed().subscribe(() => {
+          this.router.navigate(['/login']);
+        });
+      }
+    });
+  }
+
 
   get e(): { [key: string]: AbstractControl } {
     return this.twoFAForm.controls;

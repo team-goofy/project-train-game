@@ -115,7 +115,6 @@ export class AuthService {
     return this.http.put<any>(`${this.baseUrl}/auth/verify2FA`, body, httpOptions);
   }
 
-
   disable2FA(): Observable<any> {
     const httpOptions: Object = {
       headers: new HttpHeaders().set('Content-Type', 'application/json'),

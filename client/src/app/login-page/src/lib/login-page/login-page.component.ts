@@ -66,6 +66,7 @@ export class LoginPageComponent implements OnInit{
 
         ref.afterDismissed().subscribe(() => {
 
+          //CHECK IF 2FA IS ENABLED BEFORE OPENING THE DIALOG
               this._dialog.open(TwoFaDialogComponent, {
                 // data: <DialogData>{
                 //   stations: trip.routeStations
