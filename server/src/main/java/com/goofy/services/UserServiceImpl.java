@@ -106,24 +106,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public ResponseEntity<String> verify2FA(String secret, String code, String uid) throws InterruptedException, ExecutionException {
-
-        CustomTotp totp = new CustomTotp(secret);
-        if (totp.verify(code, 2, 2).isValid()) {
-            DocumentReference userReference = this.firestore.collection("user").document(uid);
-            userReference.update("secret", secret, "is2FaActivated", true);
-
-            return ResponseEntity.ok("2FA activated");
-        }
-        return ResponseEntity.badRequest().build();
-    }
-
-    public ResponseEntity<String> disable2FA(String uid) throws InterruptedException, ExecutionException {
-        DocumentReference userReference = this.firestore.collection("user").document(uid);
-        userReference.update("secret", ' ', "is2FaActivated", false);
-
-        return ResponseEntity.ok("2FA disabled");
-    }
-
-
 }
