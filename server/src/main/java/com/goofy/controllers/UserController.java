@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.security.Principal;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -49,8 +50,11 @@ public class UserController {
     }
 
     @PutMapping("/verify2FA")
-    public ResponseEntity<String> verify2FA(@RequestBody() @Valid String secret, Principal principal) throws Exception {
-        return userService.verify2FA(secret, principal.getName());
+    public ResponseEntity<String> verify2FA(@RequestBody @Valid Map<String, String> requestBody, Principal principal) throws Exception {
+        String secret = requestBody.get("secret");
+        String code = requestBody.get("code");
+
+        return userService.verify2FA(secret, code, principal.getName());
     }
 
     @PutMapping("/disable2FA")

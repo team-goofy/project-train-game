@@ -4,6 +4,7 @@ import com.goofy.controllers.EmailController;
 import com.goofy.dtos.UserDTO;
 import com.goofy.exceptions.UsernameExistsException;
 import com.goofy.models.Profile;
+import com.goofy.security.CustomTotp;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
@@ -11,6 +12,7 @@ import com.google.firebase.auth.UserRecord;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -104,11 +106,17 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public ResponseEntity<String> verify2FA(String secret, String uid) throws InterruptedException, ExecutionException {
-        DocumentReference userReference = this.firestore.collection("user").document(uid);
-        userReference.update("secret", secret, "is2FaActivated", true);
+    public ResponseEntity<String> verify2FA(String secret, String code, String uid) throws InterruptedException, ExecutionException {
+        System.out.println(code);
 
-        return ResponseEntity.ok("2FA activated");
+        CustomTotp totp = new CustomTotp(secret);
+        if (totp.verify(code, 2, 2).isValid()) {
+            DocumentReference userReference = this.firestore.collection("user").document(uid);
+            userReference.update("secret", secret, "is2FaActivated", true);
+
+            return ResponseEntity.ok("2FA activated");
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     public ResponseEntity<String> disable2FA(String uid) throws InterruptedException, ExecutionException {

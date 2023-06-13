@@ -9,7 +9,7 @@ import {
 } from '@angular/fire/auth';
 import { Router } from "@angular/router";
 import {catchError, from, Observable, switchMap, tap, throwError} from "rxjs";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {UserLoginModel, UserRequestModel, Stats} from "@client/shared-models";
 import { environment } from "../../../../environments/environment";
 import {User} from "firebase/auth";
@@ -101,14 +101,20 @@ export class AuthService {
     return this.http.put<any>(`${this.baseUrl}/user/profileUsername`, username, httpOptions);
   }
 
-  verify2FA(secret: string): Observable<any> {
+  verify2FA(secret: string, code: string): Observable<any> {
     const httpOptions: Object = {
       headers: new HttpHeaders().set('Content-Type', 'application/json'),
       responseType: 'text'
     }
 
-    return this.http.put<any>(`${this.baseUrl}/user/verify2FA`, secret, httpOptions);
+    const body = {
+      secret: secret,
+      code: code
+    };
+
+    return this.http.put<any>(`${this.baseUrl}/user/verify2FA`, body, httpOptions);
   }
+
 
   disable2FA(): Observable<any> {
     const httpOptions: Object = {
