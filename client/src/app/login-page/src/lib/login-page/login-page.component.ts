@@ -4,7 +4,7 @@ import { AuthService } from "@client/shared-services";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {UserLoginModel} from "@client/shared-models";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {TwoFaDialogComponent} from "../components/two-fa-dialog/two-fa-dialog.component";
 
 @Component({
@@ -24,6 +24,7 @@ export class LoginPageComponent implements OnInit{
 
   submitted = false;
   showPassword = true;
+  twoFAEnabled = false;
 
   ngOnInit(): void {
     this.form = this.formBuilder.group(
@@ -58,23 +59,37 @@ export class LoginPageComponent implements OnInit{
 
     this.authService.login(user).subscribe({
       next: (success) => {
-        let ref = this.snackbar.open(
-          "Logged in successfully",
-          "",
-          { horizontalPosition: 'end', duration: 2000 }
-        );
+        this.authService.getUserCollectionData()
+          .subscribe({
+            next: (data:any) => {
+              const parsedData = JSON.parse(data);
+              this.twoFAEnabled = parsedData.is2FaActivated;
 
-        ref.afterDismissed().subscribe(() => {
+              if (this.twoFAEnabled) {
+                const dialogConfig = new MatDialogConfig();
+                dialogConfig.data = parsedData; // Pass the parsedData to the dialog
 
-          //CHECK IF 2FA IS ENABLED BEFORE OPENING THE DIALOG
-              this._dialog.open(TwoFaDialogComponent, {
-                // data: <DialogData>{
-                //   stations: trip.routeStations
-                // }
-              });
+                this._dialog.open(TwoFaDialogComponent, dialogConfig);
 
-          // this.router.navigate(['/']);
-        });
+              }else{
+                let ref = this.snackbar.open(
+                  "Logged in successfully",
+                  "",
+                  { horizontalPosition: 'end', duration: 2000 }
+                );
+
+                ref.afterDismissed().subscribe(() => {
+                  this.router.navigate(['/']);
+                });
+              }
+
+            },
+            error: () => {
+              this.snackbar.open(
+                "Something went wrong, please try again later",
+                "", { horizontalPosition: 'end', duration: 3000 });
+            }
+          });
       },
       error: (error) => {
         this.snackbar.open("Something went wrong, please try again", "", { horizontalPosition: 'end', duration: 3000 });

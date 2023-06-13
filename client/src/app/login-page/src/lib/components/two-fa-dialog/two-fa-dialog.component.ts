@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import {Component, Inject, inject} from '@angular/core';
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { RouteStation } from "@client/shared-models";
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
@@ -29,6 +29,11 @@ export class TwoFaDialogComponent {
 
   private secret: string = "";
 
+  constructor(@Inject(MAT_DIALOG_DATA) public userData: any) {
+    // Access the passed data using this.data
+    this.secret = userData.secret;
+  }
+
   ngOnInit(): void {
     this.twoFAForm = this.formBuilder.group({
       authCode: [
@@ -41,30 +46,15 @@ export class TwoFaDialogComponent {
         ]
       ]
     });
-
-    this.authService.getUserCollectionData()
-      .subscribe({
-        next: (data:any) => {
-          const parsedData = JSON.parse(data);
-          this.secret= parsedData.secret;
-        },
-        error: () => {
-          this.snackbar.open(
-            "Something went wrong, please try again later",
-            "", { horizontalPosition: 'end', duration: 3000 });
-        }
-      });
-
   }
 
   verify2FA() {
     let givenAuthCode = this.twoFAForm.controls['authCode'].value.toString();
-    console.log(givenAuthCode);
 
     this.authService.verify2FA(this.secret, givenAuthCode).subscribe({
       next: (success) => {
         let ref = this.snackbar.open(
-          "2FA login successfull",
+          "2FA login successfully",
           "",
           {horizontalPosition: 'end', duration: 2000}
         );
