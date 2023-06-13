@@ -41,9 +41,9 @@ public class UserServiceImpl implements UserService {
             UserRecord createdUser = this.firebaseAuth.createUser(request);
 
             // Create User-Document where username will be stored
-            Map<String, String> userData = Map.of(
+            Map<String, Object> userData = Map.of(
                     "username", user.getUsername(),
-                    "is2FaActivated", "false",
+                    "is2FaActivated", false,
                     "secret", "");
             this.firestore.collection("user").document(createdUser.getUid()).set(userData);
 
@@ -88,8 +88,7 @@ public class UserServiceImpl implements UserService {
                     String currUsername = profile.getUsername();
 
                     if (!currUsername.equals(newUsername)) {
-                        profile.setUsername(newUsername);
-                        usernameReference.set(profile);
+                        usernameReference.update("username", newUsername);
 
                         return ResponseEntity.ok(newUsername);
                     } else {
@@ -107,8 +106,7 @@ public class UserServiceImpl implements UserService {
 
     public ResponseEntity<String> verify2FA(String secret, String uid) throws InterruptedException, ExecutionException {
         DocumentReference userReference = this.firestore.collection("user").document(uid);
-
-        userReference.set(Map.of("secret", secret, "is2FaActivated", "true"), SetOptions.merge());
+        userReference.update("secret", secret, "is2FaActivated", true);
 
         return ResponseEntity.ok("2FA activated");
     }

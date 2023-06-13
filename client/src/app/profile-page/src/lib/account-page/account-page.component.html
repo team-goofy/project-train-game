@@ -30,8 +30,8 @@
         <ng-container *ngIf="!state.editing">
           <button mat-raised-button color="primary" (click)="editingState()"> <mat-icon matSuffix>edit</mat-icon>Edit</button>
           <button mat-raised-button color="accent" (click)="changePassword()"><mat-icon matSuffix>security</mat-icon>Change password</button>
-          <button *ngIf="!twoFAEnabled" mat-raised-button color="accent" (click)="enable2FA()"><mat-icon matSuffix>security</mat-icon>Enable two factor authentication</button>
-          <button *ngIf="twoFAEnabled" mat-raised-button color="accent" (click)="enable2FA()"><mat-icon matSuffix>security</mat-icon>Disable two factor authentication</button>
+          <button *ngIf="!twoFAEnabled" mat-raised-button color="primary" (click)="enable2FA()"><mat-icon matSuffix>security</mat-icon>Enable two factor authentication</button>
+          <button *ngIf="twoFAEnabled" mat-raised-button color="primary" (click)="enable2FA()"><mat-icon matSuffix>security</mat-icon>Disable two factor authentication</button>
         </ng-container>
 
         <ng-container *ngIf="state.editing">

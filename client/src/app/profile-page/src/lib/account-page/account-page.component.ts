@@ -141,14 +141,12 @@ export class AccountPageComponent implements OnInit {
 
     }
 
-    this.authService.getUsername()
+    this.authService.getUserCollectionData()
       .subscribe({
         next: (data:any) => {
-
           const parsedData = JSON.parse(data);
           this.username = parsedData.username;
-          // needed for string boolean interpretation
-          this._twoFAEnabled = parsedData.is2FaActivated == true;
+          this._twoFAEnabled = parsedData.is2FaActivated;
 
           this.accountEditForm.controls['userEmailForm'].setValue(this.userEmail);
           this.accountEditForm.controls['userUsername'].setValue(this.username);

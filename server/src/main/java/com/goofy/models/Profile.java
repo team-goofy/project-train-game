@@ -3,14 +3,14 @@ package com.goofy.models;
 
 public class Profile {
     private String username;
-    private String is2FaActivated;
+    private Boolean is2FaActivated;
     private String secret;
 
-    public String getIs2FaActivated() {
+    public Boolean getIs2FaActivated() {
         return is2FaActivated;
     }
 
-    public void setIs2FaActivated(String is2FaActivated) {
+    public void setIs2FaActivated(Boolean is2FaActivated) {
         this.is2FaActivated = is2FaActivated;
     }
 

@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @PutMapping("/verify2FA")
-    public ResponseEntity<String> verify2FA(@RequestBody() @Valid String secret, String uid) throws Exception {
-        return userService.verify2FA(secret, uid);
+    public ResponseEntity<String> verify2FA(@RequestBody() @Valid String secret, Principal principal) throws Exception {
+        return userService.verify2FA(secret, principal.getName());
     }
 }

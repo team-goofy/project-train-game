@@ -68,7 +68,7 @@ export class AuthService {
       return this.http.get(`${this.baseUrl}/user/username`, { params: { username } });
     }
 
-    getUsername(): Observable<any> {
+  getUserCollectionData(): Observable<any> {
       const httpOptions: Object = {
         headers: new HttpHeaders().set('Content-Type', 'application/json'),
         responseType: 'text'
@@ -107,7 +107,7 @@ export class AuthService {
       responseType: 'text'
     }
     console.log(secret);
-    return this.http.put<any>(`${this.baseUrl}/user/verify2FA`, {params: {secret: secret, uid: this.auth.currentUser!.uid}}, httpOptions);
+    return this.http.put<any>(`${this.baseUrl}/user/verify2FA`, secret, httpOptions);
   }
 
   changeUserEmail(newUserEmail: string): Observable<any> {
