@@ -63,12 +63,11 @@ export class AccountPageComponent implements OnInit {
       const randomIndex = Math.floor(Math.random() * chars.length);
       secret += chars[randomIndex];
     }
-
     return secret;
   }
 
   generateQRCode(): void {
-    this.myAngularxQrCode = `otpauth://totp/${this.username}?secret=W4AU5VIXXCPZ3S6T&issuer=WanderTrains`;
+    this.myAngularxQrCode = `otpauth://totp/${this.username}?secret=${this._secret}&issuer=WanderTrains`;
   }
 
   onChangeURL(url: SafeUrl) {

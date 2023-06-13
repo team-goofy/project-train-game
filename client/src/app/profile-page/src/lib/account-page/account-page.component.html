@@ -44,7 +44,9 @@
         <div class="form-fields">
           <!--    scan or click code-->
           <div style="display: flex;">
-            <qrcode class="text-centered" (qrCodeURL)="onChangeURL($event)" [qrdata]="myAngularxQrCode" [width]="245" [errorCorrectionLevel]="'M'" [margin]="2"></qrcode>
+            <a href="{{myAngularxQrCode}}">
+              <qrcode class="text-centered" (qrCodeURL)="onChangeURL($event)" [qrdata]="myAngularxQrCode" [width]="245" [errorCorrectionLevel]="'M'" [margin]="2"></qrcode>
+            </a>
 <!--            REMOVE INLINE STYLE-->
             <div class="content" style="display: flex; flex-direction: column;">
               <h2 class="mat-headline-6 text-centered" style="padding-top: 6px">SCAN THE QR CODE</h2>
