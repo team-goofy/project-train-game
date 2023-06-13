@@ -9,6 +9,8 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
+import {TwoFaDialogComponent} from "./components/two-fa-dialog/two-fa-dialog.component";
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   imports: [
@@ -20,10 +22,12 @@ import {ReactiveFormsModule} from "@angular/forms";
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDialogModule
   ],
     declarations: [
       LoginPageComponent,
+      TwoFaDialogComponent
     ],
 })
 export class LoginPageModule {}

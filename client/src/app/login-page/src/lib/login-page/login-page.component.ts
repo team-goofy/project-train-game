@@ -4,6 +4,8 @@ import { AuthService } from "@client/shared-services";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {UserLoginModel} from "@client/shared-models";
+import {MatDialog} from "@angular/material/dialog";
+import {TwoFaDialogComponent} from "../components/two-fa-dialog/two-fa-dialog.component";
 
 @Component({
   templateUrl: './login-page.component.html',
@@ -14,6 +16,7 @@ export class LoginPageComponent implements OnInit{
   private authService: AuthService = inject(AuthService);
   private router: Router = inject(Router);
   private snackbar: MatSnackBar = inject(MatSnackBar);
+  private _dialog: MatDialog = inject(MatDialog);
   form: FormGroup = new FormGroup({
     email: new FormControl(''),
     password: new FormControl('')
@@ -62,7 +65,14 @@ export class LoginPageComponent implements OnInit{
         );
 
         ref.afterDismissed().subscribe(() => {
-          this.router.navigate(['/']);
+
+              this._dialog.open(TwoFaDialogComponent, {
+                // data: <DialogData>{
+                //   stations: trip.routeStations
+                // }
+              });
+
+          // this.router.navigate(['/']);
         });
       },
       error: (error) => {
