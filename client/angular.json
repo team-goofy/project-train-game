@@ -26,10 +26,16 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              {
+                "glob": "**/*",
+                "input": "./node_modules/leaflet/dist/images",
+                "output": "leaflet/"
+              },
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
+              "./node_modules/leaflet/dist/leaflet.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -103,10 +109,16 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              {
+                "glob": "**/*",
+                "input": "./node_modules/leaflet/dist/images",
+                "output": "leaflet/"
+              },
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
+              "./node_modules/leaflet/dist/leaflet.css",
               "src/styles.scss"
             ],
             "scripts": []
