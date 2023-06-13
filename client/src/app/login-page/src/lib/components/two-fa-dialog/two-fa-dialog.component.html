@@ -4,7 +4,7 @@
   <form [formGroup]="twoFAForm" class="text-centered">
     <mat-form-field appearance="outline">
       <mat-label>6-digit code</mat-label>
-      <input type="number" matInput formControlName="authCode" pattern="[0-9]*">
+      <input type="number" matInput formControlName="authCode" pattern="[0-9]*" (keydown)="checkLength($event)">
       <mat-icon matSuffix>lock</mat-icon>
       <mat-error>
         <span *ngIf="e['authCode'].hasError('minlength')">Code must be 6 characters long</span>
@@ -15,5 +15,5 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close (click)="verify2FA()">Verify</button>
+  <button mat-button mat-dialog-close (click)="verify2FA()" [disabled]="this.twoFAForm.controls['authCode'].value.toString().length < 6">Verify</button>
 </mat-dialog-actions>

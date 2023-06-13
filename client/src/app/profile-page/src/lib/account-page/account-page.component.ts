@@ -342,6 +342,12 @@ export class AccountPageComponent implements OnInit {
     this.state = this.initialState();
   }
 
+  checkLength(event: KeyboardEvent) {
+    const input = event.target as HTMLInputElement;
+    if (input.value.length >= 6 && event.key !== 'Backspace') {
+      event.preventDefault();
+    }
+  }
   get f(): { [key: string]: AbstractControl } {
     return this.accountEditForm.controls;
   }
@@ -361,7 +367,6 @@ export class AccountPageComponent implements OnInit {
   get secret(): string {
     return this._secret;
   }
-
 
   get twoFAEnabled(): boolean {
     return this._twoFAEnabled;

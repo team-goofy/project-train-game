@@ -48,6 +48,13 @@ export class TwoFaDialogComponent {
     });
   }
 
+  checkLength(event: KeyboardEvent) {
+    const input = event.target as HTMLInputElement;
+    if (input.value.length >= 6 && event.key !== 'Backspace') {
+      event.preventDefault();
+    }
+  }
+
   verify2FA() {
     const givenAuthCode = this.twoFAForm.controls['authCode'].value.toString();
 
