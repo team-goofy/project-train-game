@@ -220,7 +220,7 @@ class UserServiceImplTests {
     }
 
     @Test
-    public void saveUser_existingUsername_throwsUsernameExistException() throws Exception {
+    void saveUser_existingUsername_throwsUsernameExistException() throws Exception {
         // Arrange
         UserDTO user = new UserDTO();
         user.setUsername("testUsername");
@@ -254,7 +254,7 @@ class UserServiceImplTests {
     }
 
     @Test
-    public void saveUser_validUser_returnsCreatedUser() throws Exception {
+    void saveUser_validUser_returnsCreatedUser() throws Exception {
         // Arrange
         UserDTO user = new UserDTO();
         user.setUsername("testUsername");
@@ -309,7 +309,7 @@ class UserServiceImplTests {
     }
 
     @Test
-    public void usernameExists_existingUsername_returnsTrue() throws ExecutionException, InterruptedException {
+    void usernameExists_existingUsername_returnsTrue() throws ExecutionException, InterruptedException {
         // Arrange
         String username = "testUsername";
 
@@ -334,7 +334,7 @@ class UserServiceImplTests {
     }
 
     @Test
-    public void usernameExists_nonExistingUsername_returnsFalse() throws ExecutionException, InterruptedException {
+    void usernameExists_nonExistingUsername_returnsFalse() throws ExecutionException, InterruptedException {
         // Arrange
         String username = "testUsername";
 
