@@ -7,6 +7,7 @@ import { take, EMPTY} from "rxjs";
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { AuthService, TripService} from '@client/shared-services';
 import { NsTrip, RouteStation, Trip } from '@client/shared-models';
+import { GeolocationService } from '@ng-web-apis/geolocation';
 
 @Component({
   templateUrl: './picture-upload-page.component.html',
@@ -16,6 +17,7 @@ export class PictureUploadPageComponent implements OnInit {
   @ViewChild('previewImg') private _previewImg?: ElementRef;
   private _authService: AuthService = inject(AuthService);
   private _tripService: TripService = inject(TripService);
+  private readonly _geoLocationService: GeolocationService = inject(GeolocationService);
   private _snackbar: MatSnackBar = inject(MatSnackBar);
   private _route: ActivatedRoute = inject(ActivatedRoute);
   private _router: Router = inject(Router);
@@ -24,6 +26,8 @@ export class PictureUploadPageComponent implements OnInit {
   private _imageUrl!: string;
   private _tripId: string = "";
   private _uicCode: string = "";
+  private _ltd!: number;
+  private _lng!: number;
   private _location: string = "";
   private _loading: boolean = false;
   private _totalTripDuration: number = 0;
@@ -33,6 +37,11 @@ export class PictureUploadPageComponent implements OnInit {
       this._tripId = params['tripId'];
       this._uicCode = params['uicCode'];
       this._location = params['location'];
+    });
+
+    this._geoLocationService.pipe(take(1)).subscribe((position) => {
+      this._ltd = position.coords.latitude
+      this._lng = position.coords.longitude
     });
   }
 
@@ -149,6 +158,8 @@ export class PictureUploadPageComponent implements OnInit {
         formData.append('image', blob);
         formData.append('tripId', this._tripId);
         formData.append('uicCode', this._uicCode);
+        formData.append('ltd', this._ltd.toString());
+        formData.append('lng', this._lng.toString());
 
         this._tripService.saveImage(formData).subscribe({
           next: () => {

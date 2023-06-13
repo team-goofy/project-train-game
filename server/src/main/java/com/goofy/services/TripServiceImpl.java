@@ -39,7 +39,9 @@ public class TripServiceImpl implements TripService {
         String contentType = image.getImage().getContentType();
 
         String tripId = image.getTripId();
-        String stationUic = image.getUicCode();
+        String stationUic = image.getUicCode();        
+        String ltd = image.getLtd();
+        String lng = image.getLng();
 
         if (contentType == null) {
             throw new NoContentTypeException("Content type has not been specified");
@@ -47,7 +49,7 @@ public class TripServiceImpl implements TripService {
 
         String extension = getFileExtension(contentType);
 
-        String blobId = String.format("trip-%s_station-%s_user-%s%s", tripId, stationUic, uid, extension);
+        String blobId = String.format("trip-%s_station-%s_user-%s_ltd-%s_lng-%s%s", tripId, stationUic, uid, ltd, lng, extension);
         Blob blob = storage.bucket().get(blobId);
 
         if (blob != null && blob.exists()) {
