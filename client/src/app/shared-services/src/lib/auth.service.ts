@@ -13,6 +13,8 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {UserLoginModel, UserRequestModel, Stats} from "@client/shared-models";
 import { environment } from "../../../../environments/environment";
 import {User} from "firebase/auth";
+import {AchievementStats} from "../../../shared-models/src/lib/achievement-stats.model";
+import {AchievementUser} from "../../../shared-models/src/lib/achievement-user.model";
 
 @Injectable({
     providedIn: 'root'
@@ -145,12 +147,25 @@ export class AuthService {
       { params: { uid: this.auth.currentUser!.uid } });
   }
 
-  updateStats(totalDuration: number) {
+  updateStats(totalDuration: number): Observable<Stats> {
+    const httpOptions: Object = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    }
+
+    return this.http.put<Stats>(`${this.baseUrl}/stats`, totalDuration, httpOptions);
+  }
+
+  getUsersAchievements(): Observable<AchievementUser> {
+    return this.http.get<AchievementUser>(`${this.baseUrl}/achievements`,
+      { params: { uid: this.auth.currentUser!.uid } });
+  }
+
+  updateUsersAchievements(achievementStats: AchievementStats): Observable<boolean> {
     const httpOptions: Object = {
       headers: new HttpHeaders().set('Content-Type', 'application/json'),
       responseType: 'text'
     }
 
-    return this.http.put<any>(`${this.baseUrl}/stats`, totalDuration, httpOptions);
+    return this.http.put<boolean>(`${this.baseUrl}/achievements`, achievementStats, httpOptions);
   }
 }

@@ -51,10 +51,10 @@ public class UserServiceImpl implements UserService {
                         achievement.setUid(document.getId());
                         return achievement;
                     }).toList();
-            List<Achievement.UserAchievement> userAchievementList = new ArrayList<>();
+            List<Achievement.UserAchievementUpdate> userAchievementList = new ArrayList<>();
 
             for (Achievement achievement : achievementList) {
-                Achievement.UserAchievement userAchievement = new Achievement.UserAchievement();
+                Achievement.UserAchievementUpdate userAchievement = new Achievement.UserAchievementUpdate();
 
                 userAchievement.setUid(achievement.getUid());
                 userAchievement.setProgress(0);

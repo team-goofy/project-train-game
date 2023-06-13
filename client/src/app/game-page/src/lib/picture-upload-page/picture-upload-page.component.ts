@@ -6,7 +6,8 @@ import { DialogData, TripOverviewDialogComponent } from "../components/trip-over
 import { take, EMPTY} from "rxjs";
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { AuthService, TripService} from '@client/shared-services';
-import { NsTrip, RouteStation, Trip } from '@client/shared-models';
+import {NsTrip, RouteStation, Stats, Trip} from '@client/shared-models';
+import {AchievementStats} from "../../../../shared-models/src/lib/achievement-stats.model";
 
 @Component({
   templateUrl: './picture-upload-page.component.html',
@@ -27,6 +28,7 @@ export class PictureUploadPageComponent implements OnInit {
   private _location: string = "";
   private _loading: boolean = false;
   private _totalTripDuration: number = 0;
+  private _statsResponse: Stats | undefined;
 
   ngOnInit(): void {
     this._route.queryParams.subscribe((params) => {
@@ -88,6 +90,8 @@ export class PictureUploadPageComponent implements OnInit {
               this._snackbar.open(error.errors.join(), "Close");
               return EMPTY;
             }),
+
+            // Get Duration of trip
             switchMap(() => {
               const tripStations: RouteStation[] = trip.routeStations;
 
@@ -103,9 +107,29 @@ export class PictureUploadPageComponent implements OnInit {
               return this._tripService.getTripDuration(nsTrips).pipe(catchError(({ error }) => {
                 this._snackbar.open(error.errors.join(), "Close");
                 return EMPTY;
-              }), switchMap((tripDuration) => {
+              }),
+
+                // Update the user's stats
+                switchMap((tripDuration) => {
                 this._totalTripDuration = tripDuration;
-                return this._authService.updateStats(this._totalTripDuration);
+
+                return this._authService.updateStats(this._totalTripDuration).pipe(catchError(({ error }) => {
+                  this._snackbar.open(error.errors.join(), "Close");
+                  return EMPTY;
+                }),
+
+                  // Update the user's achievements
+                  switchMap((statsResponse: Stats) => {
+                  const achievementStats: AchievementStats = {
+                    totalTripDuration: this._totalTripDuration,
+                    totalVisitedStations: statsResponse.totalStations
+                  }
+
+                  return this._authService.updateUsersAchievements(achievementStats).pipe(catchError(({ error }) => {
+                    this._snackbar.open(error.errors.join(), "Close");
+                    return EMPTY;
+                  }));
+                }));
               }));
             }
           ));
