@@ -11,6 +11,10 @@ export interface DialogData {
   stations: RouteStation[];
 }
 
+interface State {
+  valueHasNotBeenChanged: boolean;
+}
+
 @Component({
   selector: 'app-two-fa-dialog',
   templateUrl: './two-fa-dialog.component.html',
@@ -27,11 +31,19 @@ export class TwoFaDialogComponent {
     authCode: new FormControl('')
   });
 
+  state: State;
   private secret: string = "";
 
   constructor(@Inject(MAT_DIALOG_DATA) public userData: any) {
     // Access the passed data using this.data
     this.secret = userData.secret;
+    this.state = this.initialState();
+  }
+
+  initialState(): State {
+    return {
+      valueHasNotBeenChanged: true
+    };
   }
 
   ngOnInit(): void {
@@ -45,6 +57,12 @@ export class TwoFaDialogComponent {
           Validators.maxLength(6),
         ]
       ]
+    });
+
+    this.twoFAForm.valueChanges.subscribe((formValue) => {
+      const authCodeValue = String(this.twoFAForm.controls['authCode'].value);
+      const length = authCodeValue.length;
+      this.state.valueHasNotBeenChanged = length !== 6 && authCodeValue !== '';
     });
   }
 

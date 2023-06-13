@@ -316,6 +316,11 @@ export class AccountPageComponent implements OnInit {
 
   enable2FA(){
     this.state.enable2FA = true;
+    this.twoFAForm.valueChanges.subscribe((formValue) => {
+      const authCodeValue = String(this.twoFAForm.controls['authCode'].value);
+      const length = authCodeValue.length;
+      this.state.valueHasNotBeenChanged = length !== 6 && authCodeValue !== '';
+    });
   }
 
   disable2FA(){

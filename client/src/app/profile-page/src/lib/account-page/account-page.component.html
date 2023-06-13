@@ -67,7 +67,7 @@
             </div>
           </div>
 
-          <button mat-raised-button color="primary" (click)="verify2FA()" [disabled]="this.twoFAForm.controls['authCode'].value.toString().length < 6"><mat-icon matSuffix>edit</mat-icon>Verify 2FA</button>
+          <button mat-raised-button color="primary" (click)="verify2FA()" [disabled]="state.valueHasNotBeenChanged"><mat-icon matSuffix>edit</mat-icon>Verify 2FA</button>
           <button mat-raised-button color="accent" (click)="cancel()"><mat-icon matSuffix>close</mat-icon>Cancel</button>
         </div>
       </ng-container>
