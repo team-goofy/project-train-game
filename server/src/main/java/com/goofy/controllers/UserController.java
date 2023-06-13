@@ -49,16 +49,4 @@ public class UserController {
         return userService.changeUsername(username, principal.getName());
     }
 
-    @PutMapping("/verify2FA")
-    public ResponseEntity<String> verify2FA(@RequestBody @Valid Map<String, String> requestBody, Principal principal) throws Exception {
-        String secret = requestBody.get("secret");
-        String code = requestBody.get("code");
-
-        return userService.verify2FA(secret, code, principal.getName());
-    }
-
-    @PutMapping("/disable2FA")
-    public ResponseEntity<String> disable2FA(@RequestBody() String uid) throws Exception {
-        return userService.disable2FA(uid);
-    }
 }

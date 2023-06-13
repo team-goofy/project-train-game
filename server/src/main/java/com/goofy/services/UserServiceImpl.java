@@ -107,7 +107,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public ResponseEntity<String> verify2FA(String secret, String code, String uid) throws InterruptedException, ExecutionException {
-        System.out.println(code);
 
         CustomTotp totp = new CustomTotp(secret);
         if (totp.verify(code, 2, 2).isValid()) {

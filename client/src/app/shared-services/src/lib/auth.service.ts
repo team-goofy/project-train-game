@@ -112,7 +112,7 @@ export class AuthService {
       code: code
     };
 
-    return this.http.put<any>(`${this.baseUrl}/user/verify2FA`, body, httpOptions);
+    return this.http.put<any>(`${this.baseUrl}/auth/verify2FA`, body, httpOptions);
   }
 
 
@@ -122,7 +122,7 @@ export class AuthService {
       responseType: 'text',
     }
 
-    return this.http.put<any>(`${this.baseUrl}/user/disable2FA`, this.auth.currentUser!.uid ,httpOptions);
+    return this.http.put<any>(`${this.baseUrl}/auth/disable2FA`, this.auth.currentUser!.uid ,httpOptions);
   }
 
   changeUserEmail(newUserEmail: string): Observable<any> {
