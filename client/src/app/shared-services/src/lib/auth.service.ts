@@ -106,8 +106,17 @@ export class AuthService {
       headers: new HttpHeaders().set('Content-Type', 'application/json'),
       responseType: 'text'
     }
-    console.log(secret);
+
     return this.http.put<any>(`${this.baseUrl}/user/verify2FA`, secret, httpOptions);
+  }
+
+  disable2FA(): Observable<any> {
+    const httpOptions: Object = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      responseType: 'text',
+    }
+
+    return this.http.put<any>(`${this.baseUrl}/user/disable2FA`, this.auth.currentUser!.uid ,httpOptions);
   }
 
   changeUserEmail(newUserEmail: string): Observable<any> {

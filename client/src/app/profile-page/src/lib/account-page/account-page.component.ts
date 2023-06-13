@@ -319,6 +319,25 @@ export class AccountPageComponent implements OnInit {
     this.state.enable2FA = true;
   }
 
+  disable2FA(){
+    this.authService.disable2FA().subscribe({
+      next: (success) => {
+        let ref = this.snackbar.open(
+          "2FA disabled successfully",
+          "",
+          {horizontalPosition: 'end', duration: 2000}
+        );
+        this.state.loading = false;
+        this.fetchUserData();
+        this.state = this.initialState();
+      },
+      error: (error) => {
+        this.state.loading = false;
+        this.snackbar.open("An error occurred", "", {horizontalPosition: 'end', duration: 3000});
+      }
+    });
+  }
+
   cancel(): void{
     this.fetchUserData();
     this.state = this.initialState();

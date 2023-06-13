@@ -7,6 +7,7 @@ import com.goofy.services.UserServiceImpl;
 import com.google.firebase.auth.UserRecord;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -50,5 +51,10 @@ public class UserController {
     @PutMapping("/verify2FA")
     public ResponseEntity<String> verify2FA(@RequestBody() @Valid String secret, Principal principal) throws Exception {
         return userService.verify2FA(secret, principal.getName());
+    }
+
+    @PutMapping("/disable2FA")
+    public ResponseEntity<String> disable2FA(@RequestBody() String uid) throws Exception {
+        return userService.disable2FA(uid);
     }
 }

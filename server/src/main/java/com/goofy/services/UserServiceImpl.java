@@ -111,5 +111,12 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok("2FA activated");
     }
 
+    public ResponseEntity<String> disable2FA(String uid) throws InterruptedException, ExecutionException {
+        DocumentReference userReference = this.firestore.collection("user").document(uid);
+        userReference.update("secret", ' ', "is2FaActivated", false);
+
+        return ResponseEntity.ok("2FA disabled");
+    }
+
 
 }
