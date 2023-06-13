@@ -31,15 +31,16 @@
           <button mat-raised-button color="primary" (click)="editingState()"> <mat-icon matSuffix>edit</mat-icon>Edit</button>
           <button mat-raised-button color="accent" (click)="changePassword()"><mat-icon matSuffix>security</mat-icon>Change password</button>
           <button *ngIf="!twoFAEnabled" mat-raised-button color="primary" (click)="enable2FA()"><mat-icon matSuffix>security</mat-icon>Enable two factor authentication</button>
-          <button *ngIf="twoFAEnabled" mat-raised-button color="primary" (click)="disable2FA()"><mat-icon matSuffix>security</mat-icon>Disable two factor authentication</button>
+          <button *ngIf="twoFAEnabled" mat-raised-button color="primary" (click)="disable2FA()"><mat-icon matSuffix>delete</mat-icon>Disable two factor authentication</button>
         </ng-container>
 
         <ng-container *ngIf="state.editing">
           <button id="submit-button" [disabled]="state.valueHasNotBeenChanged" mat-raised-button color="primary" (click)="onSubmit()"><mat-icon matSuffix>save</mat-icon>Save changes</button>
-          <button mat-raised-button color="accent" (click)="cancel()">  <mat-icon matSuffix>close</mat-icon>Cancel</button>
+          <button mat-raised-button color="accent" (click)="cancel()"><mat-icon matSuffix>close</mat-icon>Cancel</button>
         </ng-container>
         </div>
       </form>
+
       <ng-container *ngIf="state.enable2FA">
         <div class="form-fields">
           <!--    scan or click code-->
@@ -47,7 +48,6 @@
             <a href="{{myAngularxQrCode}}">
               <qrcode class="text-centered" (qrCodeURL)="onChangeURL($event)" [qrdata]="myAngularxQrCode" [width]="245" [errorCorrectionLevel]="'M'" [margin]="2"></qrcode>
             </a>
-<!--            REMOVE INLINE STYLE-->
             <div class="content" style="display: flex; flex-direction: column;">
               <h2 class="mat-headline-6 text-centered" style="padding-top: 6px">SCAN THE QR CODE</h2>
               <p class="text-centered">Open the authentication app and <br>scan the QR using your phone</p>

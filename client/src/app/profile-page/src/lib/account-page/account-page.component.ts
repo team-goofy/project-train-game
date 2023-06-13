@@ -294,7 +294,6 @@ export class AccountPageComponent implements OnInit {
   verify2FA() {
     this.state.loading = true;
     let givenAuthCode = this.twoFAForm.controls['authCode'].value.toString();
-    console.log(givenAuthCode);
     const secret = this._secret;
 
     this.authService.verify2FA(secret, givenAuthCode).subscribe({

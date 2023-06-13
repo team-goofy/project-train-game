@@ -49,34 +49,42 @@ export class TwoFaDialogComponent {
   }
 
   verify2FA() {
-    let givenAuthCode = this.twoFAForm.controls['authCode'].value.toString();
+    const givenAuthCode = this.twoFAForm.controls['authCode'].value.toString();
 
-    this.authService.verify2FA(this.secret, givenAuthCode).subscribe({
-      next: (success) => {
-        let ref = this.snackbar.open(
-          "2FA login successfully",
-          "",
-          {horizontalPosition: 'end', duration: 2000}
-        );
-
-        ref.afterDismissed().subscribe(() => {
-            this.router.navigate(['/']);
-        });
-
+    this.authService.verify2FA(this.secret, givenAuthCode).subscribe(
+      (success) => {
+        this.show2FALoginSuccessSnackbar();
       },
-      error: (error) => {
-        let ref = this.snackbar.open(
-          "It looks like you entered the wrong code, please try again",
-          "",
-          {horizontalPosition: 'end', duration: 2000}
-        );
-
-        ref.afterDismissed().subscribe(() => {
-          this.router.navigate(['/login']);
-        });
+      (error) => {
+        this.showWrongCodeErrorSnackbar();
       }
+    );
+  }
+
+  private show2FALoginSuccessSnackbar(): void {
+    const ref = this.snackbar.open(
+      "2FA login successfully",
+      "",
+      { horizontalPosition: 'end', duration: 2000 }
+    );
+
+    ref.afterDismissed().subscribe(() => {
+      this.router.navigate(['/']);
     });
   }
+
+  private showWrongCodeErrorSnackbar(): void {
+    const ref = this.snackbar.open(
+      "It looks like you entered the wrong code, please try again",
+      "",
+      { horizontalPosition: 'end', duration: 2000 }
+    );
+
+    ref.afterDismissed().subscribe(() => {
+      this.router.navigate(['/login']);
+    });
+  }
+
 
 
   get e(): { [key: string]: AbstractControl } {

@@ -52,50 +52,69 @@ export class LoginPageComponent implements OnInit{
       return;
     }
 
-    const user = <UserLoginModel>{
+    const user = {
       email: this.form.value.email,
       password: this.form.value.password
     };
 
-    this.authService.login(user).subscribe({
-      next: (success) => {
-        this.authService.getUserCollectionData()
-          .subscribe({
-            next: (data:any) => {
-              const parsedData = JSON.parse(data);
-              this.twoFAEnabled = parsedData.is2FaActivated;
-
-              if (this.twoFAEnabled) {
-                const dialogConfig = new MatDialogConfig();
-                dialogConfig.data = parsedData; // Pass the parsedData to the dialog
-
-                this._dialog.open(TwoFaDialogComponent, dialogConfig);
-
-              }else{
-                let ref = this.snackbar.open(
-                  "Logged in successfully",
-                  "",
-                  { horizontalPosition: 'end', duration: 2000 }
-                );
-
-                ref.afterDismissed().subscribe(() => {
-                  this.router.navigate(['/']);
-                });
-              }
-
-            },
-            error: () => {
-              this.snackbar.open(
-                "Something went wrong, please try again later",
-                "", { horizontalPosition: 'end', duration: 3000 });
-            }
-          });
+    this.authService.login(user).subscribe(
+      (success) => {
+        this.handleLoginSuccess();
       },
-      error: (error) => {
-        this.snackbar.open("Something went wrong, please try again", "", { horizontalPosition: 'end', duration: 3000 });
+      (error) => {
+        this.handleLoginError();
       }
+    );
+  }
+
+  private handleLoginSuccess(): void {
+    this.authService.getUserCollectionData().subscribe(
+      (data: any) => {
+        const parsedData = JSON.parse(data);
+        this.twoFAEnabled = parsedData.is2FaActivated;
+
+        if (this.twoFAEnabled) {
+          this.openTwoFaDialog(parsedData);
+        } else {
+          this.showLoginSuccessSnackbar();
+        }
+      },
+      () => {
+        this.showGenericErrorSnackbar();
+      }
+    );
+  }
+
+  private handleLoginError(): void {
+    this.showGenericErrorSnackbar();
+  }
+
+  private openTwoFaDialog(parsedData: any): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = parsedData;
+
+    this._dialog.open(TwoFaDialogComponent, dialogConfig);
+  }
+
+  private showLoginSuccessSnackbar(): void {
+    const ref = this.snackbar.open(
+      "Logged in successfully",
+      "",
+      { horizontalPosition: 'end', duration: 2000 }
+    );
+
+    ref.afterDismissed().subscribe(() => {
+      this.router.navigate(['/']);
     });
   }
+
+  private showGenericErrorSnackbar(): void {
+    this.snackbar.open(
+      "Something went wrong, please try again later",
+      "", { horizontalPosition: 'end', duration: 3000 }
+    );
+  }
+
 
   get f(): { [key: string]: AbstractControl } {
     return this.form.controls;
