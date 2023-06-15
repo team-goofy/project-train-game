@@ -9,12 +9,13 @@ import com.goofy.dtos.TripImageDTO;
 import com.goofy.models.Departure;
 import com.goofy.models.Trip;
 import com.goofy.models.TripFilter;
+import com.goofy.models.TripImage;
 import com.google.cloud.storage.BlobId;
 
 public interface TripService {
     BlobId saveImage(TripImageDTO image, String uid) throws IOException;
     
-    List<Object> getTripImages(String tripId, String uid);
+    List<TripImage> getTripImages(String tripId, String uid);
 
     String saveTrip(TripDTO trip, String uid);
 

@@ -4,6 +4,7 @@ import { environment } from "../../../../environments/environment";
 import { Observable } from "rxjs";
 import {NsTrip, Trip, TripResponse} from "@client/shared-models";
 import { createHttpParams } from "@client/shared-utils";
+import {MapImage} from "../../../profile-page/src/lib/models/map-image.model";
 
 export interface TripFilter {
   onGoing: boolean;
@@ -18,6 +19,10 @@ export class TripService {
 
   saveImage(formData: FormData): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/trip/image`, formData);
+  }
+
+  getImages(tripId: string): Observable<MapImage[]> {
+    return this.http.get<MapImage[]>(`${this.baseUrl}/trip/${tripId}/images`);
   }
 
   saveTrip(trip: Trip): Observable<TripResponse> {

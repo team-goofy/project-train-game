@@ -9,8 +9,14 @@
         <mat-icon>sort</mat-icon>
         {{ isAscending ? 'Sort date oldest to newest' : 'Sort date newest to oldest' }}
       </button>
+      <div [hidden]="markers.length <= 0" class="map-container"
+           leaflet
+           [leafletOptions]="options"
+           (leafletMapReady)="onMapReady($event)">
+      </div>
       <mat-accordion >
-        <mat-expansion-panel *ngFor="let trip of trips.slice(currentPage * pageSize, (currentPage + 1) * pageSize); let i=index">
+        <mat-expansion-panel *ngFor="let trip of trips.slice(currentPage * pageSize, (currentPage + 1) * pageSize); let i=index"
+                             (opened)="onTripOpened(trip)" (closed)="onTripClosed()">
           <mat-expansion-panel-header>
             <button class="number-btn" mat-mini-fab color="accent">
               {{i+1}}
@@ -31,18 +37,11 @@
             </mat-step>
           </mat-stepper>
         </mat-expansion-panel>
-        <div class="map-container"
-        leaflet
-        [leafletOptions]="options"
-        (leafletMapReady)="onMapReady($event)"
-        (leafletClick)="mapClicked($event)">
-      </div>
       </mat-accordion>
       <mat-paginator [length]="trips.length" [pageSize]="pageSize" [pageIndex]="currentPage" [pageSizeOptions]="[5, 10, 15, 20]"
                      aria-label="Select page" (page)="pageChanged($event)">
       </mat-paginator>
     </div>
-    <!-- <div id="map" style="height: 300px;" leaflet [leafletOptions]="mapOptions" [leafletLayers]="mapLayers" (leafletMapReady)="onMapReady($event)"></div> -->
     <div *ngIf="!state.hasTrips" class="text-centered">
       <h1>It seems like you still haven't finished any trips or played a game yet 😢</h1>
       <h2>Click the button below to start a new game. After completion your travel history will be visible here.</h2>

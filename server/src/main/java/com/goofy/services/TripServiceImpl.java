@@ -8,6 +8,7 @@ import com.goofy.exceptions.UnsupportedFileExtensionException;
 import com.goofy.models.Departure;
 import com.goofy.models.Trip;
 import com.goofy.models.TripFilter;
+import com.goofy.models.TripImage;
 import com.goofy.utils.UUIDGenerator;
 import com.google.api.gax.paging.Page;
 import com.google.api.core.ApiFuture;
@@ -21,7 +22,6 @@ import lombok.AllArgsConstructor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -64,17 +64,17 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public List<Object> getTripImages(String tripId, String uid) {
-        List<Object> results = new ArrayList<>();
+    public List<TripImage> getTripImages(String tripId, String uid) {
+        List<TripImage> results = new ArrayList<>();
         Page<Blob> blobs = storage.bucket().list();
 
         for (Blob blob : blobs.iterateAll()) {
             if (blob.getName().contains(uid) && blob.getName().contains(tripId)) {
                 String[] split = blob.getName().split("_");
-                String ltd = split[3].split("-")[1];
+                double ltd = Double.parseDouble(split[3].split("-")[1]);
                 String lngWithExtension = split[4].split("-")[1];
-                String lng = lngWithExtension.substring(0, lngWithExtension.lastIndexOf("."));
-                results.add(Map.of("ltd", ltd, "lng", lng, "image", blob.getContent()));
+                double lng = Double.parseDouble(lngWithExtension.substring(0, lngWithExtension.lastIndexOf(".")));
+                results.add(new TripImage(blob.getContent(), ltd, lng));
             }
         }
 
