@@ -303,8 +303,8 @@ export class AccountPageComponent implements OnInit {
           "",
           {horizontalPosition: 'end', duration: 2000}
         );
+        this._twoFAEnabled = true;
         this.state.loading = false;
-        this.fetchUserData();
         this.state = this.initialState();
       },
       error: (error) => {
@@ -331,8 +331,8 @@ export class AccountPageComponent implements OnInit {
           "",
           {horizontalPosition: 'end', duration: 2000}
         );
+        this._twoFAEnabled = false;
         this.state.loading = false;
-        this.fetchUserData();
         this.state = this.initialState();
       },
       error: (error) => {
