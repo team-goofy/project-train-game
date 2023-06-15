@@ -3,7 +3,7 @@ import {TripFilter, TripService} from "@client/shared-services";
 import {Trip} from "@client/shared-models";
 import {PageEvent} from "@angular/material/paginator";
 import * as Leaflet from 'leaflet';
-import {take, tap} from "rxjs";
+import { take, tap} from "rxjs";
 import {MapImage} from "../models/map-image.model";
 import {LatLng, Point} from "leaflet";
 
@@ -83,7 +83,7 @@ export class TravelHistoryPageComponent implements OnInit {
     for (let index = 0; index < tripImages.length; index++) {
       const image = tripImages[index];
       const marker = this.generateMarker(image, index);
-      marker.addTo(this.map).bindPopup(`<b>${image.ltd},  ${image.lng}</b>`);
+      marker.addTo(this.map).bindPopup(`<img src="data:image/jpeg;base64,${ image.image }" width="300" alt="">`);
       this.map.panTo(<LatLng>{lat: image.ltd, lng: image.lng});
       this.markers.push(marker)
     }
