@@ -1,5 +1,5 @@
 import {Component, Inject, inject} from '@angular/core';
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import { RouteStation } from "@client/shared-models";
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "@client/shared-services";
@@ -34,7 +34,7 @@ export class TwoFaDialogComponent {
   state: State;
   private secret: string = "";
 
-  constructor(@Inject(MAT_DIALOG_DATA) public userData: any) {
+  constructor(@Inject(MAT_DIALOG_DATA) public userData: any, private dialogRef: MatDialogRef<TwoFaDialogComponent>) {
     // Access the passed data using this.data
     this.secret = userData.secret;
     this.state = this.initialState();
@@ -78,6 +78,7 @@ export class TwoFaDialogComponent {
 
     this.authService.verify2FA(this.secret, givenAuthCode).subscribe(
       (success) => {
+        this.dialogRef.close();
         this.show2FALoginSuccessSnackbar();
       },
       (error) => {

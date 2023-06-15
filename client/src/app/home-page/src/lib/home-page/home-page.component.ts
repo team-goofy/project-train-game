@@ -17,7 +17,6 @@ export class HomePageComponent implements OnInit {
   private _trips: Trip[] = []
 
   ngOnInit(): void {
-    this._dialog.closeAll();
     const filter = <TripFilter>{ onGoing: true };
     this._tripService.getTrips(filter).subscribe(trips => this._trips = trips);
   }
