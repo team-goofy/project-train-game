@@ -90,12 +90,16 @@ export class TravelHistoryPageComponent implements OnInit {
   }
 
   private generateMarker(image: MapImage, index: number) {
+    const icon = Leaflet.divIcon({
+      className: 'custom-div-icon',
+      html: `<div style='background-color:#333e9a; width: 30px; height: 30px; border-radius: 50% 50% 50% 0; background: #333e9a; position: absolute; transform: rotate(-45deg); left: 50%; top: 50%; margin: -15px 0 0 -15px;'></div><img src="data:image/jpeg;base64,${ image.image }" alt="" style='border-radius: 50%; position: absolute; width: 26px; height: 26px; left: 2px; top: 8px;'/>`,
+      iconSize: [30, 42],
+      iconAnchor: [15, 42]
+    });
+
     return Leaflet.marker(<LatLng>{ lat: image.ltd, lng: image.lng }, {
       riseOnHover: true,
-      icon: Leaflet.icon({
-        iconSize: new Point(40, 40, true),
-        iconUrl: "data:image/jpeg;base64," + image.image,
-      })
+      icon: icon
     }).on('click', (event) => this.markerClicked(event, index));
   }
 
