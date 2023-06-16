@@ -12,21 +12,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: snyk/actions/setup@master
       - name: Run Snyk to check for dependency vulnerabilities
-        run: snyk test --severity-threshold=high --file=client/package.json
+      - uses: snyk/actions/node@master
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --file=client/package.json
           
   code-security-fe:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: snyk/actions/setup@master
       - name: Run Snyk to check for code vulnerabilities
-        run: snyk code test --severity-threshold=high --file=client/package.json
+      - uses: snyk/actions/node@master
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --file=client/package.json
+          command: code test
           
   dependency-security-be:
     runs-on: ubuntu-latest
