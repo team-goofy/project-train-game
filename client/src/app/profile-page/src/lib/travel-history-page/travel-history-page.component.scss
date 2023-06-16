@@ -1,16 +1,6 @@
-.parent {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  /* Add some padding to the parent container */
-  padding: 0 20px 20px;
-  box-sizing: border-box; /* Include padding in the width calculation */
-}
-
 .centered {
   width: 100%;
-  max-width: 500px; /* Adjust the max-width value as needed */
+  max-width: 1000px; /* Adjust the max-width value as needed */
   margin-top: 5%;
   margin-left: auto;
   margin-right: auto;
@@ -44,11 +34,34 @@
   margin-bottom: 5%;
 }
 
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 36px;
+}
+
 .map-container {
+  flex: 50%;
   height: 400px;
 }
 
+@media (max-width: 1030px) {
+  .map-container {
+    flex: 100%;
+    order: 1;
+  }
+
+  .trips-container {
+    flex: 100%;
+    order: 2;
+  }
+}
+
 @media screen and (max-width: 1280px) {
+  .wrapper {
+    padding: 16px;
+  }
+
   .trip-title-text {
     font-size: 90%;
   }
