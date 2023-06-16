@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Run Snyk to check for dependency vulnerabilities
-      - uses: snyk/actions/node@master
+        uses: snyk/actions/node@master
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Run Snyk to check for code vulnerabilities
-      - uses: snyk/actions/node@master
+        uses: snyk/actions/node@master
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
