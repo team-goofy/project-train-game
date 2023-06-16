@@ -155,8 +155,8 @@ export class AuthService {
     return this.http.put<Stats>(`${this.baseUrl}/stats`, totalDuration, httpOptions);
   }
 
-  getUsersAchievements(): Observable<AchievementUser> {
-    return this.http.get<AchievementUser>(`${this.baseUrl}/achievements`,
+  getUsersAchievements(): Observable<AchievementUser[]> {
+    return this.http.get<AchievementUser[]>(`${this.baseUrl}/achievements`,
       { params: { uid: this.auth.currentUser!.uid } });
   }
 

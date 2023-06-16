@@ -1,11 +1,47 @@
 <div class="parent">
-  <div class="centered text-centered">
-    <h1 class="mat-headline-2 ">Achievements (Coming Soon!)</h1>
-    <div class="margin-text">
-      <h1>We are thrilled to announce that an exciting new feature is on its way to our website—the Achievements Page! 😊</h1>
-      <h2> This page will serve as a testament to the incredible milestones and accomplishments our users have achieved throughout their journey with us.
-        We believe that recognizing and celebrating these achievements is a crucial part of fostering a supportive and motivating community.</h2>
-    </div>
+  <div class="centered">
+    <h1 class="mat-headline-2 text__centered title__small">Achievements</h1>
 
+    <div class="cardWrapper cardWrapperAchievement" fxLayoutAlign="space-between center">
+      <mat-card *ngFor="let achievement of achievementsList" class="statsCard statsCardAchievement" fxFlex="30">
+        <mat-card-header class="icon__center">
+          <mat-icon *ngIf="!achievement.hasAchieved" class="icon__circle icon__gray mat-icon">{{achievement.matIcon}}</mat-icon>
+
+          <mat-icon *ngIf="achievement.hasAchieved && achievement.bgColor == 'bronze'" class="icon__circle icon__bronze mat-icon">
+            {{achievement.matIcon}}
+          </mat-icon>
+
+          <mat-icon *ngIf="achievement.hasAchieved && achievement.bgColor == 'lightblue'" class="icon__circle icon__lightblue mat-icon">
+            {{achievement.matIcon}}
+          </mat-icon>
+
+          <mat-icon *ngIf="achievement.hasAchieved && achievement.bgColor == 'gold'" class="icon__circle icon__gold mat-icon">
+            {{achievement.matIcon}}
+          </mat-icon>
+        </mat-card-header>
+
+        <mat-card-content>
+          <mat-card-title class="text__centered">{{achievement.title}}</mat-card-title>
+          <mat-card-subtitle class="text__centered mat-subtitle-1">{{achievement.description}}</mat-card-subtitle>
+
+          <mat-card-subtitle *ngIf="achievement.hasAchieved" class="text__centered mat-subtitle-1">
+            <b>Achieved at</b><br>
+            {{formatDate(achievement.dateAchieved)}}
+          </mat-card-subtitle>
+
+          <mat-card-subtitle *ngIf="!achievement.hasAchieved && achievement.tag != 'totalTime'" class="text__centered mat-subtitle-1">
+            <b>Progress</b><br>
+            {{achievement.progress}} / {{achievement.valueToReach}}
+          </mat-card-subtitle>
+
+          <mat-card-subtitle *ngIf="!achievement.hasAchieved && achievement.tag == 'totalTime'" class="text__centered mat-subtitle-1">
+            <b>Progress</b><br>
+            {{Number(achievement.progress / 60).toFixed(1)}} hours
+            / {{Number(achievement.valueToReach / 60).toFixed(0)}} hours
+          </mat-card-subtitle>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
 </div>

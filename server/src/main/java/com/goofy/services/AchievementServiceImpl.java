@@ -53,6 +53,8 @@ public class AchievementServiceImpl implements AchievementService {
             userAchievement.setDescription(achievement.getDescription());
             userAchievement.setValueToReach(achievement.getValueToReach());
             userAchievement.setTag(achievement.getTag());
+            userAchievement.setMatIcon(achievement.getMatIcon());
+            userAchievement.setBgColor(achievement.getBgColor());
         }
 
         userAchievementList.sort(Comparator.comparing(Achievement.UserAchievement::getTag)

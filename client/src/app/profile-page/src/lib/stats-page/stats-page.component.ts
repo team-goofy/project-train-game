@@ -1,7 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {AuthService} from "@client/shared-services";
 
-
 interface State {
   hasTrips: boolean;
 }

@@ -14,6 +14,8 @@ public class Achievement {
     private String description;
     private int valueToReach;
     private String tag;
+    private String matIcon;
+    private String bgColor;
 
     @Getter
     @Setter
@@ -36,6 +38,8 @@ public class Achievement {
         private String description;
         private int valueToReach;
         private String tag;
+        private String matIcon;
+        private String bgColor;
         private int progress;
         private String dateAchieved;
         private boolean hasAchieved;
