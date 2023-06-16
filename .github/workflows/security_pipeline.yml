@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  dependency-security-fe:
+  dependency-security:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -16,9 +16,8 @@ jobs:
         run: npx snyk test --severity-threshold=high
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        working-directory: client
 
-  code-security-fe:
+  code-security:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -26,24 +25,3 @@ jobs:
         run: npx snyk code test --severity-threshold=high
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        working-directory: client
-
-  dependency-security-be:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: Run Snyk to check for dependency vulnerabilities
-        run: npx snyk test --severity-threshold=high --file=pom.xml
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        working-directory: server
-
-  code-security-be:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: Run Snyk to check for code vulnerabilities
-        run: npx snyk code test --severity-threshold=high
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        working-directory: server
