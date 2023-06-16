@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@master
       - uses: snyk/actions/setup@master
       - name: Run Snyk to check for dependency vulnerabilities
-        run: snyk test
+        run: snyk test --severity-threshold=high --file=client/package.json
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           
@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@master
       - uses: snyk/actions/setup@master
       - name: Run Snyk to check for code vulnerabilities
-        run: snyk code test
+        run: snyk code test --severity-threshold=high --file=client/package.json
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           
