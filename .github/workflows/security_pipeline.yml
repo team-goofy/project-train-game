@@ -8,20 +8,39 @@ permissions:
   contents: read
 
 jobs:
-  dependency-security:
+  checkout:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
+
+  dependency-security:
+    needs: checkout
+    runs-on: ubuntu-latest
+    steps:
       - name: Run Snyk to check for dependency vulnerabilities
-        run: npx snyk test --severity-threshold=high --all-projects
+        run: npx snyk test --severity-threshold=high --all-projects --org=project-train-game
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   code-security:
+    needs: checkout
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
       - name: Run Snyk to check for code vulnerabilities
-        run: npx snyk code test --severity-threshold=high --all-projects
+        run: npx snyk code test --severity-threshold=high --all-projects --org=project-train-game
+        env:
+           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  monitor:
+    if: always()
+    needs: [dependency-security, code-security]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Submit dependency security results to Snyk
+        run: npx snyk monitor --all-projects --org=project-train-game
+        env:
+           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Submit code security results to Snyk
+        run: npx snyk code monitor --all-projects --org=project-train-game
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
