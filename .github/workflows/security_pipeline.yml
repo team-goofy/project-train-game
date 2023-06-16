@@ -8,13 +8,13 @@ permissions:
   contents: read
 
 jobs:
-  snyk-fe:
+  dependency-security-fe:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - uses: snyk/actions/setup@master
-      - name: Run Snyk to check for vulnerabilities
-        run: snyk code test --sarif > snyk-fe.sarif
+      - name: Run Snyk to check for dependency vulnerabilities
+        run: snyk test --sarif > snyk-dependency-fe.sarif
         continue-on-error: true
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -23,17 +23,48 @@ jobs:
         with:
           sarif_file: snyk-fe.sarif
           
-  snyk-be:
+  code-security-fe:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
+      - uses: snyk/actions/setup@master
+      - name: Run Snyk to check for code vulnerabilities
+        run: snyk code test --sarif > snyk-code-fe.sarif
+        continue-on-error: true
+        env:
+           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: snyk-fe.sarif
+          
+  dependency-security-be:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for dependency vulnerabilities
         uses: snyk/actions/maven-3-jdk-17@master
         continue-on-error: true # To make sure that SARIF upload gets called
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high --sarif-file-output=snyk-be.sarif --file=server/pom.xml
+          args: --severity-threshold=high --sarif-file-output=snyk-dependency-be.sarif --file=server/pom.xml
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: snyk-be.sarif
+          
+  code-security-be:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for code vulnerabilities
+        uses: snyk/actions/maven-3-jdk-17@master
+        continue-on-error: true # To make sure that SARIF upload gets called
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --sarif-file-output=snyk-code-be.sarif --file=server/pom.xml
           command: code test
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v2
