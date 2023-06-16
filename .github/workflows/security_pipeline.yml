@@ -13,12 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Run Snyk to check for dependency vulnerabilities
-        uses: snyk/actions/node@master
+        run: npx snyk test --severity-threshold=high
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high --file=client/package.json --all-projects --detection-depth=1
-          
+        working-directory: client
+
   code-security-fe:
     runs-on: ubuntu-latest
     steps:
@@ -28,7 +27,7 @@ jobs:
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         working-directory: client
-          
+
   dependency-security-be:
     runs-on: ubuntu-latest
     steps:
@@ -40,7 +39,6 @@ jobs:
         with:
           args: --severity-threshold=high --file=server/pom.xml
 
-          
   code-security-be:
     runs-on: ubuntu-latest
     steps:
