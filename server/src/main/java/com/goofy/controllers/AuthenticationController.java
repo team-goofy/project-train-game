@@ -22,6 +22,7 @@ public class AuthenticationController {
 
     private final AuthenticationService authService;
     private final AuthenticationServiceImpl authServiceImpl;
+
     @PutMapping("/verify2FA")
     public ResponseEntity<String> verify2FA(@RequestBody @Valid Map<String, String> requestBody, Principal principal) throws Exception {
         String secret = requestBody.get("secret");
@@ -29,6 +30,16 @@ public class AuthenticationController {
 
         return authService.verify2FA(secret, code, principal.getName());
     }
+
+    @PutMapping("/verify2falogin")
+    public ResponseEntity<String> verify2FA(@RequestBody @Valid Map<String, String> requestBody) throws Exception {
+        String secret = requestBody.get("secret");
+        String code = requestBody.get("code");
+        String uid = requestBody.get("uid");
+
+        return authService.verify2FA(secret, code, uid);
+    }
+
 
     @PutMapping("/disable2FA")
     public ResponseEntity<String> disable2FA(@RequestBody() String uid) throws Exception {

@@ -7,7 +7,6 @@ import com.goofy.services.UserServiceImpl;
 import com.google.firebase.auth.UserRecord;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -47,6 +46,12 @@ public class UserController {
     @PutMapping("/profileUsername")
     public ResponseEntity<String> updateUserName(@RequestBody() @Valid String username, Principal principal) throws Exception {
         return userService.changeUsername(username, principal.getName());
+    }
+
+
+    @GetMapping("/twofacheck")
+    public Map<String, String> check2FA(@RequestParam() @Valid String email) throws Exception {
+        return userService.getUidByEmail(email);
     }
 
 }

@@ -33,10 +33,14 @@ export class TwoFaDialogComponent {
 
   state: State;
   private secret: string = "";
+  private uid: string = "";
+  private user: any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public userData: any, private dialogRef: MatDialogRef<TwoFaDialogComponent>) {
     // Access the passed data using this.data
-    this.secret = userData.secret;
+    this.secret = userData.parsedData.secret;
+    this.uid = userData.uid;
+    this.user = userData.user;
     this.state = this.initialState();
   }
 
@@ -76,14 +80,32 @@ export class TwoFaDialogComponent {
   verify2FA() {
     const givenAuthCode = this.twoFAForm.controls['authCode'].value.toString();
 
-    this.authService.verify2FA(this.secret, givenAuthCode).subscribe(
+    this.authService.verify2FALogin(this.secret, givenAuthCode, this.uid).subscribe(
       (success) => {
-        this.dialogRef.close();
-        this.show2FALoginSuccessSnackbar();
+        this.authService.login(this.user).subscribe(
+          (success) => {
+            this.dialogRef.close();
+            this.show2FALoginSuccessSnackbar();
+          },
+          (error) => {
+            this.handleLoginError();
+          }
+        );
       },
       (error) => {
         this.showWrongCodeErrorSnackbar();
       }
+    );
+  }
+
+  private handleLoginError(): void {
+    this.showGenericErrorSnackbar();
+  }
+
+  private showGenericErrorSnackbar(): void {
+    this.snackbar.open(
+      "Something went wrong, please try again later",
+      "", { horizontalPosition: 'end', duration: 3000 }
     );
   }
 

@@ -4,7 +4,6 @@ import com.goofy.controllers.EmailController;
 import com.goofy.dtos.UserDTO;
 import com.goofy.exceptions.UsernameExistsException;
 import com.goofy.models.Profile;
-import com.goofy.security.CustomTotp;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.auth.FirebaseAuth;
@@ -12,7 +11,6 @@ import com.google.firebase.auth.UserRecord;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -28,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     public UserRecord saveUser(UserDTO user) throws Exception {
         try {
+
             boolean usernameExists = this.usernameExists(user.getUsername());
 
             UserRecord.CreateRequest request = new UserRecord.CreateRequest()
@@ -103,6 +102,20 @@ public class UserServiceImpl implements UserService {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
+        }
+    }
+
+
+    @Override
+    public Map<String, String> getUidByEmail(String email) throws Exception {
+        UserRecord getUserInfo = this.firebaseAuth.getUserByEmail(email);
+        DocumentReference userRef = this.firestore.collection("user").document(getUserInfo.getUid());
+        DocumentSnapshot userSnapshot = userRef.get().get();
+        if (userSnapshot.exists()) {
+            Map<String, String> userSnapshotId = Map.of("uid", userSnapshot.getId());
+            return userSnapshotId;
+        } else {
+            return null; // or throw an exception, depending on your requirements
         }
     }
 

@@ -43,30 +43,30 @@ export class AuthService {
         );
     }
 
-    logout(): void {
-        this.auth.signOut().then(() => {
-          localStorage.removeItem('tokenId');
-          this.router.navigate(['/']);
-        });
+  logout(): void {
+      this.auth.signOut().then(() => {
+        localStorage.removeItem('tokenId');
+        this.router.navigate(['/']);
+      });
+  }
+
+  register(userRequestModel: UserRequestModel): Observable<any> {
+    return this.http.post(`${this.baseUrl}/user/register`, userRequestModel);
+  }
+
+  sendVerificationMail() {
+    const httpOptions: Object = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      responseType: 'text'
     }
 
-    register(userRequestModel: UserRequestModel): Observable<any> {
-      return this.http.post(`${this.baseUrl}/user/register`, userRequestModel);
-    }
+    return this.http
+      .post<any>(`${this.baseUrl}/mail/send-verification`, this.auth.currentUser!.email, httpOptions)
+  }
 
-    sendVerificationMail() {
-      const httpOptions: Object = {
-        headers: new HttpHeaders().set('Content-Type', 'application/json'),
-        responseType: 'text'
-      }
-
-      return this.http
-        .post<any>(`${this.baseUrl}/mail/send-verification`, this.auth.currentUser!.email, httpOptions)
-    }
-
-    checkUsername(username: string): Observable<any> {
-      return this.http.get(`${this.baseUrl}/user/username`, { params: { username } });
-    }
+  checkUsername(username: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/user/username`, { params: { username } });
+  }
 
   getUserCollectionData(): Observable<any> {
       const httpOptions: Object = {
@@ -76,9 +76,21 @@ export class AuthService {
       return this.http.post<any>(`${this.baseUrl}/user/profile`, this.auth.currentUser!.uid, httpOptions);
     }
 
-    isLoggedIn(): boolean {
-      return !!localStorage.getItem('tokenId');
+  getUserCollectionDataWithoutLogin(uid: string): Observable<any> {
+    const httpOptions: Object = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      responseType: 'text'
     }
+    return this.http.post<any>(`${this.baseUrl}/user/profile`, uid, httpOptions);
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('tokenId');
+  }
+
+  getUidByEmail(email: string): Observable<{uid: string}> {
+    return this.http.get<{uid: string}>(`${this.baseUrl}/user/twofacheck`, {params: {email}});
+  }
 
 //    account-page
   getUserData(): User {
@@ -113,6 +125,21 @@ export class AuthService {
     };
 
     return this.http.put<any>(`${this.baseUrl}/auth/verify2FA`, body, httpOptions);
+  }
+
+  verify2FALogin(secret: string, code: string, uid: string): Observable<any> {
+    const httpOptions: Object = {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      responseType: 'text'
+    }
+
+    const body = {
+      secret: secret,
+      code: code,
+      uid: uid
+    };
+
+    return this.http.put<any>(`${this.baseUrl}/auth/verify2falogin`, body, httpOptions);
   }
 
   disable2FA(): Observable<any> {

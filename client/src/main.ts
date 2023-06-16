@@ -5,12 +5,12 @@ import {environment} from "./environments/environment.prod";
 import {enableProdMode} from "@angular/core";
 
 
-if(environment.production){
-  window.console.log = () => {
-
-  };
-  enableProdMode()
-}
+// if(environment.production){
+//   window.console.log = () => {
+//
+//   };
+//   enableProdMode()
+// }
 
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));

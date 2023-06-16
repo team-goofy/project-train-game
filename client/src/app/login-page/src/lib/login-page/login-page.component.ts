@@ -57,26 +57,38 @@ export class LoginPageComponent implements OnInit{
       password: this.form.value.password
     };
 
-    this.authService.login(user).subscribe(
-      (success) => {
-        this.handleLoginSuccess();
+    this.authService.getUidByEmail(user.email).subscribe({
+      next: (data: {uid: string}) => {
+        this.handle2FALogin(data.uid);
       },
-      (error) => {
-        this.handleLoginError();
+      error: ({ error }) => {
+        console.log('error')
       }
-    );
+    });
   }
 
-  private handleLoginSuccess(): void {
-    this.authService.getUserCollectionData().subscribe(
+  private handle2FALogin(uid: string): void {
+    const user = {
+      email: this.form.value.email,
+      password: this.form.value.password
+    };
+
+    this.authService.getUserCollectionDataWithoutLogin(uid).subscribe(
       (data: any) => {
         const parsedData = JSON.parse(data);
         this.twoFAEnabled = parsedData.is2FaActivated;
 
         if (this.twoFAEnabled) {
-          this.openTwoFaDialog(parsedData);
+          this.openTwoFaDialog(parsedData, uid, user);
         } else {
-          this.showLoginSuccessSnackbar();
+            this.authService.login(user).subscribe(
+              (success) => {
+                this.handleLoginSuccess();
+              },
+              (error) => {
+                this.handleLoginError();
+              }
+            );
         }
       },
       () => {
@@ -85,13 +97,21 @@ export class LoginPageComponent implements OnInit{
     );
   }
 
+  private handleLoginSuccess(): void {
+    this.showLoginSuccessSnackbar();
+  }
+
   private handleLoginError(): void {
     this.showGenericErrorSnackbar();
   }
 
-  private openTwoFaDialog(parsedData: any): void {
+  private openTwoFaDialog(parsedData: any, uid: string, user: any): void {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = parsedData;
+    dialogConfig.data = {
+      parsedData: parsedData,
+      uid: uid,
+      user: user
+    };
 
     this._dialog.open(TwoFaDialogComponent, dialogConfig);
   }
