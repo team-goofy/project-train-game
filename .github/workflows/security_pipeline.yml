@@ -33,20 +33,17 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Run Snyk to check for dependency vulnerabilities
-        uses: snyk/actions/maven-3-jdk-17@master
+        run: npx snyk test --severity-threshold=high --file=pom.xml
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high --file=server/pom.xml
+        working-directory: server
 
   code-security-be:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - name: Run Snyk to check for code vulnerabilities
-        uses: snyk/actions/maven-3-jdk-17@master
+        run: npx snyk code test --severity-threshold=high
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high --file=server/pom.xml
-          command: code test
+        working-directory: server
