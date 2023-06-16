@@ -24,12 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Run Snyk to check for code vulnerabilities
-        uses: snyk/actions/node@master
+        run: npx snyk code test --severity-threshold=high
         env:
            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high --file=client/package.json --all-projects --detection-depth=1
-          command: code test
+        working-directory: client
           
   dependency-security-be:
     runs-on: ubuntu-latest
