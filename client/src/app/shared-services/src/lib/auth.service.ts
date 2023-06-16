@@ -160,12 +160,12 @@ export class AuthService {
       { params: { uid: this.auth.currentUser!.uid } });
   }
 
-  updateUsersAchievements(achievementStats: AchievementStats): Observable<boolean> {
+  updateUsersAchievements(achievementStats: AchievementStats): Observable<string> {
     const httpOptions: Object = {
       headers: new HttpHeaders().set('Content-Type', 'application/json'),
       responseType: 'text'
     }
 
-    return this.http.put<boolean>(`${this.baseUrl}/achievements`, achievementStats, httpOptions);
+    return this.http.put<string>(`${this.baseUrl}/achievements`, achievementStats, httpOptions);
   }
 }

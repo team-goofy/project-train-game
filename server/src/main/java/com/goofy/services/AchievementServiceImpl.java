@@ -89,7 +89,7 @@ public class AchievementServiceImpl implements AchievementService {
             } else if (achievement.getTag().equals("amountTrips")) {
                 userAchievementUpdate.setProgress(userAchievementUpdate.getProgress() + 1);
             } else {
-                userAchievementUpdate.setProgress(userAchievementUpdate.getProgress() + achievementStats.getTotalVisitedStations());
+                userAchievementUpdate.setProgress(achievementStats.getTotalVisitedStations());
             }
 
             if (userAchievementUpdate.getProgress() >= achievement.getValueToReach()) {
