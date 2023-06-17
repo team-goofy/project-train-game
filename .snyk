@@ -4,4 +4,4 @@ ignore: {}
 patch: {}
 exclude:
   global:
-    - server\src\main\java\com\goofy\configs\WebSecurityConfig.java
+    - server/src/main/java/com/goofy/configs/WebSecurityConfig.java
