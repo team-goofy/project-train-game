@@ -15,11 +15,11 @@ jobs:
       - name: Run Snyk to check for dependency vulnerabilities
         run: npx snyk test --severity-threshold=high --all-projects
         env:
-           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Submit dependency security results to Snyk
         run: npx snyk monitor --all-projects
         env:
-           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   code-security:
     runs-on: ubuntu-latest
@@ -28,4 +28,4 @@ jobs:
       - name: Run Snyk to check for code vulnerabilities
         run: npx snyk code test --severity-threshold=high --all-projects
         env:
-           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
