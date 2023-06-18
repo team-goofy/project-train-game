@@ -6,6 +6,12 @@ import { TripService } from "../../../../shared-services/src/lib/trip.service";
 import { delay, switchMap, tap } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
+interface State {
+  loading: boolean;
+  error: string | null;
+  randomTrain: ExitStationTrain | null;
+}
+
 @Component({
   templateUrl: './random-train.component.html',
   styleUrls: ['./random-train.component.scss']
@@ -14,63 +20,71 @@ export class RandomTrainComponent implements OnInit {
   private _randomTrainService: RandomTrainService = inject(RandomTrainService);
   private _route: ActivatedRoute = inject(ActivatedRoute);
   private _tripService: TripService = inject(TripService);
-  private _randomTrain!: ExitStationTrain;
   private _snackbar: MatSnackBar = inject(MatSnackBar);
   private _router: Router = inject(Router);
 
-  private tripId: string = "";
-  private uicCode: string = "";
-  private departureLocation: string = "";
-  private _loading: boolean = false;
+  private _tripId: string = "";
+  private _uicCode: string = "";
+  private _departureLocation: string = "";
+  private _state: State;
 
-  get departureLocationValue(): string {
-    return this.departureLocation;
+  constructor() {
+    this._state = this.initialState();
   }
-
+  
   ngOnInit(): void {
     this._route.queryParams.subscribe((params) => {
-      this.uicCode = params['uicCode'];
-      this.departureLocation = params['location'];
-      this.tripId = params['tripId'];
+      this._uicCode = params['uicCode'];
+      this._departureLocation = params['location'];
+      this._tripId = params['tripId'];
     });
 
     this.getRandomTrain();
   }
 
   getRandomTrain(): void {
-    this._loading = true;
+    this.initialState();
+    this._state.loading = true;
 
-    this._randomTrainService.getRandomTrain(this.uicCode)
+    this._randomTrainService.getRandomTrain(this._uicCode)
       .pipe(delay(1000))
-      .subscribe(train => {
-        if(train !== null) {
-          this._randomTrain = train
-          this._randomTrain.departure.plannedDateTime = train.departure.plannedDateTime;
-          this._loading = false;
+      .subscribe({
+        next: (train) => {
+          this._state.randomTrain = train;
+          this._state.randomTrain.departure.plannedDateTime = train.departure.plannedDateTime;
+          this._state.loading = false;
+        }, 
+        error: ({ error }) => {
+          this._state = this.initialState();
+          this._state.error = error.errors.join();
         }
       });
   }
 
   saveTrip(): void {
-    this._loading = true;
+    if(this._state.randomTrain === null) {
+      return;
+    }
 
-    this._tripService.getTripById(this.tripId).pipe(
+    this._state.loading = true;
+
+    this._tripService.getTripById(this._tripId).pipe(
       switchMap((trip: Trip) => {
         trip.routeStations.push(
           {
-            uicCode: this._randomTrain.exitStation.uicCode,
-            mediumName: this._randomTrain.exitStation.mediumName
+            uicCode: this._state.randomTrain!.exitStation.uicCode,
+            mediumName: this._state.randomTrain!.exitStation.mediumName
           }
         );
 
         // Add the departureTime to the second last station
         const secondLastIndex = trip.routeStations.length - 2;
-        trip.routeStations[secondLastIndex].departureTime = this._randomTrain.departure.plannedDateTime;
+        trip.routeStations[secondLastIndex].departureTime = this._state.randomTrain!.departure.plannedDateTime;
 
         return this._tripService.saveTrip(trip);
       }),
       tap((response) => {
-        this._loading = false;
+        this._state.loading = false;
         this._snackbar.open(
           "Your trip progress has been saved!",
           "",
@@ -80,19 +94,27 @@ export class RandomTrainComponent implements OnInit {
         this._router.navigate(['game/picture-upload'], {
           queryParams: {
             tripId: response.tripId,
-            uicCode: this._randomTrain.exitStation.uicCode,
-            location: this._randomTrain.exitStation.mediumName
+            uicCode: this._state.randomTrain!.exitStation?.uicCode,
+            location: this._state.randomTrain!.exitStation?.mediumName
           }
         });
       })
     ).subscribe();
   }
 
-  get randomTrain(): ExitStationTrain {
-    return this._randomTrain;
+  initialState(): State {
+    return <State>{
+      loading: false,
+      error: null,
+      randomTrain: null
+    };
   }
 
-  public get loading(): boolean {
-    return this._loading;
+  get departureLocation(): string {
+    return this._departureLocation;
+  }
+
+  get state(): State {
+    return this._state;
   }
 }
