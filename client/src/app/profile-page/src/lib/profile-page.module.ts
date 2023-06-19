@@ -20,6 +20,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import {MatStepperModule} from "@angular/material/stepper";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     MatGridListModule,
     FlexLayoutModule,
     MatProgressSpinnerModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    QRCodeModule
   ],
   declarations: [
     ProfilePageComponent,

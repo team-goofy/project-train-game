@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Two Factor Authentication 🚩</h2>
+<mat-dialog-content>
+  <p class="mat-subtitle-1">To log in you need to enter the authentication code from your phone:</p>
+  <form [formGroup]="twoFAForm" class="text-centered">
+    <mat-form-field appearance="outline">
+      <mat-label>6-digit code</mat-label>
+      <input type="number" matInput formControlName="authCode" pattern="[0-9]*" (keydown)="checkLength($event)">
+      <mat-icon matSuffix>lock</mat-icon>
+      <mat-error>
+        <span *ngIf="e['authCode'].hasError('minlength')">Code must be 6 characters long</span>
+        <span *ngIf="e['authCode'].hasError('maxlength')">Code must be 6 characters long</span>
+        <span *ngIf="e['authCode'].hasError('required')">Code is required</span>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button  (click)="verify2FA()" [disabled]="state.valueHasNotBeenChanged">Verify</button>
+</mat-dialog-actions>

@@ -142,15 +142,13 @@ export class PictureUploadPageComponent implements OnInit {
         }),
         tap(() => {
           if (!this._achievementUnlocked.valueOf()) {
-            let ref = this._snackbar.open(
+            this._snackbar.open(
               "Your trip has ended!",
               "",
               { horizontalPosition: 'end', duration: 2000 }
             );
 
-            ref.afterDismissed().subscribe(() => {
-              this._router.navigate(['/']);
-            })
+            this._router.navigate(['/']);
           }
 
           else {
@@ -207,7 +205,7 @@ export class PictureUploadPageComponent implements OnInit {
   }
 
   showConfetti() {
-    let ref = this._snackbar.open(
+    this._snackbar.open(
       "Your trip has ended and you've unlocked a new achievement! Check your profile page!",
       "",
       { horizontalPosition: 'end', duration: 2000 }
@@ -221,9 +219,7 @@ export class PictureUploadPageComponent implements OnInit {
       size: party.variation.range(1, 2),
     });
 
-    ref.afterDismissed().subscribe(() => {
-      this._router.navigate(['/']);
-    })
+    this._router.navigate(['/']);
   }
 
   private checkValidImageSize(image: Blob): boolean {
