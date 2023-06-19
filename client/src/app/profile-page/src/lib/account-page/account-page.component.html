@@ -5,7 +5,7 @@
       <mat-spinner></mat-spinner>
     </ng-template>
 
-      <form [formGroup]="accountEditForm">
+      <form *ngIf="!state.enable2FA" [formGroup]="accountEditForm">
         <div class="form-fields">
         <mat-form-field appearance="outline">
           <mat-label>Username</mat-label>
@@ -27,18 +27,50 @@
           </mat-error>
         </mat-form-field>
 
-
         <ng-container *ngIf="!state.editing">
           <button mat-raised-button color="primary" (click)="editingState()"> <mat-icon matSuffix>edit</mat-icon>Edit</button>
           <button mat-raised-button color="accent" (click)="changePassword()"><mat-icon matSuffix>security</mat-icon>Change password</button>
+          <button *ngIf="!twoFAEnabled" mat-raised-button color="primary" (click)="enable2FA()"><mat-icon matSuffix>security</mat-icon>Enable two factor authentication</button>
+          <button *ngIf="twoFAEnabled" mat-raised-button color="primary" (click)="disable2FA()"><mat-icon matSuffix>delete</mat-icon>Disable two factor authentication</button>
         </ng-container>
 
         <ng-container *ngIf="state.editing">
           <button id="submit-button" [disabled]="state.valueHasNotBeenChanged" mat-raised-button color="primary" (click)="onSubmit()"><mat-icon matSuffix>save</mat-icon>Save changes</button>
-          <button mat-raised-button color="accent" (click)="cancel()">  <mat-icon matSuffix>close</mat-icon>Cancel</button>
+          <button mat-raised-button color="accent" (click)="cancel()"><mat-icon matSuffix>close</mat-icon>Cancel</button>
         </ng-container>
         </div>
       </form>
+
+      <ng-container *ngIf="state.enable2FA">
+        <div class="form-fields">
+          <!--    scan or click code-->
+          <div style="display: flex;">
+            <a href="{{myAngularxQrCode}}">
+              <qrcode class="text-centered" (qrCodeURL)="onChangeURL($event)" [qrdata]="myAngularxQrCode" [width]="245" [errorCorrectionLevel]="'M'" [margin]="2"></qrcode>
+            </a>
+            <div class="content" style="display: flex; flex-direction: column;">
+              <h2 class="mat-headline-6 text-centered" style="padding-top: 6px">SCAN THE QR CODE</h2>
+              <p class="text-centered">Open the authentication app and <br>scan the QR using your phone</p>
+              <p class="text-centered">OR: manually add this code: <b>{{secret}}</b> to your authentication app</p>
+              <form [formGroup]="twoFAForm" class="text-centered">
+                <mat-form-field appearance="outline">
+                  <mat-label>6-digit code</mat-label>
+                  <input type="number" matInput formControlName="authCode" pattern="[0-9]*" (keydown)="checkLength($event)">
+                  <mat-icon matSuffix>lock</mat-icon>
+                  <mat-error>
+                    <span *ngIf="e['authCode'].hasError('minlength')">Code must be 6 characters long</span>
+                    <span *ngIf="e['authCode'].hasError('maxlength')">Code must be 6 characters long</span>
+                    <span *ngIf="e['authCode'].hasError('required')">Code is required</span>
+                  </mat-error>
+                </mat-form-field>
+              </form>
+            </div>
+          </div>
+
+          <button mat-raised-button color="primary" (click)="verify2FA()" [disabled]="state.valueHasNotBeenChanged"><mat-icon matSuffix>edit</mat-icon>Verify 2FA</button>
+          <button mat-raised-button color="accent" (click)="cancel()"><mat-icon matSuffix>close</mat-icon>Cancel</button>
+        </div>
+      </ng-container>
   </div>
 </div>
 

@@ -49,7 +49,7 @@ class TripServiceImplTest {
     private final TripService tripService = new TripServiceImpl(storage, firestore, uuidGenerator);
 
     @Test
-    public void saveTrip_NoTripId_GeneratesAndReturnsNewTripId() {
+    void saveTrip_NoTripId_GeneratesAndReturnsNewTripId() {
         // Arrange
         RouteStation station = new RouteStation();
         station.setUicCode("station1_uic_code");
@@ -83,7 +83,7 @@ class TripServiceImplTest {
     }
 
     @Test
-    public void saveTrip_ValidTripDTO_ReturnsTripId() {
+    void saveTrip_ValidTripDTO_ReturnsTripId() {
         // Arrange
         RouteStation station = new RouteStation();
         station.setUicCode("station1_uic_code");
@@ -169,7 +169,7 @@ class TripServiceImplTest {
     }
 
     @Test
-    public void saveImage_NoContentType_ThrowsNoContentTypeException() {
+    void saveImage_NoContentType_ThrowsNoContentTypeException() {
         // Arrange
         String uid = "testUid";
         TripImageDTO tripImageDTO = new TripImageDTO();
@@ -184,7 +184,7 @@ class TripServiceImplTest {
     }
 
     @Test
-    public void saveImage_UnsupportedFileExtensions_ThrowsUnsupportedFileExtensionException() throws IOException {
+    void saveImage_UnsupportedFileExtensions_ThrowsUnsupportedFileExtensionException() throws IOException {
         // Arrange
         String uid = "testUid";
         TripImageDTO tripImageDTO = new TripImageDTO();
@@ -199,7 +199,7 @@ class TripServiceImplTest {
     }
 
     @Test
-    public void saveImage_TripImageAlreadyExists_ThrowsTripImageAlreadyExistsException() throws IOException {
+    void saveImage_TripImageAlreadyExists_ThrowsTripImageAlreadyExistsException() throws IOException {
         // Arrange
         String uid = "testUid";
         TripImageDTO tripImageDTO = new TripImageDTO();
@@ -225,7 +225,7 @@ class TripServiceImplTest {
     }
 
     @Test
-    public void saveImage_ValidInput_ReturnsBlobId() throws IOException {
+    void saveImage_ValidInput_ReturnsBlobId() throws IOException {
         // Arrange
         String uid = "testUid";
         TripImageDTO tripImageDTO = new TripImageDTO();

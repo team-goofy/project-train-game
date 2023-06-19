@@ -4,6 +4,7 @@ import com.goofy.builders.UserTestDataBuilder;
 import com.goofy.controllers.EmailController;
 import com.goofy.dtos.UserDTO;
 import com.goofy.exceptions.UsernameExistsException;
+import com.goofy.models.Achievement;
 import com.goofy.models.Profile;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
@@ -15,6 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -220,7 +224,7 @@ class UserServiceImplTests {
     }
 
     @Test
-    public void saveUser_existingUsername_throwsUsernameExistException() throws Exception {
+    void saveUser_existingUsername_throwsUsernameExistException() throws Exception {
         // Arrange
         UserDTO user = new UserDTO();
         user.setUsername("testUsername");
@@ -254,7 +258,7 @@ class UserServiceImplTests {
     }
 
     @Test
-    public void saveUser_validUser_returnsCreatedUser() throws Exception {
+    void saveUser_validUser_returnsCreatedUser() throws Exception {
         // Arrange
         UserDTO user = new UserDTO();
         user.setUsername("testUsername");
@@ -263,24 +267,34 @@ class UserServiceImplTests {
 
         // Mock
         // Check if username exists
-        CollectionReference collectionReference = mock(CollectionReference.class);
-        when(firestore.collection("user")).thenReturn(collectionReference);
-        Query query = mock(Query.class);
-        when(collectionReference.whereEqualTo("username", user.getUsername())).thenReturn(query);
-        ApiFuture<QuerySnapshot> future = mock(ApiFuture.class);
-        when(query.get()).thenReturn(future);
-        QuerySnapshot snapshot = mock(QuerySnapshot.class);
-        when(future.get()).thenReturn(snapshot);
-        when(snapshot.isEmpty()).thenReturn(true);
+        CollectionReference userCollectionReference = mock(CollectionReference.class);
+        Query userQuery = mock(Query.class);
+        ApiFuture<QuerySnapshot> userFuture = mock(ApiFuture.class);
+        QuerySnapshot userSnapshot = mock(QuerySnapshot.class);
+
+        when(firestore.collection("user")).thenReturn(userCollectionReference);
+        when(userCollectionReference.whereEqualTo("username", user.getUsername())).thenReturn(userQuery);
+        when(userQuery.get()).thenReturn(userFuture);
+        when(userFuture.get()).thenReturn(userSnapshot);
+        when(userSnapshot.isEmpty()).thenReturn(true);
 
         // Create the user
         UserRecord createdUser = mock(UserRecord.class);
         when(firebaseAuth.createUser(any(UserRecord.CreateRequest.class))).thenReturn(createdUser);
-        when(firestore.collection("user")).thenReturn(collectionReference);
-        DocumentReference documentReference = mock(DocumentReference.class);
-        when(collectionReference.document(createdUser.getUid())).thenReturn(documentReference);
-        ApiFuture<WriteResult> writeResultApiFuture = mock(ApiFuture.class);
-        when(documentReference.set(any(Map.class))).thenReturn(writeResultApiFuture);
+
+        // Add achievements & username to user-document
+        CollectionReference achievementsCollectionReference = mock(CollectionReference.class);
+        ApiFuture<QuerySnapshot> achievementsFuture = mock(ApiFuture.class);
+        QuerySnapshot achievementsSnapShot = mock(QuerySnapshot.class);
+        when(firestore.collection("achievements")).thenReturn(achievementsCollectionReference);
+        when(achievementsCollectionReference.get()).thenReturn(achievementsFuture);
+        when(achievementsFuture.get()).thenReturn(achievementsSnapShot);
+
+        DocumentReference userDocumentReference = mock(DocumentReference.class);
+        ApiFuture<WriteResult> userWriteResultApiFuture = mock(ApiFuture.class);
+        when(firestore.collection("user")).thenReturn(userCollectionReference);
+        when(userCollectionReference.document(createdUser.getUid())).thenReturn(userDocumentReference);
+        when(userDocumentReference.set(any(Map.class))).thenReturn(userWriteResultApiFuture);
 
         // Create Stats-Document where the user's stats will be stored
         CollectionReference statsCollectionReference = mock(CollectionReference.class);
@@ -299,9 +313,9 @@ class UserServiceImplTests {
         // Assert
         assertEquals(createdUser, result);
         verify(firestore, times(2)).collection("user");
-        verify(collectionReference, times(1)).whereEqualTo("username", user.getUsername());
+        verify(userCollectionReference, times(1)).whereEqualTo("username", user.getUsername());
         verify(firebaseAuth, times(1)).createUser(any(UserRecord.CreateRequest.class));
-        verify(collectionReference, times(1)).document(createdUser.getUid());
+        verify(userCollectionReference, times(1)).document(createdUser.getUid());
         verify(firestore, times(1)).collection("stats");
         verify(statsCollectionReference, times(1)).document(createdUser.getUid());
         verify(statsDocumentReference, times(1)).set(any(Map.class));
@@ -309,7 +323,7 @@ class UserServiceImplTests {
     }
 
     @Test
-    public void usernameExists_existingUsername_returnsTrue() throws ExecutionException, InterruptedException {
+    void usernameExists_existingUsername_returnsTrue() throws ExecutionException, InterruptedException {
         // Arrange
         String username = "testUsername";
 
@@ -334,7 +348,7 @@ class UserServiceImplTests {
     }
 
     @Test
-    public void usernameExists_nonExistingUsername_returnsFalse() throws ExecutionException, InterruptedException {
+    void usernameExists_nonExistingUsername_returnsFalse() throws ExecutionException, InterruptedException {
         // Arrange
         String username = "testUsername";
 

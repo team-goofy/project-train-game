@@ -115,3 +115,9 @@ mat-card {
     height: 75%;
   }
 }
+
+@media (max-height: 600px) {
+  .img-preview {
+    width: 200px;
+  }
+}

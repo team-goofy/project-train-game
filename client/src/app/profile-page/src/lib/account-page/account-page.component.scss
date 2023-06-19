@@ -8,7 +8,7 @@
 }
 
 .centered {
-  width: 100%;
+  width: 120%;
   max-width: 500px; /* Adjust the max-width value as needed */
   margin-top: 5%;
   margin-left: auto;
@@ -22,7 +22,19 @@
   margin-bottom: 40px;
   width: 100%; /* Add this line to make the form fields expand to the full width */
 }
+
 .text-centered {
   text-align: center;
 }
 
+@media (max-width: 600px) {
+  .form-fields > div {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 500px) {
+  .mat-headline-2 {
+    font-size: 50px !important;
+  }
+}

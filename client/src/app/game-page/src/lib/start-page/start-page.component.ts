@@ -5,7 +5,7 @@ import { PermissionsService } from '@ng-web-apis/permissions';
 import { StationService } from '../services/station.service';
 import { TripService } from '@client/shared-services';
 import { Station, Trip } from '@client/shared-models';
-import { catchError, filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { catchError, delay, filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { EMPTY, Observable, Subject } from 'rxjs';
 import { MatSnackBar } from "@angular/material/snack-bar";
 
@@ -53,6 +53,7 @@ export class StartPageComponent implements OnInit, OnDestroy {
       tap((state: PermissionState) => this.state.permission = state),
       filter((state: PermissionState) => state === 'granted'),
       switchMap(() => this._geoLocationService.pipe(take(1))),
+      delay(1000),
       tap((position: GeolocationPosition) => {
         this._stationService.init(position.coords.latitude, position.coords.longitude)
         this.state.loading = false;

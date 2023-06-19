@@ -40,7 +40,7 @@ import { RandomTrainService } from "./services/random-train.service";
       TripOverviewDialogComponent
     ],
     providers: [
-      StationService, 
+      StationService,
       RandomTrainService
     ]
 })

@@ -19,7 +19,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import com.goofy.dtos.TripImageDTO;
@@ -27,7 +26,6 @@ import com.goofy.services.TripService;
 import com.google.cloud.storage.BlobId;
 import org.springframework.web.client.RestTemplate;
 
-@Transactional
 @RestController
 @RequestMapping("/trip")
 @AllArgsConstructor

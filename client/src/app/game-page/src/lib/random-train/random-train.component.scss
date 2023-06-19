@@ -84,3 +84,10 @@ mat-card {
     height: 75%;
   }
 }
+
+@media (max-height: 650px) {
+  .departure-title {
+    margin: 0;
+  }
+}
+

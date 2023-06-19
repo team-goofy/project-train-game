@@ -8,3 +8,4 @@ export * from './lib/station.model';
 export * from './lib/trip-response.model';
 export * from './lib/stats.model';
 export * from './lib/nsTrip.model';
+export * from './lib/achievement-stats.model';

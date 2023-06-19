@@ -21,6 +21,7 @@ import { MatStepperModule } from "@angular/material/stepper";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { LeafletModule } from "@asymmetrik/ngx-leaflet";
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   imports: [
@@ -40,7 +41,8 @@ import { LeafletModule } from "@asymmetrik/ngx-leaflet";
     FlexLayoutModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
-    LeafletModule
+    LeafletModule,
+    QRCodeModule
   ],
   declarations: [
     ProfilePageComponent,

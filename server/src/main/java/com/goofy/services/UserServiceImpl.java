@@ -3,6 +3,7 @@ package com.goofy.services;
 import com.goofy.controllers.EmailController;
 import com.goofy.dtos.UserDTO;
 import com.goofy.exceptions.UsernameExistsException;
+import com.goofy.models.Achievement;
 import com.goofy.models.Profile;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
@@ -13,8 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -26,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
     public UserRecord saveUser(UserDTO user) throws Exception {
         try {
+
             boolean usernameExists = this.usernameExists(user.getUsername());
 
             UserRecord.CreateRequest request = new UserRecord.CreateRequest()
@@ -40,8 +45,31 @@ public class UserServiceImpl implements UserService {
 
             UserRecord createdUser = this.firebaseAuth.createUser(request);
 
+            // Retrieve all achievements from Firebase
+            List<Achievement> achievementList = this.firestore.collection("achievements").get().get().getDocuments()
+                    .stream().map(document -> {
+                        Achievement achievement = document.toObject(Achievement.class);
+                        achievement.setUid(document.getId());
+                        return achievement;
+                    }).toList();
+            List<Achievement.UserAchievementUpdate> userAchievementList = new ArrayList<>();
+
+            for (Achievement achievement : achievementList) {
+                Achievement.UserAchievementUpdate userAchievement = new Achievement.UserAchievementUpdate();
+
+                userAchievement.setUid(achievement.getUid());
+                userAchievement.setProgress(0);
+                userAchievement.setDateAchieved("");
+                userAchievement.setHasAchieved(false);
+                userAchievementList.add(userAchievement);
+            }
+
             // Create User-Document where username will be stored
-            Map<String, String> userData = Map.of("username", user.getUsername());
+            Map<String, Object> userData = Map.of(
+                "username", user.getUsername(),
+                "achievements", userAchievementList,
+                "is2FaActivated", false,
+                "secret", "");
             this.firestore.collection("user").document(createdUser.getUid()).set(userData);
 
             // Create Stats-Document where the user's stats will be stored
@@ -72,7 +100,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public ResponseEntity<String> changeUsername(String newUsername, String uid) throws InterruptedException, ExecutionException {
-
         if (usernameExists(newUsername)) {
             return ResponseEntity.badRequest().build();
         } else {
@@ -85,8 +112,7 @@ public class UserServiceImpl implements UserService {
                     String currUsername = profile.getUsername();
 
                     if (!currUsername.equals(newUsername)) {
-                        profile.setUsername(newUsername);
-                        usernameReference.set(profile);
+                        usernameReference.update("username", newUsername);
 
                         return ResponseEntity.ok(newUsername);
                     } else {
@@ -101,4 +127,19 @@ public class UserServiceImpl implements UserService {
             }
         }
     }
+
+
+    @Override
+    public Map<String, String> getUidByEmail(String email) throws Exception {
+        UserRecord getUserInfo = this.firebaseAuth.getUserByEmail(email);
+        DocumentReference userRef = this.firestore.collection("user").document(getUserInfo.getUid());
+        DocumentSnapshot userSnapshot = userRef.get().get();
+        if (userSnapshot.exists()) {
+            Map<String, String> userSnapshotId = Map.of("uid", userSnapshot.getId());
+            return userSnapshotId;
+        } else {
+            return null; // or throw an exception, depending on your requirements
+        }
+    }
+
 }

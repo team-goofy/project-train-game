@@ -5,14 +5,12 @@ import com.goofy.services.StatsService;
 import com.goofy.services.TripService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-@Transactional
 @RestController
 @RequestMapping("/stats")
 @AllArgsConstructor
@@ -21,7 +19,7 @@ public class StatsController {
     private final StatsService statsService;
 
     @PutMapping
-    public ResponseEntity<String> updateStats(@RequestBody Integer totalTripDuration, Principal principal)
+    public ResponseEntity<Stats> updateStats(@RequestBody Integer totalTripDuration, Principal principal)
             throws ExecutionException, InterruptedException {
         TripFilter filter = new TripFilter();
         filter.setOnGoing(false);
@@ -51,8 +49,8 @@ public class StatsController {
                 .withTotalStations((int) totalUniqueStationsVisited)
                 .buildStats();
 
-        String statsId = this.statsService.updateStats(statsToUpdate, principal.getName());
-        return ResponseEntity.ok(statsId);
+        this.statsService.updateStats(statsToUpdate, principal.getName());
+        return ResponseEntity.ok(statsToUpdate);
     }
 
     @GetMapping
