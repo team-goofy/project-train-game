@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     public UserRecord saveUser(UserDTO user) throws Exception {
         try {
+
             boolean usernameExists = this.usernameExists(user.getUsername());
 
             UserRecord.CreateRequest request = new UserRecord.CreateRequest()
@@ -41,8 +42,12 @@ public class UserServiceImpl implements UserService {
             UserRecord createdUser = this.firebaseAuth.createUser(request);
 
             // Create User-Document where username will be stored
-            Map<String, String> userData = Map.of("username", user.getUsername());
+            Map<String, Object> userData = Map.of(
+                    "username", user.getUsername(),
+                    "is2FaActivated", false,
+                    "secret", "");
             this.firestore.collection("user").document(createdUser.getUid()).set(userData);
+
 
             // Create Stats-Document where the user's stats will be stored
             Map<String, Object> statsData = Map.of(
@@ -72,7 +77,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public ResponseEntity<String> changeUsername(String newUsername, String uid) throws InterruptedException, ExecutionException {
-
         if (usernameExists(newUsername)) {
             return ResponseEntity.badRequest().build();
         } else {
@@ -85,8 +89,7 @@ public class UserServiceImpl implements UserService {
                     String currUsername = profile.getUsername();
 
                     if (!currUsername.equals(newUsername)) {
-                        profile.setUsername(newUsername);
-                        usernameReference.set(profile);
+                        usernameReference.update("username", newUsername);
 
                         return ResponseEntity.ok(newUsername);
                     } else {
@@ -101,4 +104,19 @@ public class UserServiceImpl implements UserService {
             }
         }
     }
+
+
+    @Override
+    public Map<String, String> getUidByEmail(String email) throws Exception {
+        UserRecord getUserInfo = this.firebaseAuth.getUserByEmail(email);
+        DocumentReference userRef = this.firestore.collection("user").document(getUserInfo.getUid());
+        DocumentSnapshot userSnapshot = userRef.get().get();
+        if (userSnapshot.exists()) {
+            Map<String, String> userSnapshotId = Map.of("uid", userSnapshot.getId());
+            return userSnapshotId;
+        } else {
+            return null; // or throw an exception, depending on your requirements
+        }
+    }
+
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.security.Principal;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -46,4 +47,11 @@ public class UserController {
     public ResponseEntity<String> updateUserName(@RequestBody() @Valid String username, Principal principal) throws Exception {
         return userService.changeUsername(username, principal.getName());
     }
+
+
+    @GetMapping("/twofacheck")
+    public Map<String, String> check2FA(@RequestParam() @Valid String email) throws Exception {
+        return userService.getUidByEmail(email);
+    }
+
 }
