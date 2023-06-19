@@ -8,42 +8,38 @@
       </button>
       <button class="outline-location" mat-button color="accent">
         <mat-icon>location_on</mat-icon>
-        {{departureLocationValue}}
+        {{departureLocation}}
       </button>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngIf="!trainIsNull && randomTrain">
+    <ng-container *ngIf="state.randomTrain && !state.loading">
       <div class="title-container">
-        <p class="mat-headline-6 departure-title">Train towards: <b>{{randomTrain.departure.direction}}</b></p>
+        <p class="mat-headline-6 departure-title">Train towards: <b>{{state.randomTrain.departure.direction}}</b></p>
         <p class="mat-h2 time-title">Departure time:</p>
-        <p class="mat-headline-2 time-title"><b>{{randomTrain.departure.plannedDateTime | date:'shortTime'}}</b></p>
-        <p class="mat-headline-5">On platform: <b>{{randomTrain.departure.actualTrack}}</b></p>
-        <p class="mat-h2">Exit the train at station: </p>
-        <p class="mat-headline-5"><b>{{randomTrain.exitStation.mediumName}}</b></p>
+        <p class="mat-headline-3 time-title"><b>{{state.randomTrain.departure.plannedDateTime | date:'shortTime'}}</b></p>
+        <p class="mat-headline-6">On platform: <b>{{state.randomTrain.departure.actualTrack}}</b></p>
+        <p class="mat-headline-6 departure-title">Exit the train at station: <b>{{state.randomTrain.exitStation.mediumName}}</b></p>
       </div>
     </ng-container>
-    <ng-container *ngIf="trainIsNull">
+    <ng-container *ngIf="state.error && !state.loading">
       <div class="title-container">
-        <p class="mat-headline-6 departure-title">There are no trains departing from this station in the next 30 minutes. Please come back later 😅</p>
+        <p class="mat-headline-6 departure-title">{{state.error}}</p>
       </div>
     </ng-container>
+    <mat-progress-spinner *ngIf="state.loading" mode="indeterminate"></mat-progress-spinner>
 
   </mat-card-content>
   <div class="spacer"></div>
   <ng-container>
     <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="getRandomTrain()">
+      <button *ngIf="!state.loading" mat-raised-button color="primary" (click)="getRandomTrain()">
         <mat-icon class="icon">location_on</mat-icon>
         Missed train
       </button>
-      <button mat-raised-button color="accent" (click)="saveTrip()">
+      <button *ngIf="state.randomTrain && !state.loading" mat-raised-button color="accent" (click)="saveTrip()">
         <mat-icon class="icon">train</mat-icon>
         Arrived
-      </button>
-      <button mat-raised-button color="primary" disabled>
-        <mat-icon class="icon">library_books</mat-icon>
-        Suggestions
       </button>
     </mat-card-actions>
   </ng-container>

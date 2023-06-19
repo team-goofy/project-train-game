@@ -9,10 +9,6 @@
     </button>
   </ng-container>
   <ng-template class="center" #loggedIn>
-    <button color="primary" mat-raised-button disabled>
-      <mat-icon>group</mat-icon>
-      Social
-    </button>
     <button color="primary" mat-raised-button routerLink="/profile-page">
       <mat-icon>person</mat-icon>
       Profile
@@ -35,7 +31,7 @@
     Start new trip
   </button>
 
-  <mat-card *ngIf="trips.length > 0" class="ongoing-trip-card">
+  <mat-card *ngIf="trips.length > 0 && (authService.user$ | async)" class="ongoing-trip-card">
     <mat-card-header>
       <div class="header">
         <p class="mat-headline-5">Or continue your ongoing trip 🌏</p>
