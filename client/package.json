@@ -29,6 +29,7 @@
     "@ng-web-apis/permissions": "^2.0.0",
     "angularx-qrcode": "^15.0.1",
     "express": "^4.18.2",
+    "party-js": "^2.2.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "typescript": "~4.9.4",

@@ -213,7 +213,7 @@ export class AccountPageComponent implements OnInit {
   submitUserUsername(user: UserRequestModel){
     this.authService.changeUserName(user).subscribe({
       next: (success) => {
-        let ref = this.snackbar.open(
+        this.snackbar.open(
           "Username changed successfully",
           "",
           {horizontalPosition: 'end', duration: 2000}
@@ -243,23 +243,20 @@ export class AccountPageComponent implements OnInit {
           .subscribe({
             next: () => {
               this.state.loading = false;
-              let ref = this.snackbar.open(
+              this.snackbar.open(
                 "A verification email has been sent to your email address.",
                 "",
                 { horizontalPosition: 'end', duration: 6000 }
               );
-              ref.afterDismissed().subscribe(() => {
-                this.authService.logout();
-              });
+
+              this.authService.logout();
             },
             error: () => {
               this.state.loading = false;
-              let ref = this.snackbar.open(
+              this.snackbar.open(
                 "Something went wrong sending email, please try again later",
                 "", { horizontalPosition: 'end', duration: 3000 });
-              ref.afterDismissed().subscribe(() => {
-                this.router.navigate(['/verify-email'])
-              });
+              this.router.navigate(['/verify-email'])
             }
           });
       },
@@ -298,7 +295,7 @@ export class AccountPageComponent implements OnInit {
 
     this.authService.verify2FA(secret, givenAuthCode).subscribe({
       next: (success) => {
-        let ref = this.snackbar.open(
+        this.snackbar.open(
           "2FA enabled successfully",
           "",
           {horizontalPosition: 'end', duration: 2000}
@@ -326,7 +323,7 @@ export class AccountPageComponent implements OnInit {
   disable2FA(){
     this.authService.disable2FA().subscribe({
       next: (success) => {
-        let ref = this.snackbar.open(
+        this.snackbar.open(
           "2FA disabled successfully",
           "",
           {horizontalPosition: 'end', duration: 2000}

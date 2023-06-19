@@ -87,15 +87,13 @@ export class RegisterPageComponent implements OnInit{
       next: () => {
         this.success = true;
 
-        let ref = this.snackbar.open(
+       this.snackbar.open(
           "Account has been created successfully! Check your mail to verify your account.",
           "",
           { horizontalPosition: 'end', duration: 6000 }
         );
 
-        ref.afterDismissed().subscribe(() => {
-          this.router.navigate(['/login']);
-        });
+        this.router.navigate(['/login']);
       },
       error: ({ error }) => {
         this.submitted = false;

@@ -58,11 +58,43 @@
   width: 85px;
   height: 85px;
   border-radius: 50%;
-  background-color: pink;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+.icon__pink {
+  background-color: pink;
+}
+
+.icon__gray {
+  background-color: lightgrey;
+}
+
+.icon__bronze {
+  background-color: #cd7f32;
+}
+
+.icon__lightblue {
+  background-color: lightblue;
+}
+
+.icon__gold {
+  background-color: gold;
+}
+
+@media (max-width: 800px) {
+  .statsCardAchievement {
+    max-width: 500px!important;
+    width: 500px;
+  }
+
+  .cardWrapperAchievement {
+    width: 100%;
+    flex-direction: column!important;
+  }
+}
+
 
 @media (max-width: 600px) {
   .statsCard {
@@ -73,6 +105,10 @@
   .cardWrapper {
     width: 100%;
     flex-direction: column!important;
+  }
+
+  .title__small {
+    font-size: 50px;
   }
 }
 

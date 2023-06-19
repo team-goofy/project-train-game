@@ -3,10 +3,12 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from "@angular/material/dialog";
 import { DialogData, TripOverviewDialogComponent } from "../components/trip-overview-dialog/trip-overview-dialog.component";
-import { take, EMPTY} from "rxjs";
+import {take, EMPTY, of} from "rxjs";
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { AuthService, TripService} from '@client/shared-services';
-import { NsTrip, RouteStation, Trip } from '@client/shared-models';
+import {NsTrip, RouteStation, Stats, Trip} from '@client/shared-models';
+import {AchievementStats} from "../../../../shared-models/src/lib/achievement-stats.model";
+import party from "party-js";
 
 @Component({
   templateUrl: './picture-upload-page.component.html',
@@ -26,6 +28,7 @@ export class PictureUploadPageComponent implements OnInit {
   private _uicCode: string = "";
   private _location: string = "";
   private _loading: boolean = false;
+  private _achievementUnlocked: boolean = false;
   private _totalTripDuration: number = 0;
 
   ngOnInit(): void {
@@ -88,6 +91,8 @@ export class PictureUploadPageComponent implements OnInit {
               this._snackbar.open(error.errors.join(), "Close");
               return EMPTY;
             }),
+
+            // Get Duration of trip
             switchMap(() => {
               const tripStations: RouteStation[] = trip.routeStations;
 
@@ -103,21 +108,52 @@ export class PictureUploadPageComponent implements OnInit {
               return this._tripService.getTripDuration(nsTrips).pipe(catchError(({ error }) => {
                 this._snackbar.open(error.errors.join(), "Close");
                 return EMPTY;
-              }), switchMap((tripDuration) => {
+              }),
+
+                // Update the user's stats
+                switchMap((tripDuration) => {
                 this._totalTripDuration = tripDuration;
-                return this._authService.updateStats(this._totalTripDuration);
+
+                return this._authService.updateStats(this._totalTripDuration).pipe(catchError(({ error }) => {
+                  this._snackbar.open(error.errors.join(), "Close");
+                  return EMPTY;
+                }),
+
+                  // Update the user's achievements
+                  switchMap((statsResponse: Stats) => {
+                  const achievementStats: AchievementStats = {
+                    totalTripDuration: this._totalTripDuration,
+                    totalVisitedStations: statsResponse.totalStations
+                  }
+
+                  return this._authService.updateUsersAchievements(achievementStats).pipe(catchError(({ error }) => {
+                    this._snackbar.open(error.errors.join(), "Close");
+                    return EMPTY;
+                  }),
+
+                    // Set the achievementUnlocked-observable to the value of the response
+                    switchMap((hasUnlocked) => {
+                      return this.setAchievementUnlocked(JSON.parse(hasUnlocked));
+                    }));
+                }));
               }));
             }
           ));
         }),
         tap(() => {
-          this._snackbar.open(
-            "Your trip has ended!",
-            "",
-            { horizontalPosition: 'end', duration: 2000 }
-          );
+          if (!this._achievementUnlocked.valueOf()) {
+            this._snackbar.open(
+              "Your trip has ended!",
+              "",
+              { horizontalPosition: 'end', duration: 2000 }
+            );
 
-          this._router.navigate(['/']);
+            this._router.navigate(['/']);
+          }
+
+          else {
+            this.showConfetti();
+          }
         })
       ).subscribe();
     });
@@ -168,9 +204,32 @@ export class PictureUploadPageComponent implements OnInit {
     )
   }
 
+  showConfetti() {
+    this._snackbar.open(
+      "Your trip has ended and you've unlocked a new achievement! Check your profile page!",
+      "",
+      { horizontalPosition: 'end', duration: 2000 }
+    );
+
+    const specificElement: HTMLElement = document.getElementsByClassName('mat-mdc-snack-bar-label')[0] as HTMLElement;
+
+    // Trigger the confetti animation on the snackbar element
+    party.confetti(specificElement, {
+      count: party.variation.range(20, 30),
+      size: party.variation.range(1, 2),
+    });
+
+    this._router.navigate(['/']);
+  }
+
   private checkValidImageSize(image: Blob): boolean {
     const IMAGE_MAX_BYTE_SIZE = 1000000;
     return image.size < IMAGE_MAX_BYTE_SIZE;
+  }
+
+  setAchievementUnlocked(value: boolean) {
+    this._achievementUnlocked = value;
+    return of(value);
   }
 
   get imageUrl(): string {
