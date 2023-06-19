@@ -3,7 +3,6 @@ package com.goofy.controllers;
 import com.goofy.services.EmailService;
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
-import jakarta.transaction.Transactional;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@Transactional
 @RequestMapping("/mail")
 public class EmailController {
     private final Environment env;

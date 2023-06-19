@@ -5,14 +5,12 @@ import com.goofy.services.StatsService;
 import com.goofy.services.TripService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-@Transactional
 @RestController
 @RequestMapping("/stats")
 @AllArgsConstructor
