@@ -1,19 +1,22 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { AuthService } from "@client/shared-services";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {UserLoginModel} from "@client/shared-models";
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
-export class LoginPageComponent implements OnInit{
+export class LoginPageComponent implements OnInit, OnDestroy {
   private formBuilder: FormBuilder = inject(FormBuilder);
   private authService: AuthService = inject(AuthService);
   private router: Router = inject(Router);
   private snackbar: MatSnackBar = inject(MatSnackBar);
+  private destroy$: Subject<boolean> = new Subject<boolean>();
+
   form: FormGroup = new FormGroup({
     email: new FormControl(''),
     password: new FormControl('')
@@ -42,6 +45,11 @@ export class LoginPageComponent implements OnInit{
     )
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   onSubmit(): void {
     this.submitted = true;
     if (this.form.invalid) {
@@ -53,19 +61,20 @@ export class LoginPageComponent implements OnInit{
       password: this.form.value.password
     };
 
-    this.authService.login(user).subscribe({
-      next: (success) => {
-        let ref = this.snackbar.open(
+    this.authService.login(user)
+    .pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: () => {
+        this.snackbar.open(
           "Logged in successfully",
           "",
           { horizontalPosition: 'end', duration: 2000 }
         );
 
-        ref.afterDismissed().subscribe(() => {
-          this.router.navigate(['/']);
-        });
+        this.router.navigate(['/']);
       },
-      error: (error) => {
+      error: () => {
         this.snackbar.open("Something went wrong, please try again", "", { horizontalPosition: 'end', duration: 3000 });
       }
     });
