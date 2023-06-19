@@ -8,7 +8,9 @@ import com.goofy.exceptions.UnsupportedFileExtensionException;
 import com.goofy.models.Departure;
 import com.goofy.models.Trip;
 import com.goofy.models.TripFilter;
+import com.goofy.models.TripImage;
 import com.goofy.utils.UUIDGenerator;
+import com.google.api.gax.paging.Page;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
@@ -19,6 +21,7 @@ import lombok.AllArgsConstructor;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -40,6 +43,8 @@ public class TripServiceImpl implements TripService {
 
         String tripId = image.getTripId();
         String stationUic = image.getUicCode();
+        String ltd = image.getLtd();
+        String lng = image.getLng();
 
         if (contentType == null) {
             throw new NoContentTypeException("Content type has not been specified");
@@ -47,7 +52,8 @@ public class TripServiceImpl implements TripService {
 
         String extension = getFileExtension(contentType);
 
-        String blobId = String.format("trip-%s_station-%s_user-%s%s", tripId, stationUic, uid, extension);
+        String blobId = String.format("trip-%s_station-%s_user-%s_ltd-%s_lng-%s%s", tripId, stationUic, uid, ltd, lng,
+                extension);
         Blob blob = storage.bucket().get(blobId);
 
         if (blob != null && blob.exists()) {
@@ -55,6 +61,24 @@ public class TripServiceImpl implements TripService {
         }
 
         return storage.bucket().create(blobId, inputStream, contentType).getBlobId();
+    }
+
+    @Override
+    public List<TripImage> getTripImages(String tripId, String uid) {
+        List<TripImage> results = new ArrayList<>();
+        Page<Blob> blobs = storage.bucket().list();
+
+        for (Blob blob : blobs.iterateAll()) {
+            if (blob.getName().contains(uid) && blob.getName().contains(tripId)) {
+                String[] split = blob.getName().split("_");
+                double ltd = Double.parseDouble(split[3].split("-")[1]);
+                String lngWithExtension = split[4].split("-")[1];
+                double lng = Double.parseDouble(lngWithExtension.substring(0, lngWithExtension.lastIndexOf(".")));
+                results.add(new TripImage(blob.getContent(), ltd, lng));
+            }
+        }
+
+        return results;
     }
 
     @Override
@@ -106,7 +130,7 @@ public class TripServiceImpl implements TripService {
             List<QueryDocumentSnapshot> documents = future.get().getDocuments();
             return documents.stream().map(doc -> doc.toObject(Trip.class)).collect(Collectors.toList());
         } catch (InterruptedException | ExecutionException e) {
-        
+
             throw new RuntimeException("Error getting trips from Firestore", e);
         }
     }

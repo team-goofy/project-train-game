@@ -18,4 +18,12 @@ public class TripImageDTO {
     @NotEmpty(message = "UIC code can not be empty")
     @NotBlank(message = "UIC code can not be blank")
     private String uicCode;
+
+    @NotEmpty(message = "Ltd can not be empty")
+    @NotBlank(message = "Ltd can not be blank")
+    private String ltd;
+
+    @NotEmpty(message = "Lng can not be empty")
+    @NotBlank(message = "Lng can not be blank")
+    private String lng;
 }

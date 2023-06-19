@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goofy.dtos.TripDTO;
-import com.goofy.models.NsTrip;
-import com.goofy.models.Trip;
-import com.goofy.models.TripFilter;
-import com.goofy.models.TripResponse;
+import com.goofy.models.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -64,6 +61,12 @@ public class TripController {
             throws IOException {
         BlobId blobId = tripService.saveImage(image, principal.getName());
         return ResponseEntity.ok(blobId);
+    }
+
+    @GetMapping(value = "/{tripId}/images")
+    public ResponseEntity<List<TripImage>> getTripImages(@PathVariable String tripId, Principal principal) {
+        List<TripImage> images = this.tripService.getTripImages(tripId, principal.getName());
+        return ResponseEntity.ok(images);
     }
 
     @PostMapping("/duration")
