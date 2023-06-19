@@ -18,7 +18,9 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit(): void {
     const filter = <TripFilter>{ onGoing: true };
-    this._tripService.getTrips(filter).subscribe(trips => this._trips = trips);
+    this._tripService.getTrips(filter).subscribe(trips => {
+      this._trips = trips
+    });
   }
 
   scrollTo(target: HTMLDivElement) {

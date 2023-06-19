@@ -1,11 +1,11 @@
-import {Component, Inject, inject} from '@angular/core';
+import {Component, Inject, inject, OnDestroy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import { RouteStation } from "@client/shared-models";
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "@client/shared-services";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {debounceTime, distinctUntilChanged} from "rxjs";
+import {debounceTime, distinctUntilChanged, Subject, takeUntil} from "rxjs";
 
 export interface DialogData {
   stations: RouteStation[];
@@ -20,7 +20,7 @@ interface State {
   templateUrl: './two-fa-dialog.component.html',
   styleUrls: ['./two-fa-dialog.component.scss']
 })
-export class TwoFaDialogComponent {
+export class TwoFaDialogComponent implements OnDestroy {
   private formBuilder: FormBuilder = inject(FormBuilder);
   private authService: AuthService = inject(AuthService);
   private router: Router = inject(Router);
@@ -35,6 +35,8 @@ export class TwoFaDialogComponent {
   private secret: string = "";
   private uid: string = "";
   private user: any;
+
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(@Inject(MAT_DIALOG_DATA) public userData: any, private dialogRef: MatDialogRef<TwoFaDialogComponent>) {
     // Access the passed data using this.data
@@ -70,6 +72,11 @@ export class TwoFaDialogComponent {
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   checkLength(event: KeyboardEvent) {
     const input = event.target as HTMLInputElement;
     if (input.value.length >= 6 && event.key !== 'Backspace') {
@@ -82,7 +89,11 @@ export class TwoFaDialogComponent {
 
     this.authService.verify2FALogin(this.secret, givenAuthCode, this.uid).subscribe(
       (success) => {
-        this.authService.login(this.user).subscribe(
+        this.authService.login(this.user)
+        .pipe(
+          takeUntil(this.destroy$)
+        )
+        .subscribe(
           (success) => {
             this.dialogRef.close();
             this.show2FALoginSuccessSnackbar();
@@ -110,27 +121,23 @@ export class TwoFaDialogComponent {
   }
 
   private show2FALoginSuccessSnackbar(): void {
-    const ref = this.snackbar.open(
+    this.snackbar.open(
       "2FA login successfully",
       "",
       { horizontalPosition: 'end', duration: 2000 }
     );
 
-    ref.afterDismissed().subscribe(() => {
-      this.router.navigate(['/']);
-    });
+    this.router.navigate(['/']);
   }
 
   private showWrongCodeErrorSnackbar(): void {
-    const ref = this.snackbar.open(
+    this.snackbar.open(
       "It looks like you entered the wrong code, please try again",
       "",
       { horizontalPosition: 'end', duration: 2000 }
     );
 
-    ref.afterDismissed().subscribe(() => {
-      this.router.navigate(['/login']);
-    });
+    this.router.navigate(['/login']);
   }
 
 

@@ -21,3 +21,9 @@
 .margin-text{
   margin-left: 8px;
 }
+
+@media (max-width: 500px) {
+  .mat-headline-2 {
+    font-size: 50px !important;
+  }
+}
