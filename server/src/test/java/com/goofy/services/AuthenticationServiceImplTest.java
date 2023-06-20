@@ -1,13 +1,8 @@
 package com.goofy.services;
 
 
-import com.goofy.builders.User2FaTestDataBuilder;
-import com.goofy.builders.UserTestDataBuilder;
-import com.goofy.controllers.EmailController;
-import com.goofy.models.Profile;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
-import com.google.firebase.auth.FirebaseAuth;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,10 +22,10 @@ class AuthenticationServiceImplTest {
     private final AuthenticationService authenticationService = new AuthenticationServiceImpl(firestore);
 
     @Test
-    void verify2FA_ValidCode() throws ExecutionException, InterruptedException {
+    void verify2FA_with_validCode() throws ExecutionException, InterruptedException {
         // Arrange
         String secret = "SROZTAFQGXTARUUZ";
-        String code = "559990";
+        String code = "690700"; //input the authenticator code here
         String uid = "123456789";
 
         // Mock Firestore and its dependencies
@@ -53,6 +48,7 @@ class AuthenticationServiceImplTest {
         verify(userReference, times(1)).update("secret", secret, "is2FaActivated", true);
     }
 
+
     @Test
     void verify2fa_with_invalid_code() throws ExecutionException, InterruptedException {
         // Arrange
@@ -74,10 +70,72 @@ class AuthenticationServiceImplTest {
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Invalid verification code", response.getBody());
-//        // Additional assertions or verifications as needed
-//        verify(firestore, times(1)).collection("user");
-//        verify(collectionReference, times(1)).document(uid);
-//        verify(userReference, times(1)).update("secret", secret, "is2FaActivated", true);
+    }
+
+    @Test
+    void verify2fa_with_invalid_secret() throws ExecutionException, InterruptedException {
+        // Arrange
+        String secret = "INVALID_SECRET";
+        String code = "559990";
+        String uid = "123456789";
+
+        // Mock Firestore and its dependencies
+        DocumentReference userReference = mock(DocumentReference.class);
+        CollectionReference collectionReference = mock(CollectionReference.class);
+
+        when(firestore.collection("user")).thenReturn(collectionReference);
+        when(collectionReference.document(uid)).thenReturn(userReference);
+        when(userReference.update("secret", secret, "is2FaActivated", true)).thenReturn(mock(ApiFuture.class));
+
+        // Act
+        ResponseEntity<String> response = authenticationService.verify2FA(secret, code, uid);
+
+        // Assert
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    void verify2fa_with_emptyCode() throws ExecutionException, InterruptedException {
+        // Arrange
+        String secret = "SROZTAFQGXTARUUZ";
+        String code = "";
+        String uid = "123456789";
+
+        // Mock Firestore and its dependencies
+        DocumentReference userReference = mock(DocumentReference.class);
+        CollectionReference collectionReference = mock(CollectionReference.class);
+
+        when(firestore.collection("user")).thenReturn(collectionReference);
+        when(collectionReference.document(uid)).thenReturn(userReference);
+        when(userReference.update("secret", secret, "is2FaActivated", true)).thenReturn(mock(ApiFuture.class));
+
+        // Act
+        ResponseEntity<String> response = authenticationService.verify2FA(secret, code, uid);
+
+        // Assert
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    void verify2fa_with_NULLcode() throws ExecutionException, InterruptedException {
+        // Arrange
+        String secret = "SROZTAFQGXTARUUZ";
+        String code = null;
+        String uid = "123456789";
+
+        // Mock Firestore and its dependencies
+        DocumentReference userReference = mock(DocumentReference.class);
+        CollectionReference collectionReference = mock(CollectionReference.class);
+
+        when(firestore.collection("user")).thenReturn(collectionReference);
+        when(collectionReference.document(uid)).thenReturn(userReference);
+        when(userReference.update("secret", secret, "is2FaActivated", true)).thenReturn(mock(ApiFuture.class));
+
+        // Act
+        ResponseEntity<String> response = authenticationService.verify2FA(secret, code, uid);
+
+        // Assert
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
     @Test
@@ -105,6 +163,7 @@ class AuthenticationServiceImplTest {
         verify(collectionReference, times(1)).document(uid);
         verify(documentReference, times(1)).update("secret", "", "is2FaActivated", false);
     }
+
 }
 
 
