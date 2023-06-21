@@ -49,6 +49,8 @@ export class StartPageComponent implements OnInit, OnDestroy {
     this.state = this.initialState();
     this.state.loading = true;
 
+    navigator.geolocation.getCurrentPosition(function () {});
+
     this._permissionService.state('geolocation').pipe(
       tap((state: PermissionState) => this.state.permission = state),
       filter((state: PermissionState) => state === 'granted'),
